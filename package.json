@@ -32,5 +32,6 @@
     "eslint": "^9.39.1",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.1.5"
-  }
+  },
+  "packageManager": "pnpm@10.25.0"
 }

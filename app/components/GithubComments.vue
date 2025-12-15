@@ -19,10 +19,10 @@ const timer = setTimeout(() => {
   >
     <!-- CHANGE THE FOLLOWING DATA ON https://giscus.app/ -->
     <Giscus
-      repo="LawyerKyrie/nuxt-docs-ui-theme"
-      repo-id="R_kgDOQGEPng"
+      repo="LawyerKyrie/church-postil"
+      repo-id="R_kgDOQo1rhg"
       category="Comments"
-      category-id="DIC_kwDOQGEPns4CxXig"
+      category-id="DIC_kwDOQo1rhs4Czz1G"
       mapping="url"
       strict="1"
       reactions-enabled="1"

@@ -77,7 +77,7 @@ const links = computed(() => {
       />
 
       <ClientOnly>
-        <!-- <GithubComments /> -->
+        <GithubComments />
       </ClientOnly>
 
       <USeparator v-if="surround?.length" />
