@@ -6,17 +6,32 @@ definePageMeta({
   layout: 'docs'
 })
 
-const route = useRoute()
+console.log('\nTHIS IS THE [da] ...SLUG PAGE')
+
+const { path } = useRoute()
 const { toc } = useAppConfig()
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
-const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
+const { locale } = useI18n() // Get current locale
+
+// const { data: page } = await useAsyncData(path, () => queryCollection('docs').path(path).first())
+
+const { data: page } = await useAsyncData(
+  `${path}`,
+  () =>
+    queryCollection('docs')
+      // .where('path', '=', path)
+      .path(path)
+      .first()
+)
+
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
-}
+} else console.log('Path ' + path
+  + ' with ' + locale.value + ' locale')
 
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
-  return queryCollectionItemSurroundings('docs', route.path, {
+const { data: surround } = await useAsyncData(`${path}-surround`, () => {
+  return queryCollectionItemSurroundings('docs', `${path}`, {
     fields: ['description']
   })
 })

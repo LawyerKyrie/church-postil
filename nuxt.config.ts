@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'nuxt-og-image',
     'nuxt-llms',
+    '@nuxtjs/i18n',
     '@nuxtjs/mcp-toolkit'
   ],
 
@@ -55,6 +56,13 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+
+  i18n: {
+    // Basic i18n configuration
+    locales: ['en', 'da'],
+    defaultLocale: 'en',
+    strategy: 'prefix_except_default'
   },
 
   icon: {

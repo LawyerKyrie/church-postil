@@ -1,6 +1,6 @@
 ---
 seo:
-  title: Church Postil
+  title: Church Postil DA
   description: Luther's Church Postil
 ---
 
@@ -20,7 +20,7 @@ Luther's Church Postil in english and danish version, with responsive design - P
 #links
   :::u-button
   ---
-  to: /getting-started
+  to: /en/getting-started
   size: xl
   trailing-icon: i-lucide-arrow-right
   ---
@@ -65,7 +65,7 @@ The six parts
   ---
   color: neutral
   size: lg
-  to: /getting-started
+  to: /en/getting-started
   trailingIcon: i-lucide-arrow-right
   variant: subtle
   ---
@@ -79,7 +79,7 @@ The six parts
   title: 1. Advent
   description: The four Sundays in Advent
   icon: i-heroicons-book-open
-  to: /advent
+  to: /en/advent
   ---
   :::
 
@@ -88,7 +88,7 @@ The six parts
   title: 2. Christmas
   description: Christmas Eve - Epiphany (The Holy Three Kings Day)
   icon: i-heroicons-academic-cap
-  to: /christmas
+  to: /en/christmas
   ---
   :::
 
@@ -97,7 +97,7 @@ The six parts
   title: 3. Lent
   description: Epiphany Sundays - Pre-Lent - Lent - Palm Sunday
   icon: i-heroicons-book-open-solid
-  to: /lent
+  to: /en/lent
   ---
   :::
 
