@@ -1,12 +1,11 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
 
 definePageMeta({
   layout: 'docs'
 })
-
-console.log('\nTHIS IS THE [en] ...SLUG PAGE')
 
 const { path } = useRoute()
 const { toc } = useAppConfig()
@@ -27,8 +26,7 @@ const { data: page } = await useAsyncData(
 
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
-} else console.log('Path ' + path
-  + ' with ' + locale.value + ' locale')
+}
 
 const { data: surround } = await useAsyncData(`${path}-surround`, () => {
   return queryCollectionItemSurroundings('docs', `${path}`, {

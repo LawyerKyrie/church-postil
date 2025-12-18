@@ -15,7 +15,7 @@ orientation: horizontal
 Luther's [Church Postil]{.text-primary}
 
 #description
-Luther's Church Postil in english and danish version, with responsive design - Perfect readable on mobile phone.
+Luther's Church Postil in english version, with responsive design - Perfect readable on mobile phone.
 
 #links
   :::u-button
