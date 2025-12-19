@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import type { ContentNavigationItem } from '@nuxt/content'
 import type { TabsItem } from '@nuxt/ui'
+// import type { ContentNavigationItem } from '@nuxt/content'
 
 /* <!-- Tabs for toggle of language --> */
 
@@ -77,13 +77,35 @@ function closeMenuAndUpdate(event) { // When Lang Tab is clicked
   }
 } // End of function main function closeMenuAndUpdate(event)
 
+// const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
+const { data: nav_en } = await useAsyncData('filtered-nav1', () => {
+  return queryCollectionNavigation('docs')
+    .where('path', 'LIKE', '/en/%') // Only include items starting with this path
+})
+const { data: nav_da } = await useAsyncData('filtered-nav2', () => {
+  return queryCollectionNavigation('docs')
+    .where('path', 'LIKE', '/da/%') // Only include items starting with this path
+})
+
 /* <!-- Select Menu for more alternatives --> */
-
-const selectmenu = ref(['Postil 1', 'Postil 2', 'In Progress', 'Done'])
-
-// Using only in template
-const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 const { header } = useAppConfig()
+
+const { data: sermons } = await useFetch(
+  '/api/sermons', {
+    key: 'church-postil',
+    transform: (
+      data: { label: string, value: string, type: never, id: number, icon: string }[]) => {
+      return data?.map(sermon => ({
+        label: sermon.label,
+        value: String(sermon.value),
+        type: sermon.type,
+        id: String(sermon.id),
+        icon: String(sermon.icon)
+      }))
+    }
+  // lazy: true
+  }
+)
 </script>
 
 <template>
@@ -146,35 +168,46 @@ const { header } = useAppConfig()
 
     <!-- View of open menu on mobile screens -->
     <template #body>
-      <UBanner
-        class="content-navigation-body-banner"
-        title="Toggle Between English & Danish Language of Luther's Church Postil"
-        close
-        close-icon="i-lucide-x-circle"
-      />
       <UCard>
         <template #header>
-          <UTabs
-            v-model="activeTab"
-            :items="tabs"
-            @click="closeMenuAndUpdate"
-          >
-            <template #en />
-            <template #da />
-          </UTabs>
+          <UBanner
+            class="content-navigation-body-banner"
+            title="Toggle Between English & Danish Language of Luther's Church Postil"
+            close
+            close-icon="i-lucide-x-circle"
+          />
         </template>
 
-        <UContentNavigation
-          highlight
-          :navigation="navigation"
-          type="single"
-          :default-open="false"
-        />
+        <UTabs
+          v-model="activeTab"
+          :items="tabs"
+          @click="closeMenuAndUpdate"
+        >
+          <template #en>
+            <UContentNavigation
+              highlight
+              :navigation="nav_en"
+              type="single"
+              :default-open="false"
+              class="pl-2 pr-2"
+            />
+          </template>
+
+          <template #da>
+            <UContentNavigation
+              highlight
+              :navigation="nav_da"
+              type="single"
+              :default-open="false"
+              class="pl-2 pr-2"
+            />
+          </template>
+        </UTabs>
 
         <template #footer>
           <USelectMenu
-            placeholder="Other Pages"
-            :items="selectmenu"
+            placeholder="Most relevant sermons"
+            :items="sermons"
             class="w-full"
           />
         </template>
