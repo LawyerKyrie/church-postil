@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
-const { path } = useRoute()
 const { locale } = useI18n()
-
-locale.value = 'da' // changing the lang of the page
 
 /* // This is only workng with @nuxtjs/i18n package
 const app = useNuxtApp() as any

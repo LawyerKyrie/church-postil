@@ -42,7 +42,7 @@
     size="xs"
   >
     <UButton
-      label="Docs"
+      label="More"
       variant="subtle"
       trailing-icon="i-lucide-chevron-down"
       size="xs"

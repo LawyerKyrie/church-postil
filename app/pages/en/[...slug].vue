@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
 
@@ -10,8 +9,6 @@ definePageMeta({
 const { path } = useRoute()
 const { toc } = useAppConfig()
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
-
-const { locale } = useI18n() // Get current locale
 
 // const { data: page } = await useAsyncData(path, () => queryCollection('docs').path(path).first())
 

@@ -45,7 +45,7 @@ export default defineNuxtConfig({
   typescript: {
     shim: false,
     strict: false,
-    typeCheck: false
+    typeCheck: true
   },
 
   eslint: {
