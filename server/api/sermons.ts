@@ -1,6 +1,7 @@
 // List of sermons in Luther's Church Postil
 const sermons = [
   { label: 'Most Relevant', type: 'label' },
+  { label: 'Getting Started', value: '/en/getting-started' },
   { label: 'This week Gospel' },
   { label: 'This week Epistle' },
   { label: 'Last week Gospel' },

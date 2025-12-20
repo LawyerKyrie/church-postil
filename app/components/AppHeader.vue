@@ -54,15 +54,23 @@ function closeMenuAndUpdate(event) { // When Lang Tab is clicked
 
   if (localeBefore === locale.value) return
 
-  const bodyElement = event.target.closest('div[data-slot="body"]')
-  const menuParent = bodyElement.parentElement
-  const closeBtn = menuParent.children[1].children[1].children[2].children[0]
+  const headerParent = event.target.closest('div[data-dismissable-layer]')
+  const closeBtn = headerParent.children[1].children[1].children[2].children[0]
+  /* // Testing and building up the children1children1children2children0
+  const child1 = headerParent.children[1] // <div data-slot="header" OK
+  const child2 = child1.children[1] // <div data-slot="right">
+  const child3 = child2.children[2] // < close button (third child of <div data-slot"right")
+  const child4 = child3.children[0] // <span (click on close btn is registered here)
+  */
+
+  showToast(`Toggle the Language`, `${locale.value} is selected!`)
 
   closeBtn.addEventListener('click', oneTimeClickHandler)
 
   // Check locale and if... update the page language
   function oneTimeClickHandler() { // inside closeMenuAndUpdate()
     if (localeBefore !== locale.value) {
+      console.log('update the page language')
       updateThePageLanguage()
     } // And don't wait for more click
     closeBtn.removeEventListener('click', oneTimeClickHandler)
@@ -94,10 +102,11 @@ const { data: sermons } = await useFetch(
   '/api/sermons', {
     key: 'church-postil',
     transform: (
-      data: { label: string, value: string, type: never, id: number, icon: string }[]) => {
+      data: { label: string, value: string, type: never, id: number, icon: string }[]
+    ) => {
       return data?.map(sermon => ({
-        label: sermon.label,
-        value: String(sermon.value),
+        label: `${sermon.label}`,
+        value: String(sermon.value), // Nothing here
         type: sermon.type,
         id: String(sermon.id),
         icon: String(sermon.icon)
@@ -106,6 +115,39 @@ const { data: sermons } = await useFetch(
   // lazy: true
   }
 )
+// NB! The original _value object in computedRefImpl is not iterable and dos not get copied to the new computed ref.
+const computedRefSermons = computed(() => {
+  return sermons.value.map((sermon) => {
+    return {
+      ...sermon,
+      tooltip: sermon.label, // could also be set above in data sermon
+      onSelect: () => {
+        showToast(`${sermon.label} selected`, `Sermon opens in a new window`)
+        navigateTo(`${sermon.value}`, {
+          external: true,
+          open: {
+            target: '_blank',
+            windowFeatures: { width: 800, height: 600 }
+          }
+        })
+      }
+    }
+  })
+})
+
+const toast = useToast()
+function showToast(title, description) {
+  toast.add({
+    title: title,
+    description: description,
+    icon: 'i-lucide-wifi',
+    close: {
+      color: 'primary',
+      variant: 'outline',
+      class: 'rounded-full'
+    }
+  })
+}
 </script>
 
 <template>
@@ -207,9 +249,25 @@ const { data: sermons } = await useFetch(
         <template #footer>
           <USelectMenu
             placeholder="Most relevant sermons"
-            :items="sermons"
+            icon="i-lucide-search"
+            trailing-icon="i-lucide-arrow-down"
+            :items="computedRefSermons"
+            :search-input="{
+              placeholder: 'Filter...',
+              icon: 'i-lucide-search'
+            }"
             class="w-full"
-          />
+            @click="console.log('Clicking on the search field')"
+          >
+            <template #item-label="{ item }">
+              <!-- @vue-expect-error  Property 'tooltip' does not exist on type 'AcceptableValue... -->
+              <UTooltip :text="item?.tooltip">
+                <!-- @vue-expect-error  Property 'label' does not exist on type 'AcceptableValue... -->
+                <span v-if="typeof item !== 'string' && 'label' in item">{{ item?.label }}</span>
+                <span v-else>Error: No label</span>
+              </UTooltip>
+            </template>
+          </USelectMenu>
         </template>
       </UCard>
     </template>
