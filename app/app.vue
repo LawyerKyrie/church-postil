@@ -4,7 +4,6 @@ import * as locales from '@nuxt/ui/locale'
 
 const { locale } = useI18n()
 const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
-
 // console.log('Locale is already set in plugin/i18n.ts')
 
 const { seo } = useAppConfig()
