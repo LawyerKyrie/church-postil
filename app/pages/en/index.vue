@@ -5,7 +5,7 @@ const { locale } = useI18n()
 
 const { data: page } = await useAsyncData(
   `/${locale.value}/index`, () => queryCollection('docs')
-    .path(`/${locale.value}/`)
+    .path(`/en/`)
     .first()
 )
 
@@ -25,6 +25,25 @@ useSeoMeta({
   ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png',
   twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png'
 })
+
+// Select language from the buttons in the landing page
+
+onMounted(() => {
+  console.log('onMounted is started in english index.vue')
+  // Get query parameters from the URL
+  const urlParams = new URLSearchParams(window.location.search)
+  const action = urlParams.get('action') // Gets the value of the 'action' parameter
+
+  // Run a function based on the value
+  if (action === 'showAlert') {
+    locale.value = 'en'
+    myJavaScriptFunction('Data from URL query parameter in EN')
+  }
+})
+
+const myJavaScriptFunction = (message) => {
+  alert(message)
+}
 </script>
 
 <template>

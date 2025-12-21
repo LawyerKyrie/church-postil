@@ -3,9 +3,11 @@ import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
 
+console.log('checking when this is started')
+
 const { data: page } = await useAsyncData(
   `/${locale.value}/index`, () => queryCollection('docs')
-    .path(`/${locale.value}/`)
+    .path(`/da/`)
     .first()
 )
 
@@ -25,6 +27,25 @@ useSeoMeta({
   ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png',
   twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png'
 })
+
+// Select language from the buttons in the landing page
+
+onMounted(() => {
+  console.log('onMounted is started in danish index.vue')
+  // Get query parameters from the URL
+  const urlParams = new URLSearchParams(window.location.search)
+  const action = urlParams.get('action') // Gets the value of the 'action' parameter
+
+  // Run a function based on the value
+  if (action === 'showAlert') {
+    locale.value = 'da'
+    myJavaScriptFunction('Data from URL query parameter in DA')
+  }
+})
+
+const myJavaScriptFunction = (message) => {
+  alert(message)
+}
 </script>
 
 <template>

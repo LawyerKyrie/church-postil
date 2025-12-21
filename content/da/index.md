@@ -1,7 +1,7 @@
 ---
 seo:
-  title: Church Postil DA
-  description: Luther's Church Postil
+  title: Kirke Postille
+  description: Luthers Kirke Postille på Dansk
 ---
 
 ::u-page-hero{class="dark:bg-gradient-to-b from-neutral-900 to-neutral-950"}
@@ -12,116 +12,120 @@ orientation: horizontal
 :hero-background
 
 #title
-Luther's [Church Postil]{.text-primary}
+Luthers [Kirke Postille]{.text-primary}
 
 #description
-Luther's Church Postil in danish version, with responsive design - Perfect readable on mobile phone.
+Velg mellom engelsk og dansk kirkepostille.
 
 #links
   :::u-button
   ---
-  to: /en/getting-started
+  icon: i-iconoir-language
   size: xl
+  to: /en/?action=showAlert
   trailing-icon: i-lucide-arrow-right
   ---
-  Intro
+  Engelsk
   :::
 
   :::u-button
   ---
-  icon: i-simple-icons-github
+  icon: i-lucide-languages
   color: neutral
   variant: outline
   size: xl
-  to: https://github.com/LawyerKyrie/church-postil/
-  target: _blank
+  to: /da/?action=showAlert
+  trailing-icon: i-lucide-arrow-right
   ---
-  GitHub
+  Dansk
   :::
 
 #default
   :::prose-pre
   ---
   code: |
-    God! Open my eyes and heart for the truth in this book! In Jesu name we pray!
-  filename: Pray before reading!
+    Gud! Åpne mitt hjerte og sinn for sannheten i denne bok! I Jesus navn vi ber!
+  filename: Be før du leser!
   ---
 
-  ```bash [Pray before reading!]
-    God! 
-    Open my eyes and heart 
-    for the truth in this book! 
-    In Jesu name we pray!
+  ```bash [Be før du leser!]
+    Gud! 
+    Åpne mitt hjerte og sinn 
+    for sannheten i denne bok! 
+    I Jesu navn vi ber!
   ```
   :::
 ::
 
 ::u-page-section{class="dark:bg-neutral-950"}
 #title
-The six parts
+De seks parter
 
 #links
   :::u-button
   ---
   color: neutral
   size: lg
-  to: /en/getting-started
+  to: /da/getting-started
   trailingIcon: i-lucide-arrow-right
   variant: subtle
   ---
-  Explore Church Postil
+  Utforsk Kirke Postille
   :::
 
 #features
 
   :::u-page-feature
   ---
-  title: 1. Advent
-  description: The four Sundays in Advent
+  title: 1. Adventpostille
+  description: De fire søndagene i Advent
   icon: i-heroicons-book-open
-  to: /en/advent
+  to: /da/advent
   ---
   :::
 
   :::u-page-feature
   ---
-  title: 2. Christmas
-  description: Christmas Eve - Epiphany (The Holy Three Kings Day)
+  title: 2. Julepostille
+  description: Julaften - Hellige tre Kongers dag
   icon: i-heroicons-academic-cap
-  to: /en/christmas
+  to: /da/christmas
   ---
   :::
 
   :::u-page-feature
   ---
-  title: 3. Lent
-  description: Epiphany Sundays - Pre-Lent - Lent - Palm Sunday
+  title: 3. Fastepostille
+  description: Åpenbarings søndagene - Før-faste - Faste - Palme søndag
   icon: i-heroicons-book-open-solid
-  to: /en/lent
+  to: /da/lent
   ---
   :::
 
   :::u-page-feature
   ---
-  title: 4. Summer (Easter)
-  description: Summer Postil; Easter Sunday - Pentecost
+  title: 4. Sommer postille
+  description: Sommer (Påakw) postille; 1.Påskedag - Pinse
   icon: i-heroicons-globe-alt
+  to: /da/easter
   ---
   :::
 
   :::u-page-feature
   ---
-  title: 5. Trinity I
-  description: Trinity Sunday - 12.Sunday after Trinity
+  title: 5. trefoldighed I
+  description: Trefoldighed Søndag - 12.Sundag efter Trefoldighed
   icon: i-heroicons-adjustments-vertical
+  to: /da/trinity1
   ---
   :::
 
   :::u-page-feature
   ---
-  title: 6. Trinity II
-  description: 13.Sunday after Trinity - 26.Sunday after trinity
+  title: 6. trefoldighed II
+  description: 13.Søndag efter trefoldighed - 26.Søndag efter trefoldighed
   icon: i-heroicons-beaker
+  to: /da/trinity2
   ---
   :::
 

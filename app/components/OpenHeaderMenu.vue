@@ -6,6 +6,17 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
+console.log('testing ')
+
+const isMenuOpen = ref(false)
+isMenuOpen.value = true // this code is only running when the menu is open
+
+/*
+const toggleMenu = () => {
+ isMenuOpen.value = !isMenuOpen.value
+}
+ */
+
 /* <!-- Tabs for toggle of language --> */
 
 const tabs: TabsItem[] = [
@@ -69,7 +80,7 @@ function closeMenuAndUpdate(event) { // When Lang Tab is clicked
   const closeBtn = btn3.children[0] // <span (click on close btn is registered here)
   */
 
-  showToast(`Toggle the Language`, `${uiLocale.value.name} is selected!`)
+  showToast(`${uiLocale.value.name} is selected`, `Close the menu and read the page in English `)
 
   closeBtn.addEventListener('click', oneTimeClickHandler)
 
@@ -91,6 +102,7 @@ function closeMenuAndUpdate(event) { // When Lang Tab is clicked
 
     const newPath = `../${locale.value}/${restPath}`
     router.push(`${newPath}`)
+    isMenuOpen.value = false
   }
 } // End of function main function closeMenuAndUpdate(event)
 
@@ -186,6 +198,7 @@ function showToast(title, description) {
 
       <template #da>
         <UContentNavigation
+          v-model:open="isMenuOpen"
           highlight
           :navigation="nav_da"
           type="single"

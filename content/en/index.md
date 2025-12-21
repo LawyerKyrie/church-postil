@@ -1,7 +1,7 @@
 ---
 seo:
-  title: Church Postil EN
-  description: Luther's Church Postil
+  title: Church Postil (en/da)
+  description: Luther's Church Postil (Kirke Postille)
 ---
 
 ::u-page-hero{class="dark:bg-gradient-to-b from-neutral-900 to-neutral-950"}
@@ -15,28 +15,29 @@ orientation: horizontal
 Luther's [Church Postil]{.text-primary}
 
 #description
-Luther's Church Postil in english version, with responsive design - Perfect readable on mobile phone.
+Choose between English and Danish Church Postil.
 
 #links
   :::u-button
   ---
-  to: /en/getting-started
+  icon: i-iconoir-language
   size: xl
+  to: /en/?action=showAlert
   trailing-icon: i-lucide-arrow-right
   ---
-  Intro
+  English
   :::
 
   :::u-button
   ---
-  icon: i-simple-icons-github
+  icon: i-lucide-languages
   color: neutral
   variant: outline
   size: xl
-  to: https://github.com/LawyerKyrie/church-postil/
-  target: _blank
+  to: /da/?action=showAlert
+  trailing-icon: i-lucide-arrow-right
   ---
-  GitHub
+  Danish
   :::
 
 #default
@@ -106,6 +107,7 @@ The six parts
   title: 4. Summer (Easter)
   description: Summer Postil; Easter Sunday - Pentecost
   icon: i-heroicons-globe-alt
+  to: /en/easter
   ---
   :::
 
@@ -114,6 +116,7 @@ The six parts
   title: 5. Trinity I
   description: Trinity Sunday - 12.Sunday after Trinity
   icon: i-heroicons-adjustments-vertical
+  to: /en/trinity1
   ---
   :::
 
@@ -122,6 +125,7 @@ The six parts
   title: 6. Trinity II
   description: 13.Sunday after Trinity - 26.Sunday after trinity
   icon: i-heroicons-beaker
+  to: /en/trinity2
   ---
   :::
 
