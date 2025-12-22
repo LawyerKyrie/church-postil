@@ -6,7 +6,7 @@ const { locale } = useI18n()
 console.log('checking when this is started')
 
 const { data: page } = await useAsyncData(
-  `/${locale.value}/index`, () => queryCollection('docs')
+  `/da/index`, () => queryCollection('docs')
     .path(`/da/`)
     .first()
 )
@@ -30,6 +30,20 @@ useSeoMeta({
 
 // Select language from the buttons in the landing page
 
+const toast = useToast()
+function showToast(title, description) {
+  toast.add({
+    title: title,
+    description: description,
+    icon: 'i-lucide-wifi',
+    close: {
+      color: 'primary',
+      variant: 'outline',
+      class: 'rounded-full'
+    }
+  })
+}
+
 onMounted(() => {
   console.log('onMounted is started in danish index.vue')
   // Get query parameters from the URL
@@ -37,13 +51,14 @@ onMounted(() => {
   const action = urlParams.get('action') // Gets the value of the 'action' parameter
 
   // Run a function based on the value
-  if (action === 'showAlert') {
+  if (action === 'urlAction') {
     locale.value = 'da'
-    myJavaScriptFunction('Data from URL query parameter in DA')
+    showToast(`Danske prædikener valgt`, `Åpne meny eller velg postille nedenfor`)
+    alertMessage('Data from URL query parameter in DA')
   }
 })
 
-const myJavaScriptFunction = (message) => {
+const alertMessage = (message) => {
   alert(message)
 }
 </script>

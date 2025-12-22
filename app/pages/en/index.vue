@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import * as locales from '@nuxt/ui/locale'
 
 const { locale } = useI18n()
+const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
 
 const { data: page } = await useAsyncData(
-  `/${locale.value}/index`, () => queryCollection('docs')
+  `/en/index`, () => queryCollection('docs')
     .path(`/en/`)
     .first()
 )
@@ -28,20 +30,34 @@ useSeoMeta({
 
 // Select language from the buttons in the landing page
 
+const toast = useToast()
+function showToast(title, description) {
+  toast.add({
+    title: title,
+    description: description,
+    icon: 'i-lucide-wifi',
+    close: {
+      color: 'primary',
+      variant: 'outline',
+      class: 'rounded-full'
+    }
+  })
+}
+
 onMounted(() => {
-  console.log('onMounted is started in english index.vue')
   // Get query parameters from the URL
   const urlParams = new URLSearchParams(window.location.search)
   const action = urlParams.get('action') // Gets the value of the 'action' parameter
 
   // Run a function based on the value
-  if (action === 'showAlert') {
+  if (action === 'urlAction') {
     locale.value = 'en'
-    myJavaScriptFunction('Data from URL query parameter in EN')
+    showToast(`${uiLocale.value.name} is selected`, `Open menu or select postil below!`)
+    alertMessage('Data from URL query parameter in EN')
   }
 })
 
-const myJavaScriptFunction = (message) => {
+const alertMessage = (message) => {
   alert(message)
 }
 </script>

@@ -8,6 +8,7 @@ seo:
 ---
 orientation: horizontal
 ---
+
 #top
 :hero-background
 
@@ -18,11 +19,12 @@ Luther's [Church Postil]{.text-primary}
 Choose between English and Danish Church Postil.
 
 #links
+
   :::u-button
   ---
   icon: i-iconoir-language
   size: xl
-  to: /en/?action=showAlert
+  to: /en/?action=urlAction
   trailing-icon: i-lucide-arrow-right
   ---
   English
@@ -34,18 +36,19 @@ Choose between English and Danish Church Postil.
   color: neutral
   variant: outline
   size: xl
-  to: /da/?action=showAlert
+  to: /da/?action=urlAction
   trailing-icon: i-lucide-arrow-right
   ---
   Danish
   :::
 
 #default
+
   :::prose-pre
   ---
   code: |
     God! Open my eyes and heart for the truth in this book! In Jesu name we pray!
-  filename: Pray before reading!
+  filename: Pray before reading
   ---
 
   ```bash [Pray before reading!]
@@ -54,7 +57,9 @@ Choose between English and Danish Church Postil.
     for the truth in this book! 
     In Jesu name we pray!
   ```
+
   :::
+
 ::
 
 ::u-page-section{class="dark:bg-neutral-950"}
@@ -66,7 +71,7 @@ The six parts
   ---
   color: neutral
   size: lg
-  to: /en/getting-started
+  to: /en/
   trailingIcon: i-lucide-arrow-right
   variant: subtle
   ---

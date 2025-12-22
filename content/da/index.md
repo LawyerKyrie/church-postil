@@ -8,6 +8,7 @@ seo:
 ---
 orientation: horizontal
 ---
+
 #top
 :hero-background
 
@@ -18,11 +19,14 @@ Luthers [Kirke Postille]{.text-primary}
 Velg mellom engelsk og dansk kirkepostille.
 
 #links
+
   :::u-button
   ---
   icon: i-iconoir-language
+  color: neutral
+  variant: outline
   size: xl
-  to: /en/?action=showAlert
+  to: /en/?action=urlAction
   trailing-icon: i-lucide-arrow-right
   ---
   Engelsk
@@ -31,16 +35,15 @@ Velg mellom engelsk og dansk kirkepostille.
   :::u-button
   ---
   icon: i-lucide-languages
-  color: neutral
-  variant: outline
   size: xl
-  to: /da/?action=showAlert
+  to: /da/?action=urlAction
   trailing-icon: i-lucide-arrow-right
   ---
   Dansk
   :::
 
 #default
+
   :::prose-pre
   ---
   code: |
@@ -55,6 +58,7 @@ Velg mellom engelsk og dansk kirkepostille.
     I Jesu navn vi ber!
   ```
   :::
+
 ::
 
 ::u-page-section{class="dark:bg-neutral-950"}
@@ -66,7 +70,7 @@ De seks parter
   ---
   color: neutral
   size: lg
-  to: /da/getting-started
+  to: /da/intro
   trailingIcon: i-lucide-arrow-right
   variant: subtle
   ---
@@ -105,7 +109,7 @@ De seks parter
   :::u-page-feature
   ---
   title: 4. Sommer postille
-  description: Sommer (Påakw) postille; 1.Påskedag - Pinse
+  description: Sommer (Påske) postille; 1.Påskedag - Pinse
   icon: i-heroicons-globe-alt
   to: /da/easter
   ---

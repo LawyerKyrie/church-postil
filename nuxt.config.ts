@@ -25,6 +25,10 @@ export default defineNuxtConfig({
       }
     }
   },
+  routeRules: {
+    '/': { prerender: true },
+    // '/da/intro/': { redirect: '/da/intro', prerender: false }
+  },
 
   experimental: {
     asyncContext: true
@@ -64,30 +68,30 @@ export default defineNuxtConfig({
   llms: {
     domain: 'https://church-postil.vercel.app/',
     title: 'Church Postil',
-    description: 'A template for building documentation with Nuxt UI and Nuxt Content.',
+    description: 'Luther\'s Church Postil - One year lectionary sermons',
     full: {
       title: 'Luther\'s Church Postil',
-      description: 'This is the full documentation for the Nuxt Docs Template.'
+      description: 'Luther\'s Church postil in English and Danish Language.'
     },
     sections: [
       {
-        title: 'Getting Started',
+        title: 'English Postil',
         contentCollection: 'docs',
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/getting-started%' }
+          { field: 'path', operator: 'LIKE', value: '/en%' }
         ]
       },
       {
-        title: 'Essentials',
+        title: 'Danish Postil',
         contentCollection: 'docs',
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/essentials%' }
+          { field: 'path', operator: 'LIKE', value: '/da%' }
         ]
       }
     ]
   },
 
   mcp: {
-    name: 'Docs template'
+    name: 'Church Postil'
   }
 })
