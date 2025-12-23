@@ -26,8 +26,8 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    '/': { prerender: true },
-    // '/da/intro/': { redirect: '/da/intro', prerender: false }
+    '/': { prerender: true }
+    // '/da': { redirect: '/en', prerender: false }
   },
 
   experimental: {

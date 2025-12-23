@@ -60,6 +60,33 @@ const links = computed(() => {
 
   return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
 })
+
+const route = useRoute()
+
+watch(
+  () => route.fullPath,
+  () => {
+    tocNavRef.value.click() // Close the Content Toc when url change
+  }
+)
+
+const tocNavRef = ref<HTMLDivElement | null>(null) // first click
+const clickedToc = ref<HTMLDivElement | null>(null) // second click
+
+function clickOnContentToc(event) {
+  clickedToc.value = event.target
+}
+
+// Register the toc open/ close button element
+watch(clickedToc, (newValue, oldValue) => {
+  if (oldValue === null) { // then save the tocNavRef button element
+    const navToc = newValue.closest('nav[data-state="open"]')
+    if (navToc.hasAttribute('data-state')
+      && navToc.getAttribute('data-state') === 'open') {
+      tocNavRef.value = newValue // clickedToc.value
+    }
+  }
+})
 </script>
 
 <template>
@@ -102,6 +129,7 @@ const links = computed(() => {
       <UContentToc
         :title="toc?.title"
         :links="page.body?.toc?.links"
+        @click="clickOnContentToc"
       >
         <template
           v-if="toc?.bottom"

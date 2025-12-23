@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import * as locales from '@nuxt/ui/locale'
-import type { TabsItem } from '@nuxt/ui'
+import type { AccordionItem, TabsItem } from '@nuxt/ui'
 import { findPageChildren } from '@nuxt/content/utils'
 import { useRouter } from 'vue-router'
 
@@ -89,13 +89,26 @@ function closeMenuAndUpdate(event) { // When Lang Tab is clicked
 
   function updateThePageLanguage() { // inside closeMenuAndUpdate
     localeBefore = locale.value // updating localeBefore to the last changed language
-    const path = ref(window.location.pathname)
-    let restPath = path.value?.slice(3)
+    const oldPath = ref(window.location.pathname)
+    let restPath = oldPath.value?.slice(3)
 
     if (restPath.startsWith('/')) restPath = restPath.slice(1)
-    // if (restPath.endsWith('/')) restPath = restPath.slice(0, -1)
 
     const newPath = `../${locale.value}/${restPath}`
+
+    // Checking if the old route exists in the new language code
+    const index2LastSlash = newPath.lastIndexOf('/')
+    let resultUrl
+    if (!router.hasRoute(newPath)) {
+      if (index2LastSlash !== -1) {
+        // removing /filename and returning to the folders index-file
+        resultUrl = newPath.slice(0, index2LastSlash)
+        router.push(`../${resultUrl}`)
+        // removing the old locale value with ../
+      }
+      return
+    }
+
     router.push(`${newPath}`)
     isMenuOpen.value = false
   }
@@ -159,23 +172,46 @@ function showToast(title, description) {
     description: description,
     icon: 'i-lucide-wifi',
     close: {
-      color: 'primary',
+      color: 'secondary',
       variant: 'outline',
       class: 'rounded-full'
     }
   })
 }
+
+const headerMenuAccordion = ref<AccordionItem[]>([
+  {
+    label: 'Luther\'s Church Postil',
+    icon: 'i-iconoir-church'
+  }
+])
+const headerMenuAccordionTabs = ref<TabsItem[]>([
+  {
+    label: 'Languages',
+    icon: 'i-lucide-toggle-right',
+    content: 'Toggle between English and Danish version of Luther\'s Church Postil.'
+  },
+  {
+    label: 'About',
+    icon: 'i-lucide-file-question-mark',
+    content: 'Use Select menu below if you like to search fast for a sermon.'
+  }
+])
 </script>
 
 <template>
   <UCard>
     <template #header>
-      <UBanner
-        class="content-navigation-body-banner"
-        title="Select Sermons in English/Danish"
-        close
-        close-icon="i-lucide-x-circle"
-      />
+      <UAccordion :items="headerMenuAccordion">
+        <template #body="{ }">
+          <!-- <template #body="{ item }" -->
+          <UTabs
+            :unmount-on-hide="false"
+            :items="headerMenuAccordionTabs"
+            class="w-full"
+          />
+        </template>
+      </UAccordion>
     </template>
     <UTabs
       v-model="activeTab"
