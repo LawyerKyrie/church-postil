@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
+import { onClickOutside } from '@vueuse/core'
 
 definePageMeta({
   layout: 'docs'
 })
 
-const route = useRoute()
-// const { path } = useRoute()
+const { path } = useRoute()
 const { toc } = useAppConfig()
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
 // const { data: page } = await useAsyncData(path, () => queryCollection('docs').path(path).first())
 
 const { data: page } = await useAsyncData(
-  `${route.path}`,
+  `${path}`,
   () =>
     queryCollection('docs')
       // .where('path', '=', path)
-      .path(route.path)
+      .path(path)
       .first()
 )
 
@@ -26,8 +26,8 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
-  return queryCollectionItemSurroundings('docs', `${route.path}`, {
+const { data: surround } = await useAsyncData(`${path}-surround`, () => {
+  return queryCollectionItemSurroundings('docs', `${path}`, {
     fields: ['description']
   })
 })
@@ -62,10 +62,10 @@ const links = computed(() => {
   return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
 })
 
-// Maybe it's better to watch the route.path than clickedToc
-// const route = useRoute()
-// Watch for route changes and close the menu
+/* ------------------ */
+const route = useRoute()
 
+// Watch for route changes and close the menu
 watch(
   () => route.fullPath,
   (newPath, oldPath) => {
@@ -97,6 +97,9 @@ watch(clickedToc, (newValue, oldValue) => {
     if (navToc.hasAttribute('data-state')
       && navToc.getAttribute('data-state') === 'open') {
       tocNavRef.value = clickedToc.value
+      tocNavRef.value.setAttribute('ref', 'navRef')
+      tocNavRef.value.setAttribute('v-if', 'isOpen')
+
       // console.log('navToc click-element is saved \n(to simulate click when link is selected).')
       // It's only need to save it once (on the first opening)
     }
@@ -112,6 +115,16 @@ watch(clickedToc, (newValue, oldValue) => {
     }
   }
 })
+
+/* ------------------ */
+const navRef = ref(null)
+const isNavOpen = ref(true)
+
+const closeNav = () => {
+  isNavOpen.value = false
+}
+
+onClickOutside(navRef, closeNav)
 </script>
 
 <template>

@@ -91,26 +91,41 @@ function closeMenuAndUpdate(event) { // When Lang Tab is clicked
     localeBefore = locale.value // updating localeBefore to the last changed language
     const oldPath = ref(window.location.pathname)
     let restPath = oldPath.value?.slice(3)
-
     if (restPath.startsWith('/')) restPath = restPath.slice(1)
 
     const newPath = `../${locale.value}/${restPath}`
 
-    // Checking if the old route exists in the new language code
-    const index2LastSlash = newPath.lastIndexOf('/')
-    let resultUrl
-    if (!router.hasRoute(newPath)) {
-      if (index2LastSlash !== -1) {
-        // removing /filename and returning to the folders index-file
-        resultUrl = newPath.slice(0, index2LastSlash)
-        router.push(`../${resultUrl}`)
-        // removing the old locale value with ../
-      }
-      return
+    const endings = ['advent', 'christmas', 'lent', 'easter', 'trinity1', 'trinity2']
+    function endsWithAny(str, suffixes) {
+      return suffixes.some(function (suffix) {
+        return str.endsWith(suffix)
+      })
     }
+    if (endsWithAny(newPath, endings)) {
+      console.log('The string ends with one of the specified suffixes.')
+      // Output: The string ends with one of the specified suffixes.
+      router.push(`${newPath}`)
+      isMenuOpen.value = false
+    } else {
+      console.log('The string does not end with any of the specified suffixes.')
 
-    router.push(`${newPath}`)
-    isMenuOpen.value = false
+      // Checking if the old route exists in the new language code
+      const index2LastSlash = newPath.lastIndexOf('/')
+      let resultUrl
+      if (!router.hasRoute(newPath)) {
+        if (index2LastSlash !== -1) {
+          // removing /filename and returning to the folders index-file
+          // if not a folder
+          resultUrl = newPath.slice(0, index2LastSlash)
+          console.log('before resultUrl')
+          console.log('New resultUrl: ')
+          console.log(resultUrl)
+          router.push(`../${resultUrl}`)
+          // removing the old locale value with ../
+        }
+        return
+      }
+    }
   }
 } // End of function main function closeMenuAndUpdate(event)
 

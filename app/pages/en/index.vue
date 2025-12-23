@@ -53,13 +53,9 @@ onMounted(() => {
   if (action === 'urlAction') {
     locale.value = 'en'
     showToast(`${uiLocale.value.name} is selected`, `Open menu or select postil below!`)
-    alertMessage('Data from URL query parameter in EN')
+    // alert('Data from URL query parameter in EN')
   }
 })
-
-const alertMessage = (message) => {
-  alert(message)
-}
 </script>
 
 <template>

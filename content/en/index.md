@@ -42,29 +42,11 @@ Choose between English and Danish Church Postil.
   Danish
   :::
 
-#default
-
-  :::prose-pre
-  ---
-  code: |
-    God! Open my eyes and heart for the truth in this book! In Jesu name we pray!
-  filename: Pray before reading
-  ---
-
-  ```bash [Pray before reading!]
-    God! 
-    Open my eyes and heart 
-    for the truth in this book! 
-    In Jesu name we pray!
-  ```
-
-  :::
-
 ::
 
 ::u-page-section{class="dark:bg-neutral-950"}
 #title
-The six parts
+Six (6) Postils
 
 #links
   :::u-button

@@ -6,6 +6,7 @@ const { header } = useAppConfig()
   <UHeader
     :ui="{ center: 'flex-1' }"
     :to="header?.to || '/'"
+    class="relative"
   >
     <UContentSearchButton
       v-if="header?.search"

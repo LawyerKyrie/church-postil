@@ -42,28 +42,11 @@ Velg mellom engelsk og dansk kirkepostille.
   Dansk
   :::
 
-#default
-
-  :::prose-pre
-  ---
-  code: |
-    Gud! Åpne mitt hjerte og sinn for sannheten i denne bok! I Jesus navn vi ber!
-  filename: Be før du leser!
-  ---
-
-  ```bash [Be før du leser!]
-    Gud! 
-    Åpne mitt hjerte og sinn 
-    for sannheten i denne bok! 
-    I Jesu navn vi ber!
-  ```
-  :::
-
 ::
 
 ::u-page-section{class="dark:bg-neutral-950"}
 #title
-De seks parter
+Seks (6) Postiller
 
 #links
   :::u-button

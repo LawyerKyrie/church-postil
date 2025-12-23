@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
+import { onClickOutside } from '@vueuse/core'
 
 definePageMeta({
   layout: 'docs'
@@ -61,6 +62,8 @@ const links = computed(() => {
   return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
 })
 
+/* ------------------ */
+
 const route = useRoute()
 
 watch(
@@ -84,9 +87,21 @@ watch(clickedToc, (newValue, oldValue) => {
     if (navToc.hasAttribute('data-state')
       && navToc.getAttribute('data-state') === 'open') {
       tocNavRef.value = newValue // clickedToc.value
+      tocNavRef.value.setAttribute('ref', 'navRef')
+      tocNavRef.value.setAttribute('v-if', 'isOpen')
     }
   }
 })
+
+/* ------------------ */
+const navRef = ref(null)
+const isNavOpen = ref(true)
+
+const closeNav = () => {
+  isNavOpen.value = false
+}
+
+onClickOutside(navRef, closeNav)
 </script>
 
 <template>

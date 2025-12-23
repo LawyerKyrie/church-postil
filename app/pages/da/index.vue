@@ -54,13 +54,9 @@ onMounted(() => {
   if (action === 'urlAction') {
     locale.value = 'da'
     showToast(`Danske prædikener valgt`, `Åpne meny eller velg postille nedenfor`)
-    alertMessage('Data from URL query parameter in DA')
+    // alert('Data from URL query parameter in DA')
   }
 })
-
-const alertMessage = (message) => {
-  alert(message)
-}
 </script>
 
 <template>

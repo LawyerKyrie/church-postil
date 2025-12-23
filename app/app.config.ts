@@ -1,5 +1,13 @@
 export default defineAppConfig({
   ui: {
+    contentToc: {
+      slots: {
+        // Adjust the 'root' class: change top positioning to 'top-0'
+        // and potentially remove background effects.
+        // sticky top-0 z-10 bg-white dark:bg-gray-900 -mx-4 px-4 sm:px-6 sm:-mx-6 overflow-y-auto max-h-[calc(100vh)]
+        root: 'sticky top-0 z-10'
+      }
+    },
     colors: {
       primary: 'green',
       neutral: 'slate'
@@ -15,6 +23,7 @@ export default defineAppConfig({
     siteName: 'Church Postil'
   },
   header: {
+    slot: { root: 'relative top-auto z-60' },
     title: '',
     to: '/',
     logo: {
