@@ -1,13 +1,27 @@
 <script setup lang="ts">
 const { header } = useAppConfig()
+const isDrawerOpen = ref(false)
+const openMenu = useOpenMenu() // const globalValue = useGlobalValue()
+
+const handleClose = (isOpen: boolean) => {
+  if (!isOpen)
+    openMenu.value = false // globalValue.value = false
+  else
+    openMenu.value = true // globalValue.value = true
+}
 </script>
 
 <template>
+  <!-- mode= "modal" | "slideover" | "drawer" -->
   <UHeader
+    v-model:open="isDrawerOpen"
     :ui="{ center: 'flex-1' }"
     :to="header?.to || '/'"
+    mode="drawer"
     class="relative"
+    @update:open="handleClose"
   >
+    <!-- @update:open="handleClose" -->
     <UContentSearchButton
       v-if="header?.search"
       :collapsed="false"

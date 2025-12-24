@@ -5,12 +5,20 @@ import type { AccordionItem, TabsItem } from '@nuxt/ui'
 import { findPageChildren } from '@nuxt/content/utils'
 import { useRouter } from 'vue-router'
 
+const openMenu = useOpenMenu()
+
+watch(openMenu, (/* newValue, oldValue */) => {
+  if (openMenu.value === false) {
+    if (localeBefore !== locale.value) {
+      updateThePageIfLanguageIsChanged()
+    }
+  }
+  // console.log(`Global variable "openMenu" was changed from "${oldValue}" to "${newValue}"`)
+})
+
 const router = useRouter()
 
-const isMenuOpen = ref(false)
-isMenuOpen.value = true // this code is only running when the menu is open
-
-// const toggleMenu = () => { isMenuOpen.value = !isMenuOpen.value }
+// const toggleMenu = () => { openMenu.value = !openMenu.value }
 
 /* <!-- Tabs for toggle of language --> */
 
@@ -60,74 +68,39 @@ watch(activeTab, (newTabValue: number, oldTabValue) => {
 
 let localeBefore = locale.value // updating it on close click
 
-function closeMenuAndUpdate(event) { // When Lang Tab is clicked
-  // Clicked locale tabs is in-argument to this function
+function updateThePageIfLanguageIsChanged() { // inside closeMenuAndUpdate
+  localeBefore = locale.value // updating localeBefore to the last changed language
+  const oldPath = ref(window.location.pathname)
+  let restPath = oldPath.value?.slice(3)
+  if (restPath.startsWith('/')) restPath = restPath.slice(1)
 
-  if (localeBefore === locale.value) return
+  const newPath = `../${locale.value}/${restPath}`
 
-  const headerParent = event.target.closest('div[data-dismissable-layer]')
-  const closeBtn = headerParent.children[1].children[1].children[2].children[0]
-
-  /* // Testing children1children1children2children0
-  const divHeader = headerParent.children[1] // <div data-slot="header" OK
-  const divRight = divHeader.children[1] // <div data-slot="right">
-  const btn3 = divRight.children[2] // < close button (third child of <div data-slot"right")
-  const closeBtn = btn3.children[0] // <span (click on close btn is registered here)
-  */
-
-  showToast(`${uiLocale.value.name} is selected`, `Close the menu and read the page in English `)
-
-  closeBtn.addEventListener('click', oneTimeClickHandler)
-
-  // Check locale and if... update the page language
-  function oneTimeClickHandler() { // inside closeMenuAndUpdate()
-    if (localeBefore !== locale.value) {
-      updateThePageLanguage()
-    } // And don't wait for more click
-    closeBtn.removeEventListener('click', oneTimeClickHandler)
-  } // End of function oneTimeClickHandler()
-
-  function updateThePageLanguage() { // inside closeMenuAndUpdate
-    localeBefore = locale.value // updating localeBefore to the last changed language
-    const oldPath = ref(window.location.pathname)
-    let restPath = oldPath.value?.slice(3)
-    if (restPath.startsWith('/')) restPath = restPath.slice(1)
-
-    const newPath = `../${locale.value}/${restPath}`
-
-    const endings = ['advent', 'christmas', 'lent', 'easter', 'trinity1', 'trinity2']
-    function endsWithAny(str, suffixes) {
-      return suffixes.some(function (suffix) {
-        return str.endsWith(suffix)
-      })
-    }
-    if (endsWithAny(newPath, endings)) {
-      console.log('The string ends with one of the specified suffixes.')
-      // Output: The string ends with one of the specified suffixes.
-      router.push(`${newPath}`)
-      isMenuOpen.value = false
-    } else {
-      console.log('The string does not end with any of the specified suffixes.')
-
-      // Checking if the old route exists in the new language code
-      const index2LastSlash = newPath.lastIndexOf('/')
-      let resultUrl
-      if (!router.hasRoute(newPath)) {
-        if (index2LastSlash !== -1) {
-          // removing /filename and returning to the folders index-file
-          // if not a folder
-          resultUrl = newPath.slice(0, index2LastSlash)
-          console.log('before resultUrl')
-          console.log('New resultUrl: ')
-          console.log(resultUrl)
-          router.push(`../${resultUrl}`)
-          // removing the old locale value with ../
-        }
-        return
+  const endings = ['advent', 'christmas', 'lent', 'easter', 'trinity1', 'trinity2']
+  function endsWithAny(str, suffixes) {
+    return suffixes.some(function (suffix) {
+      return str.endsWith(suffix)
+    })
+  }
+  if (endsWithAny(newPath, endings)) {
+    router.push(`${newPath}`)
+  } else { // if not a folder
+    console.log('The path is not one of the six postil folders.')
+    // Checking if the old route exists in the new language code
+    const index2LastSlash = newPath.lastIndexOf('/')
+    let resultUrl
+    if (!router.hasRoute(newPath)) {
+      if (index2LastSlash !== -1) {
+        // removing /filename and returning to the folders index-file
+        resultUrl = newPath.slice(0, index2LastSlash)
+        router.push(`../${resultUrl}`)
+        // removing the old locale value with ../
       }
+      return
     }
   }
-} // End of function main function closeMenuAndUpdate(event)
+  showToast(`${uiLocale.value.name} is selected`, `Close the menu and read the page in English `)
+} // End of function updateThePageIfLanguageIsChanged()
 
 // const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 const { data: nav_en } = await useAsyncData('filtered-nav1', () => {
@@ -231,11 +204,10 @@ const headerMenuAccordionTabs = ref<TabsItem[]>([
     <UTabs
       v-model="activeTab"
       :items="tabs"
-      @click="closeMenuAndUpdate"
     >
+      <!-- <UTabs @click="closeMenuAndUpdate" -->
       <template #en>
         <UContentNavigation
-          v-model:open="isMenuOpen"
           highlight
           :navigation="flatNavigation"
           type="single"
@@ -246,7 +218,6 @@ const headerMenuAccordionTabs = ref<TabsItem[]>([
 
       <template #da>
         <UContentNavigation
-          v-model:open="isMenuOpen"
           highlight
           :navigation="flatNavigation"
           type="single"
