@@ -165,6 +165,10 @@ onClickOutside(navRef, closeNav)
       v-if="page?.body?.toc?.links?.length"
       #right
     >
+      <!--
+      ADD CUSTOM CODE TO GET ACCORDION OF CONTENT TOC - LOOK ON THE FOLLOWING URL FOR TIPS
+      https://www.google.com/search?q=nuxt+ui+content+toc+-+enable+collabseble+rows+for+subchapters&oq=nuxt+ui+content+toc+-+enable+collabseble+rows+for+subchapters&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTY2MDQyajBqN6gCCLACAfEF-8X75usZAAg&sourceid=chrome&ie=UTF-8
+      -->
       <UContentToc
         :title="toc?.title"
         :links="page.body?.toc?.links"
