@@ -190,17 +190,29 @@ const headerMenuAccordionTabs = ref<TabsItem[]>([
 <template>
   <UCard>
     <template #header>
-      <UAccordion :items="headerMenuAccordion">
-        <template #body="{ }">
-          <!-- <template #body="{ item }" -->
-          <UTabs
-            :unmount-on-hide="false"
-            :items="headerMenuAccordionTabs"
-            class="w-full"
-          />
+      <USelectMenu
+        placeholder="Luther's Church Postil"
+        icon="i-lucide-search"
+        trailing-icon="i-lucide-arrow-down"
+        :items="sermons"
+        :search-input="{
+          placeholder: 'Filter Sermons ...',
+          icon: 'i-lucide-search'
+        }"
+        class="w-full"
+        @click="console.log('Clicking on the search field')"
+      >
+        <template #item-label="{ item }">
+          <!-- @vue-expect-error  Property 'tooltip' does not exist on type 'AcceptableValue... -->
+          <UTooltip :text="item?.tooltip">
+            <!-- @vue-expect-error  Property 'label' does not exist on type 'AcceptableValue... -->
+            <span v-if="typeof item !== 'string' && 'label' in item">{{ item?.label }}</span>
+            <span v-else>Error: No label</span>
+          </UTooltip>
         </template>
-      </UAccordion>
+      </USelectMenu>
     </template>
+
     <UTabs
       v-model="activeTab"
       :items="tabs"
@@ -228,27 +240,16 @@ const headerMenuAccordionTabs = ref<TabsItem[]>([
     </UTabs>
 
     <template #footer>
-      <USelectMenu
-        placeholder="Most relevant sermons"
-        icon="i-lucide-search"
-        trailing-icon="i-lucide-arrow-down"
-        :items="sermons"
-        :search-input="{
-          placeholder: 'Filter...',
-          icon: 'i-lucide-search'
-        }"
-        class="w-full"
-        @click="console.log('Clicking on the search field')"
-      >
-        <template #item-label="{ item }">
-          <!-- @vue-expect-error  Property 'tooltip' does not exist on type 'AcceptableValue... -->
-          <UTooltip :text="item?.tooltip">
-            <!-- @vue-expect-error  Property 'label' does not exist on type 'AcceptableValue... -->
-            <span v-if="typeof item !== 'string' && 'label' in item">{{ item?.label }}</span>
-            <span v-else>Error: No label</span>
-          </UTooltip>
+      <UAccordion :items="headerMenuAccordion">
+        <template #body="{ }">
+          <!-- <template #body="{ item }" -->
+          <UTabs
+            :unmount-on-hide="false"
+            :items="headerMenuAccordionTabs"
+            class="w-full"
+          />
         </template>
-      </USelectMenu>
+      </UAccordion>
     </template>
   </UCard>
 </template>

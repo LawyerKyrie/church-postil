@@ -6,6 +6,7 @@ seo:
 
 ::u-page-hero{class="dark:bg-gradient-to-b from-neutral-900 to-neutral-950"}
 ---
+<!-- markdownlint-disable MD018 -->
 orientation: horizontal
 ---
 
@@ -28,6 +29,7 @@ Velg mellom engelsk og dansk kirkepostille.
   size: xl
   to: /en/?action=urlAction
   trailing-icon: i-lucide-arrow-right
+
   ---
   Engelsk
   :::
@@ -38,6 +40,7 @@ Velg mellom engelsk og dansk kirkepostille.
   size: xl
   to: /da/?action=urlAction
   trailing-icon: i-lucide-arrow-right
+
   ---
   Dansk
   :::
@@ -56,6 +59,7 @@ Seks (6) Postiller
   to: /da/intro
   trailingIcon: i-lucide-arrow-right
   variant: subtle
+
   ---
   Utforsk Kirke Postille
   :::
@@ -68,6 +72,7 @@ Seks (6) Postiller
   description: De fire søndagene i Advent
   icon: i-heroicons-book-open
   to: /da/advent
+
   ---
   :::
 
@@ -77,6 +82,7 @@ Seks (6) Postiller
   description: Julaften - Hellige tre Kongers dag
   icon: i-heroicons-academic-cap
   to: /da/christmas
+
   ---
   :::
 
@@ -86,6 +92,7 @@ Seks (6) Postiller
   description: Åpenbarings søndagene - Før-faste - Faste - Palme søndag
   icon: i-heroicons-book-open-solid
   to: /da/lent
+
   ---
   :::
 
@@ -95,6 +102,7 @@ Seks (6) Postiller
   description: Sommer (Påske) postille; 1.Påskedag - Pinse
   icon: i-heroicons-globe-alt
   to: /da/easter
+
   ---
   :::
 
@@ -104,6 +112,7 @@ Seks (6) Postiller
   description: Trefoldighed Søndag - 12.Sundag efter Trefoldighed
   icon: i-heroicons-adjustments-vertical
   to: /da/trinity1
+
   ---
   :::
 
@@ -113,6 +122,7 @@ Seks (6) Postiller
   description: 13.Søndag efter trefoldighed - 26.Søndag efter trefoldighed
   icon: i-heroicons-beaker
   to: /da/trinity2
+  
   ---
   :::
 
