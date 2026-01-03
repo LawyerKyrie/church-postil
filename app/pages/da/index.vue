@@ -3,8 +3,6 @@ import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
 
-console.log('checking when this is started')
-
 const { data: page } = await useAsyncData(
   `/da/index`, () => queryCollection('docs')
     .path(`/da/`)
@@ -45,13 +43,12 @@ function showToast(title, description) {
 }
 
 onMounted(() => {
-  console.log('onMounted is started in danish index.vue')
   // Get query parameters from the URL
   const urlParams = new URLSearchParams(window.location.search)
   const action = urlParams.get('action') // Gets the value of the 'action' parameter
 
   // Run a function based on the value
-  if (action === 'urlAction') {
+  if (action === 'selectLanguage') {
     locale.value = 'da'
     showToast(`Danske prædikener valgt`, `Åpne meny eller velg postille nedenfor`)
     // alert('Data from URL query parameter in DA')

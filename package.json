@@ -21,6 +21,8 @@
     "@nuxtjs/i18n": "^10.2.1",
     "@nuxtjs/mcp-toolkit": "0.5.1",
     "@vercel/analytics": "^1.6.1",
+    "@vueuse/core": "^14.1.0",
+    "@vueuse/nuxt": "^14.1.0",
     "better-sqlite3": "^12.4.6",
     "giscus": "^1.6.0",
     "nuxt": "^4.2.2",

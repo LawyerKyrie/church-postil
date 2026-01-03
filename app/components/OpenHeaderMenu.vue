@@ -3,20 +3,25 @@ import { useI18n } from 'vue-i18n'
 import * as locales from '@nuxt/ui/locale'
 import type { AccordionItem, TabsItem } from '@nuxt/ui'
 import { findPageChildren } from '@nuxt/content/utils'
-import { useRouter } from 'vue-router'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { $updateThePageOnLanguageChange } = useNuxtApp() as any
 
 const openMenu = useOpenMenu()
+const { locale } = useI18n()
+const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
+
+const localeBefore = locale.value // updating it on close click
 
 watch(openMenu, (/* newValue, oldValue */) => {
   if (openMenu.value === false) {
     if (localeBefore !== locale.value) {
-      updateThePageIfLanguageIsChanged()
+      $updateThePageOnLanguageChange(locale.value, localeBefore)
+      showToast(`${uiLocale.value.name} selected`, `Updating the page language!`)
     }
   }
   // console.log(`Global variable "openMenu" was changed from "${oldValue}" to "${newValue}"`)
 })
-
-const router = useRouter()
 
 // const toggleMenu = () => { openMenu.value = !openMenu.value }
 
@@ -27,80 +32,26 @@ const tabs: TabsItem[] = [
     label: 'English',
     icon: 'i-iconoir-language',
     slot: 'en',
-    value: 0
+    value: 'en'
   },
   {
     label: 'Danish',
     icon: 'i-lucide-languages',
     slot: 'da',
-    value: 1
+    value: 'da'
   }
 ]
 
 // 1. Read the locale value and set the correct tab active
-const { locale } = useI18n()
-const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
-// uiLocale used one time in showToast when toggle lang
-
-const handleTabChange = (newTabValue: number) => {
-  // Code for changing the content menu should be added below
-  switch (newTabValue) {
-    case 0:
-      locale.value = 'en'
-      break
-    case 1:
-      locale.value = 'da'
-      break
-    default:
-      console.log('Sorry! Only Eng/Dan Tabs.')
-  }
-}
-
-const activeTab = ref(locale.value === 'en' ? 0 : 1)
+const activeTab = ref(locale.value === 'en' ? 'en' : 'da')
 
 // 2. Watch the activeTab variable for changes
-watch(activeTab, (newTabValue: number, oldTabValue) => {
+watch(activeTab, (newTabValue: string, oldTabValue) => {
   // Optional: check if the new value is different from the old one before running the function
   if (newTabValue !== oldTabValue) {
-    handleTabChange(newTabValue)
+    locale.value = newTabValue
   }
 })
-
-let localeBefore = locale.value // updating it on close click
-
-function updateThePageIfLanguageIsChanged() { // inside closeMenuAndUpdate
-  localeBefore = locale.value // updating localeBefore to the last changed language
-  const oldPath = ref(window.location.pathname)
-  let restPath = oldPath.value?.slice(3)
-  if (restPath.startsWith('/')) restPath = restPath.slice(1)
-
-  const newPath = `../${locale.value}/${restPath}`
-
-  const endings = ['advent', 'christmas', 'lent', 'easter', 'trinity1', 'trinity2']
-  function endsWithAny(str, suffixes) {
-    return suffixes.some(function (suffix) {
-      return str.endsWith(suffix)
-    })
-  }
-  if (endsWithAny(newPath, endings)) {
-    router.push(`${newPath}`)
-  } else { // if not a folder
-    console.log('The path is not one of the six postil folders.')
-    // Checking if the old route exists in the new language code
-    const index2LastSlash = newPath.lastIndexOf('/')
-    let resultUrl
-    if (!router.hasRoute(newPath)) {
-      if (index2LastSlash !== -1) {
-        // removing /filename and returning to the folders index-file
-        resultUrl = newPath.slice(0, index2LastSlash)
-        router.push(`../${resultUrl}`)
-        // removing the old locale value with ../
-      }
-      return
-    }
-  }
-  showToast(`${uiLocale.value.name} is selected`, `Close the menu and read the page in English `)
-} // End of function updateThePageIfLanguageIsChanged()
 
 // const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 const { data: nav_en } = await useAsyncData('filtered-nav1', () => {

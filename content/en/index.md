@@ -25,7 +25,7 @@ Choose between English and Danish Church Postil.
   ---
   icon: i-iconoir-language
   size: xl
-  to: /en/?action=urlAction
+  to: /en/?action=selectLanguage
   trailing-icon: i-lucide-arrow-right
 
   ---
@@ -38,7 +38,7 @@ Choose between English and Danish Church Postil.
   color: neutral
   variant: outline
   size: xl
-  to: /da/?action=urlAction
+  to: /da/?action=selectLanguage
   trailing-icon: i-lucide-arrow-right
 
   ---
@@ -49,7 +49,7 @@ Choose between English and Danish Church Postil.
 
 ::u-page-section{class="dark:bg-neutral-950"}
 #title
-Six (6) Postils
+The Six Postils
 
 #links
   :::u-button
@@ -68,7 +68,7 @@ Six (6) Postils
 
   :::u-page-feature
   ---
-  title: 1. Advent
+  title: 1. Advent Postil
   description: The four Sundays in Advent
   icon: i-heroicons-book-open
   to: /en/advent
@@ -78,7 +78,7 @@ Six (6) Postils
 
   :::u-page-feature
   ---
-  title: 2. Christmas
+  title: 2. Christmas Postil
   description: Christmas Eve - Epiphany (The Holy Three Kings Day)
   icon: i-heroicons-academic-cap
   to: /en/christmas
@@ -88,7 +88,7 @@ Six (6) Postils
 
   :::u-page-feature
   ---
-  title: 3. Lent
+  title: 3. Lent Postil
   description: Epiphany Sundays - Pre-Lent - Lent - Palm Sunday
   icon: i-heroicons-book-open-solid
   to: /en/lent
@@ -98,7 +98,7 @@ Six (6) Postils
 
   :::u-page-feature
   ---
-  title: 4. Summer (Easter)
+  title: 4. Summer Postil
   description: Summer Postil; Easter Sunday - Pentecost
   icon: i-heroicons-globe-alt
   to: /en/easter
@@ -108,7 +108,7 @@ Six (6) Postils
 
   :::u-page-feature
   ---
-  title: 5. Trinity I
+  title: 5. Trinity I Postil
   description: Trinity Sunday - 12.Sunday after Trinity
   icon: i-heroicons-adjustments-vertical
   to: /en/trinity1
@@ -118,7 +118,7 @@ Six (6) Postils
 
   :::u-page-feature
   ---
-  title: 6. Trinity II
+  title: 6. Trinity II Postil
   description: 13.Sunday after Trinity - 26.Sunday after trinity
   icon: i-heroicons-beaker
   to: /en/trinity2

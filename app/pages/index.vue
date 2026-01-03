@@ -5,7 +5,6 @@ const { locale } = useI18n()
 
 const { data: page } = await useAsyncData(
   `/${locale.value}/index`, () => queryCollection('docs')
-    // .where('path', '=', `/${locale.value}/`)
     .path(`/${locale.value}/`)
     .first()
 )
@@ -26,9 +25,6 @@ useSeoMeta({
   ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png',
   twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png'
 })
-
-// Select language from the buttons in the landing page
-// See lang code in index.vue in /en and /da folder
 </script>
 
 <template>

@@ -49,11 +49,9 @@ onMounted(() => {
   const urlParams = new URLSearchParams(window.location.search)
   const action = urlParams.get('action') // Gets the value of the 'action' parameter
 
-  // Run a function based on the value
-  if (action === 'urlAction') {
+  if (action === 'selectLanguage') {
     locale.value = 'en'
     showToast(`${uiLocale.value.name} is selected`, `Open menu or select postil below!`)
-    // alert('Data from URL query parameter in EN')
   }
 })
 </script>

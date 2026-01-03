@@ -2,7 +2,7 @@
 import { createI18n } from 'vue-i18n'
 import * as locales from '@nuxt/ui/locale'
 
-// console.log('This code runs before app.vue is loading!')
+// console.log('This code runs before app.vue (and before other plugins) is loading!')
 
 export default defineNuxtPlugin(({ vueApp }) => {
   // Define your messages/translations here or load them dynamically

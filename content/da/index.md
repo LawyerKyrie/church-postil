@@ -6,10 +6,10 @@ seo:
 
 ::u-page-hero{class="dark:bg-gradient-to-b from-neutral-900 to-neutral-950"}
 ---
-<!-- markdownlint-disable MD018 -->
 orientation: horizontal
----
 
+---
+<!-- markdownlint-disable MD018 -->
 #top
 :hero-background
 
@@ -27,7 +27,7 @@ Velg mellom engelsk og dansk kirkepostille.
   color: neutral
   variant: outline
   size: xl
-  to: /en/?action=urlAction
+  to: /en/?action=selectLanguage
   trailing-icon: i-lucide-arrow-right
 
   ---
@@ -38,7 +38,7 @@ Velg mellom engelsk og dansk kirkepostille.
   ---
   icon: i-lucide-languages
   size: xl
-  to: /da/?action=urlAction
+  to: /da/?action=selectLanguage
   trailing-icon: i-lucide-arrow-right
 
   ---
@@ -49,7 +49,7 @@ Velg mellom engelsk og dansk kirkepostille.
 
 ::u-page-section{class="dark:bg-neutral-950"}
 #title
-Seks (6) Postiller
+Oversikt Postiller
 
 #links
   :::u-button

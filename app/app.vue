@@ -49,8 +49,6 @@ useHead({
       </NuxtLayout>
     </UMain>
 
-    <BackToTop />
-
     <AppFooter />
 
     <ClientOnly>

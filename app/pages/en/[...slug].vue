@@ -182,6 +182,7 @@ const handleUpdate = (isOpen: boolean) => {
 
       <ClientOnly>
         <GithubComments />
+        <RightBottomMenu />
       </ClientOnly>
 
       <USeparator v-if="surround?.length" />
