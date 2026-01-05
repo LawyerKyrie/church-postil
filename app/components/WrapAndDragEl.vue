@@ -16,7 +16,7 @@ const { x, y, style } = useDraggable(el, {
 })
 
 watch([width, height], ([newWidth, newHeight]) => {
-  // console.log('New width ', newWidth, ' and height ', newHeight)
+  console.log('New width ', newWidth, ' and height ', newHeight)
   x.value = newWidth - 50
   y.value = newHeight - 35
 })
@@ -28,7 +28,7 @@ watch([width, height], ([newWidth, newHeight]) => {
     title="Move me!"
     :style="style"
     style="position: fixed"
-    class="opacity-50 bg-transparent"
+    class=""
   >
     <!--
     <UButton

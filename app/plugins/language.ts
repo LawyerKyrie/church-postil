@@ -14,15 +14,14 @@ export default defineNuxtPlugin(() => {
         const newPath = `../${newLocale}/${restPath}`
 
         const endings = ['advent', 'christmas', 'lent', 'easter', 'trinity1', 'trinity2']
-        function endsWithAny(str, suffixes) {
+        function endsWith(str, suffixes) {
           return suffixes.some(function (suffix) {
             return str.endsWith(suffix)
           })
         }
-        if (endsWithAny(newPath, endings)) {
+        if (endsWith(newPath, endings)) {
           router.push(`${newPath}`)
-        } else { // if not a folder
-          console.log('The path is not one of the six postil folders.')
+        } else if (!endings.some(folder => newPath.includes(folder))) { // if not a folder
           // Checking if the old route exists in the new language code
           const index2LastSlash = newPath.lastIndexOf('/')
           let resultUrl
@@ -30,8 +29,6 @@ export default defineNuxtPlugin(() => {
             if (index2LastSlash !== -1) {
               // removing /filename and returning to the folders index-file
               resultUrl = newPath.slice(0, index2LastSlash)
-              console.log('resultUrl is')
-              console.log(resultUrl)
               router.push(`../${resultUrl}`)
               // removing the old locale value with ../
             }

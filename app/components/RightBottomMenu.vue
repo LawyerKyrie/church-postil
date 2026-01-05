@@ -7,7 +7,7 @@ const pos = {
   width: width.value, // not necessary
   height: height.value, // width.value could be used below
   get x() {
-    const result = this.width - 50
+    const result = this.width - 35
     return result.toString()
   },
   get y() {
@@ -107,7 +107,7 @@ function handleClickEvent(event, condition) {
     event.stopPropagation()
     handleClickEvent.stopped = true
     isHold.value = false
-    toast.add({ title: 'Move Menu', description: 'Hold and Drag to move the Menu!' })
+    // toast.add({ title: 'Move Menu', description: 'Hold and Drag to move the Menu!' })
   }
 }
 
@@ -151,6 +151,20 @@ const groups = [
     ]
   }
 ]
+
+// Open Select Menu with click on button on mobile phone
+const keyboardClick = () => {
+  const targetElement = document
+  const ctrlKEvent = new KeyboardEvent('keydown', {
+    key: 'k',
+    code: 'KeyK',
+    ctrlKey: true,
+    bubbles: true,
+    cancelable: true
+  })
+  inActive.value = true
+  targetElement.dispatchEvent(ctrlKEvent)
+}
 </script>
 
 <template>
@@ -159,116 +173,129 @@ const groups = [
       v-if="showButtons"
       class="fixed -bottom-10 right-2"
     >
-      <WrapAndDragEl
-        :x-init="pos.x"
-        :y-init="pos.y"
-      >
-        <UPopover
-          v-model:open="isClosed"
-          arrow
-          :content="{ side: 'top', align: 'start' }"
-          class=""
+      <!-- Extra div with the class-content prevents that content scroll on mobile when trying to drag the menu -->
+      <div class="fixed bottom-0 right-0 w-[85px] h-[200px] z-50 touch-none">
+        <WrapAndDragEl
+          :x-init="pos.x"
+          :y-init="pos.y"
+          @touchstart.stop
+          @touchmove.stop
         >
-          <div class="rotate-90">
-            <USwitch
-              ref="switchRef"
-              v-model="inActive"
-              :title="inActive === true ? 'Open Menu' : 'Close Menu'"
-              color="secondary"
-              unchecked-icon="i-lucide-x"
-              checked-icon="i-lucide-check"
-              @mousedown="handlePressStart"
-              @mouseup="handlePressEnd"
-              @touchstart="handlePressStart"
-              @touchend="handlePressEnd"
-              @click="handleClickEvent($event, isHold)"
-            />
-          </div>
-
-          <template #content>
-            <div class="">
-              <UButton
-                title="Back to Top"
-                icon="i-heroicons-arrow-up-solid"
+          <UPopover
+            v-model:open="isClosed"
+            arrow
+            :content="{ side: 'top', align: 'start' }"
+            class=""
+          >
+            <div class="rotate-90">
+              <USwitch
+                ref="switchRef"
+                v-model="inActive"
+                :title="inActive === true ? 'Open Menu' : 'Close Menu'"
                 color="secondary"
-                variant="ghost"
-                aria-label="Back to top"
-                class="block"
-                @click="scrollToTop"
+                unchecked-icon="i-lucide-x"
+                checked-icon="i-lucide-check"
+                @mousedown="handlePressStart"
+                @mouseup="handlePressEnd"
+                @touchstart="handlePressStart"
+                @touchend="handlePressEnd"
+                @click="handleClickEvent($event, isHold)"
               />
-              <UButton
-                title="Toggle Language"
-                :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
-                color="secondary"
-                square
-                variant="ghost"
-                @click="toggleLang"
-              />
-
-              <UPopover
-                v-model:open="isOpen"
-                :content="{ side: 'right', align: 'start' }"
-                class="overflow-y-auto"
-              >
-                <div class="">
-                  <UButton
-                    :icon="isOpen ? 'i-heroicons-x-mark' : 'i-lucide-menu'"
-                    color="secondary"
-                    square
-                    variant="subtle"
-                  />
-                </div>
-
-                <template #content>
-                  <div class="overflow-x-auto overflow-y-auto">
-                    <!--
-                      Source code:
-                      https://ui.nuxt.com/docs/components/command-palette#with-children-in-items
-                    -->
-                    <UCommandPalette
-                      :groups="groups"
-                      placeholder="Filter..."
-                    >
-                      <template #footer>
-                        <div class="flex items-center justify-between">
-                          <UIcon
-                            name="i-lucide-list-filter"
-                            title="Ctrl K - shortcut to sermon list"
-                            class="size-5 text-dimmed ml-1"
-                          />
-                          <div class="flex items-center">
-                            <!--
-                            <UButton color="neutral" variant="ghost" label="Open Command" class="text-dimmed" size="xs">
-                              <template #trailing>
-                                <UKbd value="enter" />
-                              </template>
-                            </UButton>
-                            <USeparator orientation="vertical" class="h-4" />
-                            -->
-
-                            <UButton
-                              color="neutral"
-                              variant="ghost"
-                              label="Sermons -"
-                              class="text-dimmed"
-                              size="xs"
-                            >
-                              <template #trailing>
-                                <UKbd value="meta" />
-                                <UKbd value="k" />
-                              </template>
-                            </UButton>
-                          </div>
-                        </div>
-                      </template>
-                    </UCommandPalette>
-                  </div>
-                </template>
-              </UPopover>
             </div>
-          </template>
-        </UPopover>
-      </WrapAndDragEl>
+
+            <template #content>
+              <div class="">
+                <UButton
+                  title="Back to Top"
+                  icon="i-heroicons-arrow-up-solid"
+                  color="secondary"
+                  variant="ghost"
+                  aria-label="Back to top"
+                  class="block"
+                  @click="scrollToTop"
+                />
+                <UButton
+                  title="Toggle Language"
+                  :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
+                  color="secondary"
+                  square
+                  variant="ghost"
+                  @click="toggleLang"
+                />
+
+                <UPopover
+                  v-model:open="isOpen"
+                  :content="{ side: 'right', align: 'start' }"
+                  class="overflow-y-auto"
+                >
+                  <div class="">
+                    <UButton
+                      :icon="isOpen ? 'i-heroicons-x-mark' : 'i-lucide-menu'"
+                      color="secondary"
+                      square
+                      variant="subtle"
+                    />
+                  </div>
+
+                  <template #content>
+                    <div class="overflow-x-auto overflow-y-auto">
+                      <!--
+                        Source code:
+                        https://ui.nuxt.com/docs/components/command-palette#with-children-in-items
+                      -->
+                      <UCommandPalette
+                        :groups="groups"
+                        placeholder="Filter..."
+                      >
+                        <template #footer>
+                          <div class="flex items-center justify-between gap-2">
+                            <UIcon
+                              name="i-lucide-list-filter"
+                              title="Ctrl K - shortcut to sermon list"
+                              class="size-5 text-dimmed ml-1"
+                            />
+                            <div class="flex items-center  gap-1">
+                              <UButton
+                                color="neutral"
+                                variant="ghost"
+                                label="Select Menu"
+                                size="xs"
+                                class="text-dimmed"
+                                @click="keyboardClick"
+                              >
+                                <template #trailing>
+                                  <UKbd value="enter" />
+                                </template>
+                              </UButton>
+                              <USeparator
+                                orientation="vertical"
+                                class="h-4"
+                              />
+
+                              <UButton
+                                color="neutral"
+                                variant="ghost"
+                                label=""
+                                class="text-dimmed"
+                                size="xs"
+                              >
+                                <template #trailing>
+                                  <UKbd value="meta" />
+                                  <UKbd value="k" />
+                                </template>
+                              </UButton>
+                            </div>
+                          </div>
+                        </template>
+                      </UCommandPalette>
+                    </div>
+                  </template>
+                </UPopover>
+              </div>
+            </template>
+          </UPopover>
+        </WrapAndDragEl>
+      </div>
     </div>
   </ClientOnly>
 </template>
