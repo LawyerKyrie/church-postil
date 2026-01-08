@@ -76,7 +76,7 @@ const flatNavigation = computed(() => {
 /* <!-- Select Menu for more alternatives --> */
 
 const { data: sermons } = await useFetch(
-  '/api/sermons', {
+  '/api/en-ctrl-k', {
     key: 'church-postil',
     transform: (
       data: { label: string, value: string, type: never, id: number, icon: string, tooltip: string, onSelect: never }[]

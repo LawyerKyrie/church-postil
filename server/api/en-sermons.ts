@@ -1,6 +1,7 @@
-// List of sermons in Luther's Church Postil
+// English Index Page
 const sermons = [
-  { label: '1. Postil - Advent to Christmas', type: 'label' },
+  // { label: '1. Postil - Advent to Christmas', type: 'label' },
+
   { label: '1. Sun. in Advent - Rom 13: 11-14', value: '/en/advent#first-sunday-in-advent-romans-13-11-14' },
   { label: '1. Sun. in Advent - Matt 21: 1-9', value: '/en/advent#first-sunday-in-advent-matthew-21-1-9' },
   { label: '2. Sun. in Advent - Rom 15: 4-13', value: '/en/advent#second-sunday-in-advent-romans-15-4-13' },
@@ -9,12 +10,14 @@ const sermons = [
   { label: '3. Sun. in Advent - Matt 11: 2-10', value: '/en/advent#third-sunday-in-advent-matthew-11-2-10' },
   { label: '4. Sun. in Advent - Phil 4: 4-7', value: '/en/advent#fourth-sunday-in-advent-philippians-4-4-7' },
   { label: '4. Sun. in Advent - John 1: 19-28', value: '/en/advent#fourth-sunday-in-advent-john-1-19-28' },
-  { label: '2. Postil - Christmas to Epiphany', type: 'label' },
+
+  // { label: '2. Postil - Christmas to Epiphany', type: 'label' },
+
   { label: 'Christmas Day - Titus 2: 11-15', value: '/en/christmas#christmas-day-titus-2-11-15' },
-  { label: 'Christmas Day - Luke 2: 1-14', value: '/en/christmas#early-christmas-service-titus-3-4-7' },
+  { label: 'Christmas Day - Luke 2: 1-14', value: '/en/christmas#early-christmas-service-luke-2-1-14' },
   { label: 'Early Xmas Serv - Tit 3: 4-7', value: '/en/christmas#early-christmas-service-titus-3-4-7' },
-  { label: 'Early Xmas Serv - Heb 1: 1-12', value: '/en/christmas#early-christmas-service-luke-2-15-20' },
-  { label: 'Xmas Morning Serv. - Joh 1: 1-14', value: '/en/christmas#christmas-morning-service-hebrews-1-1-12' },
+  { label: 'Early Xmas Serv - Luk 2: 15-20', value: '/en/christmas#early-christmas-service-luke-2-15-20' },
+  { label: 'Xmas Morning Serv. - Heb 1: 1-12', value: '/en/christmas#christmas-morning-service-hebrews-1-1-12' },
   { label: 'Principal Xmas Serv. - Joh 1: 1-14', value: '/en/christmas#principal-christmas-service-john-1-1-14' },
   { label: 'St. Stephens\'s Day - Acts 6: 8-14 & 7:54-60', value: '/en/christmas#st-stephens-day-acts-6-8-14-7-54-60' },
   { label: 'St. Steph.\'s Day - Matt 23: 34-39', value: '/en/christmas#st-stephens-day-matthew-23-34-39' },
@@ -25,15 +28,21 @@ const sermons = [
   { label: 'New Year\'s Day - Gal 3: 23-29', value: '/en/christmas#new-years-day-galatians-3-23-29' },
   { label: 'Epiphany - Isaiah 60: 1-6', value: '/en/christmas#epiphany-isaiah-60-1-6' },
   { label: 'Epiphany - Matthew 2: 1-12', value: '/en/christmas#epiphany-matthew-2-1-12' },
-  { label: '3. Postil - Epiphany to Easter', type: 'label' },
+
+  // { label: 'VinterPostil', type: 'label' },
+
   { label: 'Lent Postil is coming soon', value: '/en/lent' },
-  { label: '4. Postil - Easter (Summer)', type: 'label' },
+
+  // { label: 'SommerPostil', type: 'label' },
   { label: 'Summer Postil is coming soon', value: '/en/easter' },
-  { label: '5. Postil - Trinity I', type: 'label' },
+
+  // { label: 'Trinity I', type: 'label' },
   { label: 'Trinity I Postil is coming soon', value: '/en/trinity1' },
-  { label: '6. Postil - Trinity II', type: 'label' },
-  { label: 'Trinity II Postil is coming soon', value: '/en/trinity2' },
-  { type: 'separator' }
+
+  // { label: 'Trinity II', type: 'label' },
+  { label: 'Trinity II Postil is coming soon', value: '/en/trinity2' }
+
+  // { type: 'separator' }
 ]
 
 export default defineEventHandler(() => {

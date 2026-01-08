@@ -13,10 +13,11 @@ const el = useTemplateRef('el')
 // `style` will be a helper computed for `left: ?px; top: ?px;`
 const { x, y, style } = useDraggable(el, {
   initialValue: { x: Number(props.xInit), y: Number(props.yInit) }
+  // onStart: (pos, event) => { event.preventDefault() }
 })
 
 watch([width, height], ([newWidth, newHeight]) => {
-  console.log('New width ', newWidth, ' and height ', newHeight)
+  // console.log('New width ', newWidth, ' and height ', newHeight)
   x.value = newWidth - 50
   y.value = newHeight - 35
 })
@@ -28,7 +29,7 @@ watch([width, height], ([newWidth, newHeight]) => {
     title="Move me!"
     :style="style"
     style="position: fixed"
-    class=""
+    class="fixed z-50 touch-none select-none"
   >
     <!--
     <UButton

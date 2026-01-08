@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useWindowSize } from '@vueuse/core'
+import { useWindowSize, useWindowScroll } from '@vueuse/core'
 
 const { width, height } = useWindowSize()
 const pos = {
   width: width.value, // not necessary
   height: height.value, // width.value could be used below
   get x() {
-    const result = this.width - 35
+    const result = this.width - 50
     return result.toString()
   },
   get y() {
@@ -32,9 +32,9 @@ const handleScroll = () => {
 }
 
 const scrollToTop = () => {
-  isClosed.value = !isClosed.value
+  notClosed.value = !notClosed.value
   inActive.value = true
-  // isClosed.value = isClosed.value === true ? false : true
+  // notClosed.value = notClosed.value === true ? false : true
   toast.add({ title: 'Scrolling to Top!', description: '- and closing bottom menu' })
   window.scrollTo({
     top: 0,
@@ -51,10 +51,10 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-const isClosed = ref(false)
+const notClosed = ref(false)
 
 defineShortcuts({
-  o: () => isClosed.value = !isClosed.value
+  o: () => notClosed.value = !notClosed.value
 })
 
 const isLang = ref(false)
@@ -86,7 +86,7 @@ const handlePressStart = () => {
   // Start a timer for the hold action
   pressTimer = setTimeout(() => {
     isHold.value = true
-    if (isClosed.value === true) inActive.value = true
+    if (notClosed.value === true) inActive.value = true
     else inActive.value = false
   }, holdTime)
 }
@@ -165,6 +165,27 @@ const keyboardClick = () => {
   inActive.value = true
   targetElement.dispatchEvent(ctrlKEvent)
 }
+
+/* Close movable button on scroll */
+const { /* x, */y } = useWindowScroll()
+
+// React to scroll changes
+watch(y, (newY) => {
+  if (newY > 100) {
+    if (notClosed.value === true) {
+      isOpen.value = false
+      inActive.value = true
+      notClosed.value = false
+    }
+  }
+})
+
+/* On click outside movable menu the button stays inActive = false */
+watch(notClosed, () => {
+  // This is making the uSwitch button active when it's closing with click outside
+  if (notClosed.value !== true)
+    inActive.value = true
+})
 </script>
 
 <template>
@@ -174,7 +195,7 @@ const keyboardClick = () => {
       class="fixed -bottom-10 right-2"
     >
       <!-- Extra div with the class-content prevents that content scroll on mobile when trying to drag the menu -->
-      <div class="fixed bottom-0 right-0 w-[85px] h-[200px] z-50 touch-none">
+      <div class="fixed bottom-0 right-0 w-[90px] h-[200px] z-50 touch-none">
         <WrapAndDragEl
           :x-init="pos.x"
           :y-init="pos.y"
@@ -182,12 +203,15 @@ const keyboardClick = () => {
           @touchmove.stop
         >
           <UPopover
-            v-model:open="isClosed"
+            v-model:open="notClosed"
             arrow
             :content="{ side: 'top', align: 'start' }"
             class=""
           >
-            <div class="rotate-90">
+            <div
+              ref="movableMenu"
+              class="rotate-90"
+            >
               <USwitch
                 ref="switchRef"
                 v-model="inActive"

@@ -141,7 +141,6 @@ async function collapsibleToc() {
 onMounted(() => {
   document.addEventListener('click', function (event) {
     const containsElement = event.composedPath().includes(navMenuRef.value)
-
     if (!containsElement) // if click is outside Nav Menu then...
       if (openTocMenu.value) // === true
         closeBtnRef.value.click() // closing toc menu
