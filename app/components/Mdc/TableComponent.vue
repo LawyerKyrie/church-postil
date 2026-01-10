@@ -19,7 +19,7 @@ type RowCells = {
   type: never
 }
 
-const { data, pending } = await useFetch<RowCells[]>(
+const { data } = await useFetch<RowCells[]>(
   `/api/${props.apiFile}`,
   {
     key: 'da-christmas-sermons',
@@ -34,6 +34,7 @@ const { data, pending } = await useFetch<RowCells[]>(
         value: row.value === undefined ? '' : row.value
       })) || []
     }
+    // lazy: true
   }
 )
 
@@ -106,12 +107,12 @@ const table = useTemplateRef('table')
 
 const columnVisibility = ref({
   id: false,
-  category: false,
+  postil: false,
   tag: false,
   label: true,
   bible: true,
   value: false,
-  actions: true
+  menu: true
 })
 
 /* Sorting */
@@ -291,7 +292,6 @@ function getRowItems(row: Row<RowCells>) {
       v-model:column-visibility="columnVisibility"
       v-model:sorting="sorting"
       v-model:global-filter="globalFilter"
-      :loading="pending === true"
       :data="data"
       :columns="columns"
       class="flex-1 whitespace-normal"

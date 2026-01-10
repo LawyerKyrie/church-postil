@@ -61,99 +61,64 @@ const links = computed(() => {
   return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
 })
 
-/* ------------------ */
+// Start working with the toc menu
 
+/* -------- SAVING NAV MENU REF ---------- */
+// Only used as ref to recognize click outside toc menu
+const tocMenuRef = ref<HTMLElement | null>(null) // found after 1.click
+
+// Saving nav menu reference when toc is opened first time
+clickOnContentToc.count = 0
 function clickOnContentToc(event) {
-  closeBtnRef.value = event.target
+  clickOnContentToc.count++
+  if (clickOnContentToc.count === 1)
+    tocMenuRef.value = event.target
 }
 
-const closeBtnRef = ref<HTMLElement | null>(null) // 1.click reference
-const navMenuRef = ref<HTMLElement | null>(null) // found after 1.click
-
-// Watch for changes in the clicked TOC value:
-
-watch(closeBtnRef, (newValue, oldValue) => {
-  if (oldValue === null) {
-    navMenuRef.value = newValue.closest('nav[data-state]') as HTMLElement
-    if (newValue.tagName !== 'BUTTON')
-      closeBtnRef.value = newValue.parentElement
-    else
-      closeBtnRef.value = newValue // saving close button
-  }
+watch(tocMenuRef, (newValue, oldValue) => {
+  if (oldValue === null) // Happening only once
+    tocMenuRef.value = newValue.closest('nav[data-state]') as HTMLElement
 })
 
-/* ------------------ */
-async function collapsibleToc() {
-  let ulParent
-  if (navMenuRef.value !== null) {
-    ulParent = navMenuRef.value.children[0].children[1].children[0] as HTMLElement
-    console.log('')
-  }
+/* FINISH SAVING TOC NAV MENU REF */
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-  }
-
-  let i = 1
-  while (ulParent === undefined) {
-    await sleep(500)
-    ulParent = document.querySelector('nav > div div:nth-child(2) > ul')
-    i++
-    if (i > 3) {
-      console.log('Error: ulParent is still undefined!')
-      break // prevent eternal loop
-    }
-  }
-
-  // ulParent.setAttribute('class', 'ul_tree')
-
-  // Mark only LIs that actually have a nested UL
-  ulParent.querySelectorAll('li').forEach((li) => {
-    if (li.querySelector('ul')) {
-      li.classList.add('has-children')
-    }
-  })
-
-  ulParent.addEventListener('click', (e) => {
-    const eTarget = e.target as HTMLElement
-    const clickedLi = eTarget.closest('li')
-    // Only proceed if the clicked item has children
-    if (!clickedLi || !clickedLi.classList.contains('has-children')) return
-
-    // Stop the click from bubbling up to parent LIs
-    e.stopPropagation()
-
-    const isAlreadyOpen = clickedLi.classList.contains('is-open')
-
-    // ACCORDION: Close all sibling LIs at this specific level
-    const siblings = clickedLi.parentElement.children
-    for (const sibling of siblings) {
-      sibling.classList.remove('is-open')
-    }
-
-    // Toggle the clicked one
-    if (!isAlreadyOpen) {
-      clickedLi.classList.add('is-open')
-    }
-  })
-} // End of async collapsibleToc function
-
+// Close the toc menu on click outside the toc menu
 onMounted(() => {
   document.addEventListener('click', function (event) {
-    const containsElement = event.composedPath().includes(navMenuRef.value)
-
-    if (!containsElement) // if click is outside Nav Menu then...
-      if (openTocMenu.value) // === true
-        closeBtnRef.value.click() // closing toc menu
+    if (isTocOpen.value) {
+      const containsElement = event.composedPath().includes(tocMenuRef.value)
+      if (!containsElement) {
+        isTocOpen.value = false
+      }
+    }
   })
 })
 
-const openTocMenu = ref(null)
+/* COLLAPSIBLE HANDLER FOR CLICK ETC. ON CONTENT TOC */
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { $tocHashArr, $collapsibleToc } = useNuxtApp() as any
+
+const isTocOpen = ref(false) // Initial state (e.g., closed)
 
 const handleUpdate = (isOpen: boolean) => {
-  openTocMenu.value = !isOpen ? false : true
-  if (isOpen) collapsibleToc()
+  isTocOpen.value = !isOpen ? false : true
+  if (isOpen) {
+    // if menu have already been open open it again in the same place
+    $collapsibleToc([...hashArrayRef.value]) // collapsibleToc()
+  }
 }
+
+const route = useRoute()
+const hashArrayRef = ref([])
+
+// Watch for changes in the URL hash (e.g., #second-sunday... etc.)
+watch(() => route.hash, (newHash /* , oldHash */) => {
+  if (newHash) {
+    // tocHashArr is required to open the collapsed toc menu where it was last open
+    hashArrayRef.value = $tocHashArr(newHash)
+  }
+})
 </script>
 
 <template>
@@ -199,6 +164,7 @@ const handleUpdate = (isOpen: boolean) => {
       https://www.google.com/search?q=nuxt+ui+content+toc+-+enable+collabseble+rows+for+subchapters&oq=nuxt+ui+content+toc+-+enable+collabseble+rows+for+subchapters&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTY2MDQyajBqN6gCCLACAfEF-8X75usZAAg&sourceid=chrome&ie=UTF-8
       -->
       <UContentToc
+        v-model:open="isTocOpen"
         :title="`${toc?.title} -  ${page?.title}`"
         :links="page.body?.toc?.links"
         :ui="{

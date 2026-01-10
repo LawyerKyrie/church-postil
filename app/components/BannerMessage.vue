@@ -1,0 +1,34 @@
+<script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { $keyboardClick } = useNuxtApp() as any
+
+const bannerActivated = ref(true) // Control the visibility
+
+const handleActionClick = () => {
+  // alert('Action function activated!')
+  $keyboardClick()
+  // console.log('Banner actions activated!')
+  // isBannerOpen.value = false
+}
+
+const actions = ref([
+  {
+    label: 'Select Menu',
+    // variant: 'outline',
+    onClick: handleActionClick
+  }
+])
+</script>
+
+<template>
+  <UBanner
+    v-if="bannerActivated"
+    to="#"
+    title="“Ctrl k” or Click Opens "
+    :actions="actions"
+    close
+    close-icon="i-lucide-x-circle"
+    class="flex justify-center"
+    @click="handleActionClick"
+  />
+</template>

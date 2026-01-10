@@ -136,6 +136,9 @@ const headerMenuAccordionTabs = ref<TabsItem[]>([
     content: 'Use Select menu below if you like to search fast for a sermon.'
   }
 ])
+
+/* Open the UContentNavigation where it was last open */
+const openedPaths = useState('nav-persistent-state', () => [])
 </script>
 
 <template>
@@ -172,6 +175,7 @@ const headerMenuAccordionTabs = ref<TabsItem[]>([
       <template #en>
         <UContentNavigation
           highlight
+          highlight-color="primary"
           :navigation="flatNavigation"
           type="single"
           :default-open="false"
@@ -181,10 +185,12 @@ const headerMenuAccordionTabs = ref<TabsItem[]>([
 
       <template #da>
         <UContentNavigation
+          v-model:open="openedPaths"
           highlight
+          highlight-color="primary"
           :navigation="flatNavigation"
           type="single"
-          :default-open="false"
+          :default-open="true"
           class="pl-2 pr-2"
         />
       </template>
