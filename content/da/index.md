@@ -17,7 +17,7 @@ orientation: horizontal
 Luthers [Kirke Postille]{.text-primary}
 
 #description
-Velg mellom engelsk og dansk kirkepostille.
+&nbsp;Front side - Velg mellom engelsk og dansk kirkepostille.
 
 #links
 
@@ -48,5 +48,5 @@ Velg mellom engelsk og dansk kirkepostille.
 ::
 
 ::client-only
-  ::MdcTableComponent{apiFile="da-sermons"}
+  ::MdcTableComponent{apiFile="da/sermons"}
 ::client-only

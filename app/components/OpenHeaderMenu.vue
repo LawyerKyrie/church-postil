@@ -50,6 +50,7 @@ watch(activeTab, (newTabValue: string, oldTabValue) => {
   // Optional: check if the new value is different from the old one before running the function
   if (newTabValue !== oldTabValue) {
     locale.value = newTabValue
+    showToast(`Close the Menu`, `- and open it again - if you need the SELECT MENU in Updated Language`)
   }
 })
 
@@ -74,28 +75,38 @@ const flatNavigation = computed(() => {
 })
 
 /* <!-- Select Menu for more alternatives --> */
+type RowCells = {
+  id: string
+  postil: string
+  tag: string
+  label: string
+  bible: string
+  value: string
+  type: never
+  icon: string // creates one tab on sermons
+}
 
-const { data: sermons } = await useFetch(
-  '/api/en-ctrl-k', {
+const { data: sermons } = await useFetch<RowCells[]>(
+  `/api/${locale.value}/select-menu`, {
     key: 'church-postil',
     transform: (
-      data: { label: string, value: string, type: never, id: number, icon: string, tooltip: string, onSelect: never }[]
+      data
     ) => {
       return data?.map(sermon => ({
-        label: `${sermon.label}`,
-        value: String(sermon.value), // Nothing here
-        type: sermon.type,
-        id: String(sermon.id),
-        icon: String(sermon.icon),
+        ...sermon,
+        label: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
+        icon: sermon.icon === undefined ? '&nbsp;' : sermon.icon, // This creates a tab on sermons
         tooltip: sermon.label, // could also be set above in data sermon
         onSelect: () => {
           showToast(`${sermon.label} selected`, `Sermon opens in a new window`)
           navigateTo(`${sermon.value}`, {
-            external: true,
+            external: false
+            /*
             open: {
               target: '_blank',
               windowFeatures: { width: 800, height: 600 }
             }
+            */
           })
         }
       }))
@@ -118,22 +129,27 @@ function showToast(title, description) {
   })
 }
 
-const headerMenuAccordion = ref<AccordionItem[]>([
+const footerMenuAccordion = ref<AccordionItem[]>([
   {
-    label: 'Luther\'s Church Postil',
+    label: 'About Luther\'s Church Postil',
     icon: 'i-iconoir-church'
   }
 ])
-const headerMenuAccordionTabs = ref<TabsItem[]>([
+const footerMenuAccordionTabs = ref<TabsItem[]>([
   {
     label: 'Languages',
     icon: 'i-lucide-toggle-right',
-    content: 'Toggle between English and Danish version of Luther\'s Church Postil.'
+    content: `
+      Toggle between English and Danish version of Luther's Church Postil.
+    `
   },
   {
     label: 'About',
     icon: 'i-lucide-file-question-mark',
-    content: 'Use Select menu below if you like to search fast for a sermon.'
+    content: `
+      - Church Postil is in public domain. 
+      - "Ctrl k" activate the Select Menu.
+    `
   }
 ])
 
@@ -145,16 +161,15 @@ const openedPaths = useState('nav-persistent-state', () => [])
   <UCard>
     <template #header>
       <USelectMenu
-        placeholder="Luther's Church Postil"
+        :placeholder="`${locale === 'en' ? 'Sermons Luther\'s Church Postil' : 'Prædikener Luthers Postiller'}`"
         icon="i-lucide-search"
         trailing-icon="i-lucide-arrow-down"
         :items="sermons"
         :search-input="{
-          placeholder: 'Filter Sermons ...',
+          placeholder: `${locale === 'en' ? 'Filter Sermons...' : 'Filtrer Prædikener...'}`,
           icon: 'i-lucide-search'
         }"
         class="w-full"
-        @click="console.log('Clicking on the search field')"
       >
         <template #item-label="{ item }">
           <!-- @vue-expect-error  Property 'tooltip' does not exist on type 'AcceptableValue... -->
@@ -197,12 +212,13 @@ const openedPaths = useState('nav-persistent-state', () => [])
     </UTabs>
 
     <template #footer>
-      <UAccordion :items="headerMenuAccordion">
+      <UAccordion :items="footerMenuAccordion">
         <template #body="{ }">
           <!-- <template #body="{ item }" -->
           <UTabs
             :unmount-on-hide="false"
-            :items="headerMenuAccordionTabs"
+            :items="footerMenuAccordionTabs"
+            color="neutral"
             class="w-full"
           />
         </template>

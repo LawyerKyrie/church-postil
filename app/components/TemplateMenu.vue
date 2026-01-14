@@ -1,3 +1,7 @@
+<script setup lang="ts">
+// Add custom javascript here
+</script>
+
 <template>
   <UDropdownMenu
     v-slot="{ open }"

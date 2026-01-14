@@ -17,7 +17,8 @@ orientation: horizontal
 Luther's [Church Postil]{.text-primary}
 
 #description
-Choose between English and Danish Church Postil.
+
+&nbsp;Landing page - Choose between English and Danish Church Postil.
 
 #links
 
@@ -48,5 +49,5 @@ Choose between English and Danish Church Postil.
 ::
 
 ::client-only
-  ::MdcTableComponent{apiFile="da-sermons"}
+  ::MdcTableComponent{apiFile="en/sermons"}
 ::client-only
