@@ -1,8 +1,8 @@
 // List of sermons in Luther's Church Postil
-const postil3 = [
+const uddrag4 = [
   // { label: '1. VinterPostil', type: 'label' },
 
-  { id: 411, postil: 'Vinter', tag: 'Epistel', label: '1. Søndag', bible: 'Rom 13: 11-14', value: '/da/lent/epiphany-epistle01' },
+  { id: 6001, postil: 'Vinter', tag: 'Epistel', label: '1. Søndag', bible: 'Rom 13: 11-14', value: '/da/lent/epiphany-epistle01' },
   { id: 412, postil: 'Vinter', tag: 'Evangelium', label: '1. Søndag', bible: 'Matt 21: 1-9', value: '/da/lent/epiphany-gospel01' },
   { id: 421, postil: 'Vinter', tag: 'Epistel', label: '2. Søndag', bible: 'Rom 15: 4-13', value: '/da/lent/epiphany-epistle02' },
   { id: 422, postil: 'Vinter', tag: 'Evangelium', label: '2. Søndag', bible: 'Luke 21: 25-36', value: '/da/lent/epiphany-gospel02' },
@@ -15,5 +15,5 @@ const postil3 = [
 ]
 
 export default defineEventHandler(() => {
-  return postil3
+  return uddrag4
 })

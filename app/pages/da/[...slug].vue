@@ -259,4 +259,17 @@ nav > div div:nth-child(2) > ul li.is-open > ul {
 Reference
 https://gemini.google.com/share/59939ee5a006
 */
+/* For all elements */
+body::-webkit-scrollbar {
+    width: 15px; /* For vertical scrollbar */
+}
+body::-webkit-scrollbar-thumb {
+    background: #888; /* Dark gray thumb */
+    border-radius: 6px; /* Rounded corners */
+    /* height: 35px */
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Darker on hover */
+}
 </style>

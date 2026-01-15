@@ -1,5 +1,5 @@
 // List of sermons in Luther's Church Postil
-const postil3 = [
+const uddrag3 = [
   // { label: '1. VinterPostil', type: 'label' },
 
   { id: 5001, postil: 'Uddrag', tag: 'Evangelium', label: '3.Søn i faste', bible: 'Luk 11, 24-26', value: '/da/lent/sunday03-gospel', description: 'Under den hemmelige betydning av evangeliet forklarer Luther at "Det sidste bliver værre end det første" (Luk 11, 26b) og 2 Pet 2, 20 "Det sidste er værre for dem end det første" - når den urene ånd vender tilbage med fornuftens djævel. Se også note 1 https://kirkepostille.vercel.app/article/vinter/faste/3-evangelium' },
@@ -15,5 +15,5 @@ const postil3 = [
 ]
 
 export default defineEventHandler(() => {
-  return postil3
+  return uddrag3
 })

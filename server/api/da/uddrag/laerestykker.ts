@@ -1,5 +1,5 @@
 // List of sermons in Luther's Church Postil
-const postil3 = [
+const uddrag2 = [
   // { label: '1. Uddrag', type: 'label' },
 
   { id: 4001, postil: 'Uddrag', tag: 'Evangelium', label: 'Julesøndag', bible: 'Luk 2, 33-40', value: '/da/christmas/gospel-julesondag', description: 'To typer forargelser. Den mindste forargelse, forårsager dem, der "synder mod Moselovens anden tavle". Den værste forargelse er forårsaget af dem, der "synder imod Moselovens første tavle, mod troen samt mod Guds ære og hans gerninger."' },
@@ -15,5 +15,5 @@ const postil3 = [
 ]
 
 export default defineEventHandler(() => {
-  return postil3
+  return uddrag2
 })

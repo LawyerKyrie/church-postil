@@ -3,16 +3,23 @@ import { useI18n } from 'vue-i18n'
 import { useWindowSize, useWindowScroll } from '@vueuse/core'
 import { useScrollStop } from '~/composables/useScrollStop'
 
+const isMobile = () => {
+  if (navigator.userAgent.includes('Windows'))
+    return false
+  else if (width.value < 500)
+    return true
+}
+
 const { width, height } = useWindowSize()
 const pos = {
   width: width.value, // not necessary
   height: height.value, // width.value could be used below
   get x() {
-    const result = this.width - 50
+    const result = isMobile() ? this.width - 35 : this.width - 48
     return result.toString()
   },
   get y() {
-    const result = this.height - 35
+    const result = this.height - 33
     return result.toString()
   }
 }
@@ -27,6 +34,7 @@ const oldLocale = locale.value
 /* Creating popup menu and insert it on the right side */
 const toast = useToast()
 const showButtons = ref(false)
+
 const handleScroll = () => {
   // Show button when user scrolls down 200px
   showButtons.value = window.scrollY > 200
@@ -183,6 +191,7 @@ watch(notClosed, () => {
 
 /* Hiding Menu button on scroll */
 const { showButton } = useScrollStop()
+const filterFocus = false
 </script>
 
 <template>
@@ -216,7 +225,7 @@ const { showButton } = useScrollStop()
                 :title="inActive === true ? 'Open Menu' : 'Close Menu'"
                 color="secondary"
                 unchecked-icon="i-lucide-x"
-                checked-icon="i-lucide-check"
+                checked-icon="i-lucide-arrow-left"
                 @mousedown="handlePressStart"
                 @mouseup="handlePressEnd"
                 @touchstart="handlePressStart"
@@ -267,6 +276,9 @@ const { showButton } = useScrollStop()
                       -->
                       <UCommandPalette
                         :groups="groups"
+                        :input="filterFocus"
+                        :autofocus="filterFocus"
+                        search-term="Menu"
                         placeholder="Filter..."
                       >
                         <template #footer>

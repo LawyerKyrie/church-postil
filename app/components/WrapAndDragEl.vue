@@ -16,10 +16,17 @@ const { x, y, style } = useDraggable(el, {
   // onStart: (pos, event) => { event.preventDefault() }
 })
 
+const isMobile = () => {
+  if (navigator.userAgent.includes('Windows'))
+    return false
+  else if (width.value < 500)
+    return true
+}
+
 watch([width, height], ([newWidth, newHeight]) => {
   // console.log('New width ', newWidth, ' and height ', newHeight)
-  x.value = newWidth - 50
-  y.value = newHeight - 35
+  x.value = isMobile() ? newWidth - 35 : newWidth - 48
+  y.value = newHeight - 33
 })
 </script>
 
