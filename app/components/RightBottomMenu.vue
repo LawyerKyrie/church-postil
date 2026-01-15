@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useWindowSize, useWindowScroll } from '@vueuse/core'
+import { useScrollStop } from '~/composables/useScrollStop'
 
 const { width, height } = useWindowSize()
 const pos = {
@@ -17,7 +18,7 @@ const pos = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const { $updateThePageOnLanguageChange } = useNuxtApp() as any
+const { $updateThePageOnLanguageChange, $keyboardClickK, $keyboardClickM } = useNuxtApp() as any
 const { locale } = useI18n()
 const oldLocale = locale.value
 
@@ -119,6 +120,13 @@ const groups = [
     label: 'Actions',
     items: [
       {
+        label: 'Content Menu',
+        icon: 'i-lucide-menu',
+        title: 'Keyboard click on M opens this Menu',
+        onClick: $keyboardClickM
+
+      },
+      {
         label: 'Language',
         icon: 'i-lucide-languages',
         children: [
@@ -152,20 +160,6 @@ const groups = [
   }
 ]
 
-// Open Select Menu with click on button on mobile phone
-const keyboardClick = () => {
-  const targetElement = document
-  const ctrlKEvent = new KeyboardEvent('keydown', {
-    key: 'k',
-    code: 'KeyK',
-    ctrlKey: true,
-    bubbles: true,
-    cancelable: true
-  })
-  inActive.value = true
-  targetElement.dispatchEvent(ctrlKEvent)
-}
-
 /* Close movable button on scroll */
 const { /* x, */y } = useWindowScroll()
 
@@ -186,6 +180,9 @@ watch(notClosed, () => {
   if (notClosed.value !== true)
     inActive.value = true
 })
+
+/* Hiding Menu button on scroll */
+const { showButton } = useScrollStop()
 </script>
 
 <template>
@@ -197,6 +194,7 @@ watch(notClosed, () => {
       <!-- Extra div with the class-content prevents that content scroll on mobile when trying to drag the menu -->
       <div class="fixed bottom-0 right-0 w-[90px] h-[200px] z-50 touch-none">
         <WrapAndDragEl
+          v-if="showButton"
           :x-init="pos.x"
           :y-init="pos.y"
           @touchstart.stop
@@ -285,7 +283,7 @@ watch(notClosed, () => {
                                 label="Select Menu"
                                 size="xs"
                                 class="text-dimmed"
-                                @click="keyboardClick"
+                                @click="$keyboardClickK"
                               >
                                 <template #trailing>
                                   <UKbd value="enter" />

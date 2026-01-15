@@ -9,6 +9,10 @@ const handleClose = (isOpen: boolean) => {
   else
     openMenu.value = true // globalValue.value = true
 }
+
+defineShortcuts({
+  m: () => isDrawerOpen.value = !isDrawerOpen.value
+})
 </script>
 
 <template>

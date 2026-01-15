@@ -1,12 +1,12 @@
 <script setup lang="ts">
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const { $keyboardClick } = useNuxtApp() as any
+const { $keyboardClickK } = useNuxtApp() as any
 
 const bannerActivated = ref(true) // Control the visibility
 
 const handleActionClick = () => {
   // alert('Action function activated!')
-  $keyboardClick()
+  $keyboardClickK()
   // console.log('Banner actions activated!')
   // isBannerOpen.value = false
 }

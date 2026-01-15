@@ -43,3 +43,5 @@ const daSermons = [
 export default defineEventHandler(() => {
   return daSermons
 })
+
+// All bible book references need be like the one in Mdc/TableComponent.vue

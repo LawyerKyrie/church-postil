@@ -62,12 +62,32 @@ export default defineNuxtPlugin(() => {
 
   return {
     provide: {
-      keyboardClick() {
+      keyboardClickK() {
         const targetElement = document
         const ctrlKEvent = new KeyboardEvent('keydown', {
           key: 'k',
           code: 'KeyK',
           ctrlKey: true,
+          bubbles: true,
+          cancelable: true
+        })
+        targetElement.dispatchEvent(ctrlKEvent)
+      },
+      keyboardClickM() {
+        const targetElement = document
+        const ctrlKEvent = new KeyboardEvent('keydown', {
+          key: 'm',
+          code: 'KeyK',
+          bubbles: true,
+          cancelable: true
+        })
+        targetElement.dispatchEvent(ctrlKEvent)
+      },
+      keyboardClickO() {
+        const targetElement = document
+        const ctrlKEvent = new KeyboardEvent('keydown', {
+          key: 'o',
+          code: 'KeyK',
           bubbles: true,
           cancelable: true
         })

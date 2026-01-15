@@ -25,3 +25,5 @@ const postil3 = [
 export default defineEventHandler(() => {
   return postil3
 })
+
+// All bible book references need be like the one in Mdc/TableComponent.vue
