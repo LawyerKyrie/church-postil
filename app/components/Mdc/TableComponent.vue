@@ -17,6 +17,7 @@ type RowCells = {
   bible: string
   value: string
   type: never
+  description: string
 }
 
 const { data } = await useFetch<RowCells[]>(
@@ -57,7 +58,7 @@ const tanstackBibleSort: SortingFn<any> = (rowA, rowB, colName) => {
   const matchObjVal = (raw) => {
     const str = String(raw || '').toLowerCase().trim()
     // This regex looks for: (Book Name) (Chapter):(Verse)
-    const regex = /^((?:[1-5] )?\w+).? (\d+)[,:]\s?(\d+)[\s-].*$/ // https://regex101.com/r/L4BdP3/1
+    const regex = /^((?:[1-5] )?\w+).? (\d+)[,:]\s?(\d+)(?=$| ?-.*)/ // https://regex101.com/r/hYxBM7/1
     const match = str.match(regex)
     if (!match) return { book: str, chapter: 0, verse: 0 }
 

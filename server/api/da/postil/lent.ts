@@ -1,6 +1,6 @@
 // List of sermons in Luther's Church Postil
 const postil3 = [
-  // { label: '1. VinterPostil', type: 'label' },
+  // { label: '1. Vinter Postil', type: 'label' },
 
   { id: 411, postil: 'Vinter', tag: 'Epistel', label: '1. Søndag', bible: 'Rom 12: 1-6', value: '/da/lent/epiphany-epistle01' },
   { id: 412, postil: 'Vinter', tag: 'Evangelium', label: '1. Søndag', bible: 'Luk 2: 42-52', value: '/da/lent/epiphany-gospel01' },

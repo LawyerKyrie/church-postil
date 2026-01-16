@@ -1,6 +1,6 @@
 // List of sermons in Luther's Church Postil
 const postil5 = [
-  // { label: '1. Trinity IPostil', type: 'label' },
+  // { label: '1. Trinity I Postil', type: 'label' },
 
   { id: 2011, postil: 'Trinity I', tag: 'Epistel', label: '1. Søndag', bible: 'Rom 11: 33-36', value: '/da/trinity1/epistle01' },
   { id: 2012, postil: 'Trinity I', tag: 'Evangelium', label: '1. Søndag', bible: 'Luk 16: 19-31', value: '/da/trinity1/gospel01' },

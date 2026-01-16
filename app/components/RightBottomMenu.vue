@@ -1,21 +1,14 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useWindowSize, useWindowScroll } from '@vueuse/core'
-import { useScrollStop } from '~/composables/useScrollStop'
 
-const isMobile = () => {
-  if (navigator.userAgent.includes('Windows'))
-    return false
-  else if (width.value < 500)
-    return true
-}
-
+const isMobile = ref(false)
 const { width, height } = useWindowSize()
 const pos = {
   width: width.value, // not necessary
   height: height.value, // width.value could be used below
   get x() {
-    const result = isMobile() ? this.width - 35 : this.width - 48
+    const result = isMobile.value === true ? this.width - 35 : this.width - 48
     return result.toString()
   },
   get y() {
@@ -33,17 +26,10 @@ const oldLocale = locale.value
 
 /* Creating popup menu and insert it on the right side */
 const toast = useToast()
-const showButtons = ref(false)
-
-const handleScroll = () => {
-  // Show button when user scrolls down 200px
-  showButtons.value = window.scrollY > 200
-}
 
 const scrollToTop = () => {
   notClosed.value = !notClosed.value
   inActive.value = true
-  // notClosed.value = notClosed.value === true ? false : true
   toast.add({ title: 'Scrolling to Top!', description: '- and closing bottom menu' })
   window.scrollTo({
     top: 0,
@@ -52,12 +38,10 @@ const scrollToTop = () => {
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  // Clean up event listener when component is destroyed
-  window.removeEventListener('scroll', handleScroll)
+  if (navigator.userAgent.includes('Windows'))
+    return isMobile.value = false
+  else if (width.value < 500)
+    return isMobile.value = true
 })
 
 const notClosed = ref(false)
@@ -121,7 +105,7 @@ function handleClickEvent(event, condition) {
 }
 
 /* ----------------------------------- */
-const isOpen = ref(false)
+const selectMenuOpen = ref(false)
 const groups = [
   {
     id: 'actions',
@@ -169,41 +153,64 @@ const groups = [
 ]
 
 /* Close movable button on scroll */
-const { /* x, */y } = useWindowScroll()
+const { /* x, */y } = useWindowScroll({ idle: 200,
+  onStop: () => { scrollStopped.value = true }
+})
+
+const scrollStopped = ref(false)
+const showBottomMenu = ref(false)
+
+watch(scrollStopped, () => {
+  showBottomMenu.value = window.scrollY > 200
+  scrollStopped.value = false
+})
+
+watch(selectMenuOpen, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      if (document.activeElement.tagName === 'INPUT') {
+        const filterBtn = document.activeElement as HTMLInputElement
+        filterBtn.blur()
+      } else console.error('Error: document.activeElement.blur() of UCommandPalette Input Element FAILED')
+    }, 50)
+  }
+})
 
 // React to scroll changes
 watch(y, (newY) => {
   if (newY > 100) {
     if (notClosed.value === true) {
-      isOpen.value = false
+      if (selectMenuOpen.value === true) return
+      // Handling a problem with the state of the button (nothing serious)
       inActive.value = true
       notClosed.value = false
+    } else {
+      showBottomMenu.value = false
     }
   }
 })
 
 /* On click outside movable menu the button stays inActive = false */
 watch(notClosed, () => {
-  // This is making the uSwitch button active when it's closing with click outside
+  // This code making the uSwitch button active when it's closing with click outside
   if (notClosed.value !== true)
     inActive.value = true
 })
 
-/* Hiding Menu button on scroll */
-const { showButton } = useScrollStop()
-const filterFocus = false
+const templateExpandedHandler = () => {
+  // Voluntary start this function when the expanded template is opened
+}
 </script>
 
 <template>
   <ClientOnly>
     <div
-      v-if="showButtons"
+      v-if="showBottomMenu"
       class="fixed -bottom-10 right-2"
     >
       <!-- Extra div with the class-content prevents that content scroll on mobile when trying to drag the menu -->
       <div class="fixed bottom-0 right-0 w-[90px] h-[200px] z-50 touch-none">
         <WrapAndDragEl
-          v-if="showButton"
           :x-init="pos.x"
           :y-init="pos.y"
           @touchstart.stop
@@ -215,12 +222,8 @@ const filterFocus = false
             :content="{ side: 'top', align: 'start' }"
             class=""
           >
-            <div
-              ref="movableMenu"
-              class="rotate-90"
-            >
+            <div class="rotate-90">
               <USwitch
-                ref="switchRef"
                 v-model="inActive"
                 :title="inActive === true ? 'Open Menu' : 'Close Menu'"
                 color="secondary"
@@ -235,7 +238,7 @@ const filterFocus = false
             </div>
 
             <template #content>
-              <div class="">
+              <div>
                 <UButton
                   title="Back to Top"
                   icon="i-heroicons-arrow-up-solid"
@@ -255,13 +258,13 @@ const filterFocus = false
                 />
 
                 <UPopover
-                  v-model:open="isOpen"
+                  v-model:open="selectMenuOpen"
                   :content="{ side: 'right', align: 'start' }"
                   class="overflow-y-auto"
                 >
-                  <div class="">
+                  <div>
                     <UButton
-                      :icon="isOpen ? 'i-heroicons-x-mark' : 'i-lucide-menu'"
+                      :icon="selectMenuOpen ? 'i-heroicons-x-mark' : 'i-lucide-menu'"
                       color="secondary"
                       square
                       variant="subtle"
@@ -269,17 +272,20 @@ const filterFocus = false
                   </div>
 
                   <template #content>
-                    <div class="overflow-x-auto overflow-y-auto">
+                    <div
+                      class="overflow-x-auto overflow-y-auto"
+                    >
                       <!--
                         Source code:
                         https://ui.nuxt.com/docs/components/command-palette#with-children-in-items
                       -->
+                      <!-- :input="filterFocus" -->
                       <UCommandPalette
                         :groups="groups"
-                        :input="filterFocus"
-                        :autofocus="filterFocus"
-                        search-term="Menu"
-                        placeholder="Filter..."
+                        :autofocus="false"
+                        :input="false"
+                        inputmode="none"
+                        placeholder="Menu Filter..."
                       >
                         <template #footer>
                           <div class="flex items-center justify-between gap-2">
@@ -314,6 +320,7 @@ const filterFocus = false
                                 size="xs"
                               >
                                 <template #trailing>
+                                  <span class="hidden">{{ templateExpandedHandler() }}</span>
                                   <UKbd value="meta" />
                                   <UKbd value="k" />
                                 </template>

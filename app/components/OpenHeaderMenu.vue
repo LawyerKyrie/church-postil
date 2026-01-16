@@ -96,7 +96,7 @@ const { data: sermons } = await useFetch<RowCells[]>(
         ...sermon,
         label: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
         icon: sermon.icon === undefined ? '&nbsp;' : sermon.icon, // This creates a tab on sermons
-        tooltip: sermon.label, // could also be set above in data sermon
+        tooltip: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
         onSelect: () => {
           showToast(`${sermon.label} selected`, `Sermon opens in a new window`)
           navigateTo(`${sermon.value}`, {

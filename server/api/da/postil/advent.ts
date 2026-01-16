@@ -1,6 +1,6 @@
 // List of sermons in Luther's Church Postil
 const postil1 = [
-  // { label: '1. AdventPostil', type: 'label' },
+  // { label: '1. Advent Postil', type: 'label' },
 
   { id: 11, postil: 'Advent', tag: 'Epistel', label: '1. Søndag', bible: 'Rom 13: 11-14', value: '/da/advent/epistle1' },
   { id: 12, postil: 'Advent', tag: 'Evangelium', label: '1. Søndag', bible: 'Matt 21: 1-9', value: '/da/advent/gospel1' },

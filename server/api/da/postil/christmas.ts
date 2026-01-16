@@ -1,6 +1,6 @@
 // List of danish christmas sermons in Luther's Church Postil
 const postil2 = [
-  // { label: 'JulePostil', type: 'label' },
+  // { label: 'Jule Postil', type: 'label' },
 
   { id: 241, postil: 'Jul', tag: 'Epistel', label: 'Juleaften', bible: 'Tit 2: 11-15', value: '/da/christmas/epistle-juleaften' },
   { id: 242, postil: 'Jul', tag: 'Evangelium', label: 'Juleaften', bible: 'Luk 2: 1-14', value: '/da/christmas/gospel-juleaften' },

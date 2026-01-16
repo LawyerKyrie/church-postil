@@ -1,6 +1,6 @@
 // List of sermons in Luther's Church Postil
 const postil6 = [
-  // { label: '1. Trinity IIPostil', type: 'label' },
+  // { label: '1. Trinity II Postil', type: 'label' },
 
   { id: 2131, postil: 'Trinity II', tag: 'Epistel', label: '13. Søndag', bible: 'Gal 3: 15-22', value: '/da/trinity2/epistle13' },
   { id: 2132, postil: 'Trinity II', tag: 'Evangelium', label: '13. Søndag', bible: 'Luk 10, 23-37', value: '/da/trinity2/gospel13' },
@@ -29,7 +29,7 @@ const postil6 = [
   { id: 2242, postil: 'Trinity II', tag: 'Evangelium', label: '24. Søndag', bible: 'Matt 9: 18-26', value: '/da/trinity2/gospel24' },
   { id: 2251, postil: 'Trinity II', tag: 'Epistel', label: '25. Søndag', bible: '1 Thess 4: 13-18', value: '/da/trinity2/epistle25' },
   { id: 2252, postil: 'Trinity II', tag: 'Evangelium', label: '25. Søndag', bible: 'Matt 24: 15-28', value: '/da/trinity2/gospel25' },
-  { id: 2261, postil: 'Trinity II', tag: 'Epistel', label: '26. Søndag', bible: '2 Thess: 1: 3-10', value: '/da/trinity2/epistle26' },
+  { id: 2261, postil: 'Trinity II', tag: 'Epistel', label: '26. Søndag', bible: '2Thess 1: 3-10', value: '/da/trinity2/epistle26' },
   { id: 2262, postil: 'Trinity II', tag: 'Evangelium', label: '26. Søndag', bible: 'Matt 25: 31-42', value: '/da/trinity2/gospel26' }
 
   // { type: 'separator' }

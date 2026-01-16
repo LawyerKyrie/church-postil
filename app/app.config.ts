@@ -1,5 +1,10 @@
 export default defineAppConfig({
   ui: {
+    commandPalette: {
+      slots: {
+        empty: 'text-muted'
+      }
+    },
     contentToc: {
       slots: {
         // Adjust the 'root' class: change top positioning to 'top-0'
