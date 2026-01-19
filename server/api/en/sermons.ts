@@ -22,8 +22,8 @@ const enSermons = [
   { id: 254, postil: 'Christmas', tag: 'Gospel', label: 'Main Xmas S.', bible: 'Joh 1: 1-14', value: '/en/christmas#principal-christmas-service-john-1-1-14' },
   { id: 261, postil: 'Christmas', tag: 'Epistle', label: 'St. Steph.\'s D.', bible: 'Acts 6: 8-14 & 7:54-60', value: '/en/christmas#st-stephens-day-acts-6-8-14-7-54-60' },
   { id: 262, postil: 'Christmas', tag: 'Gospel', label: 'St. Steph.\'s D.', bible: 'Matt 23: 34-39', value: '/en/christmas#st-stephens-day-matthew-23-34-39' },
-  { id: 271, postil: 'Christmas', tag: 'Epistle', label: 'Day of St. John', bible: 'Ecclus 15: 1-8', value: '/en/christmas#day-of-st-john-ecclesiasticus-15-1-8' },
-  { id: 272, postil: 'Christmas', tag: 'Gospel', label: 'Day of St. John', bible: 'Joh 21: 19-24', value: '/en/christmas#day-of-st-john-john-21-19-24' },
+  { id: 271, postil: 'Christmas', tag: 'Epistle', label: 'St. John Day', bible: 'Ecclus 15: 1-8', value: '/en/christmas#day-of-st-john-ecclesiasticus-15-1-8' },
+  { id: 272, postil: 'Christmas', tag: 'Gospel', label: 'St. John Day', bible: 'Joh 21: 19-24', value: '/en/christmas#day-of-st-john-john-21-19-24' },
   { id: 291, postil: 'Christmas', tag: 'Epistle', label: 'Xmas Sunday', bible: 'Gal 4: 1-7', value: '/en/christmas#sunday-after-christmas-galatians-4-1-7' },
   { id: 292, postil: 'Christmas', tag: 'Gospel', label: 'Xmas Sunday', bible: 'Luk 2: 33-40', value: '/en/christmas#sunday-after-christmas-luke-2-33-40' },
   { id: 321, postil: 'Christmas', tag: 'Epistle', label: 'New Year\'s D.', bible: 'Gal 3: 23-29', value: '/en/christmas#new-years-day-galatians-3-23-29' },
@@ -54,14 +54,14 @@ const enSermons = [
   // { type: 'separator' }
   // { label: 'Summer Postil; Easter - Trinitatis', type: 'label' },
 
-  { id: 1011, postil: 'Easter', tag: 'Epistle', label: '1. Sunday', bible: '1 Joh 5: 4-12', value: '/da/easter/epistle01' },
-  { id: 1012, postil: 'Easter', tag: 'Gospel', label: '1. Sunday', bible: 'Joh 20: 19-31', value: '/da/easter/gospel01' },
-  { id: 1021, postil: 'Easter', tag: 'Epistle', label: '2. Sunday', bible: '1 Pet 2: 20-25', value: '/da/easter/epistle02' },
-  { id: 1022, postil: 'Easter', tag: 'Gospel', label: '2. Sunday', bible: 'Joh 10: 11-16', value: '/da/easter/gospel02' },
-  { id: 1031, postil: 'Easter', tag: 'Epistle', label: '3. Sunday', bible: '1 Pet 2: 11-20', value: '/da/easter/epistle03' },
-  { id: 1032, postil: 'Easter', tag: 'Gospel', label: '3. Sunday', bible: 'Joh 16: 16-23', value: '/da/easter/gospel03' },
-  { id: 1041, postil: 'Easter', tag: 'Epistle', label: '4. Sunday', bible: 'James 1: 16-21', value: '/da/easter/epistle04' },
-  { id: 1042, postil: 'Easter', tag: 'Gospel', label: '4. Sunday', bible: 'Joh 16: 5-15', value: '/da/easter/gospel04' },
+  { id: 1011, postil: 'Summer', tag: 'Epistle', label: '1. Sunday', bible: '1 Joh 5: 4-12', value: '/da/easter/epistle01' },
+  { id: 1012, postil: 'Summer', tag: 'Gospel', label: '1. Sunday', bible: 'Joh 20: 19-31', value: '/da/easter/gospel01' },
+  { id: 1021, postil: 'Summer', tag: 'Epistle', label: '2. Sunday', bible: '1 Pet 2: 20-25', value: '/da/easter/epistle02' },
+  { id: 1022, postil: 'Summer', tag: 'Gospel', label: '2. Sunday', bible: 'Joh 10: 11-16', value: '/da/easter/gospel02' },
+  { id: 1031, postil: 'Summer', tag: 'Epistle', label: '3. Sunday', bible: '1 Pet 2: 11-20', value: '/da/easter/epistle03' },
+  { id: 1032, postil: 'Summer', tag: 'Gospel', label: '3. Sunday', bible: 'Joh 16: 16-23', value: '/da/easter/gospel03' },
+  { id: 1041, postil: 'Summer', tag: 'Epistle', label: '4. Sunday', bible: 'James 1: 16-21', value: '/da/easter/epistle04' },
+  { id: 1042, postil: 'Summer', tag: 'Gospel', label: '4. Sunday', bible: 'Joh 16: 5-15', value: '/da/easter/gospel04' },
 
   // { type: 'separator' }
   // { label: 'Trinity I Postil; 1.- 12.Sun. after Trinitatis', type: 'label' },

@@ -165,17 +165,6 @@ watch(scrollStopped, () => {
   scrollStopped.value = false
 })
 
-watch(selectMenuOpen, (newVal) => {
-  if (newVal === true) {
-    setTimeout(() => {
-      if (document.activeElement.tagName === 'INPUT') {
-        const filterBtn = document.activeElement as HTMLInputElement
-        filterBtn.blur()
-      } else console.error('Error: document.activeElement.blur() of UCommandPalette Input Element FAILED')
-    }, 50)
-  }
-})
-
 // React to scroll changes
 watch(y, (newY) => {
   if (newY > 100) {
@@ -197,9 +186,39 @@ watch(notClosed, () => {
     inActive.value = true
 })
 
-const templateExpandedHandler = () => {
-  // Voluntary start this function when the expanded template is opened
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const handleInputRef = (el: any) => {
+  if (!el) return
+
+  // 1. Get the DOM node.
+  // If it's a component, grab $el.
+  let domNode = el.$el ?? el
+
+  // 2. If it's a #text node (nodeType 3), look for the nearest element sibling
+  if (domNode.nodeType === 3 && domNode.nextElementSibling) {
+    domNode = domNode.nextElementSibling
+  }
+
+  // 3. Now ensure we have a real element to query
+  if (domNode instanceof HTMLElement || domNode instanceof Element) {
+    const input = domNode.children[0].children[0] as HTMLInputElement // domNode.querySelector('input')
+
+    if (input) {
+      // Your logic here (e.g., input.focus())
+
+      // Option A: Blur it immediately
+      input.blur()
+
+      // Option B: Make it readonly temporarily so keyboard can't open
+      input.readOnly = true
+      setTimeout(() => {
+        input.readOnly = false
+      }, 100)
+    }
+  }
 }
+
+const templateExpandedHandler = () => { /* */ }
 </script>
 
 <template>
@@ -261,6 +280,7 @@ const templateExpandedHandler = () => {
                   v-model:open="selectMenuOpen"
                   :content="{ side: 'right', align: 'start' }"
                   class="overflow-y-auto"
+                  :restore-focus="false"
                 >
                   <div>
                     <UButton
@@ -279,13 +299,15 @@ const templateExpandedHandler = () => {
                         Source code:
                         https://ui.nuxt.com/docs/components/command-palette#with-children-in-items
                       -->
-                      <!-- :input="filterFocus" -->
                       <UCommandPalette
+                        :ref="handleInputRef"
                         :groups="groups"
-                        :autofocus="false"
-                        :input="false"
-                        inputmode="none"
                         placeholder="Menu Filter..."
+                        class="text-muted"
+                        :autofocus="false"
+                        :ui="{
+                          input: '[&>input]:[inputmode:none]'
+                        }"
                       >
                         <template #footer>
                           <div class="flex items-center justify-between gap-2">

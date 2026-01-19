@@ -1,4 +1,4 @@
-// List of sermons in Luther's Church Postil
+// List of except from Luther's Church Postil
 const uddrag1 = [
   // { label: '1. Uddrag', type: 'label' },
 

@@ -6,10 +6,15 @@ import type { Column, Row, SortingFn } from '@tanstack/vue-table'
 import { useClipboard } from '@vueuse/core'
 
 const props = defineProps({
-  apiFile: String
+  apiFile: String,
+  postil: String
 })
 
-type RowCells = {
+const postilApi = ref(false)
+if (props.postil !== undefined) postilApi.value = true
+else postilApi.value = false
+
+type RowItems = {
   id: string
   postil: string
   tag: string
@@ -20,20 +25,27 @@ type RowCells = {
   description: string
 }
 
-const { data } = await useFetch<RowCells[]>(
+const { data: rowItems } = await useFetch<RowItems[]>(
   `/api/${props.apiFile}`,
   {
     key: 'da-christmas-sermons',
     transform: (data /* : {}[] */) => {
-      return data?.map(row => ({
-        ...row,
-        id: row.id === undefined ? '' : row.id,
-        postil: row.postil === undefined ? '' : row.postil,
-        tag: row.tag === undefined ? '' : row.tag,
-        label: row.label === undefined ? '' : row.label,
-        bible: row.bible === undefined ? '' : row.bible,
-        value: row.value === undefined ? '' : row.value
-      })) || []
+      return data
+        ?.filter((row) => {
+          // If postilApi.value is false, return true (keep everything)
+          // Else If shouldFilter is true, only keep "${props.postil}"
+          return !postilApi.value || row.postil === props.postil
+        })
+        .map(row => ({
+          ...row,
+          // your additional transformations here
+          id: row.id === undefined ? '' : row.id,
+          postil: row.postil === undefined ? '' : row.postil,
+          tag: row.tag === undefined ? '' : row.tag,
+          label: row.label === undefined ? '' : row.label,
+          bible: row.bible === undefined ? '' : row.bible,
+          value: row.value === undefined ? '' : row.value
+        })) || []
     }
     // lazy: true
   }
@@ -85,7 +97,7 @@ const tanstackBibleSort: SortingFn<any> = (rowA, rowB, colName) => {
   return a.verse - b.verse
 }
 
-const columns: TableColumn<RowCells>[] = [
+const columns: TableColumn<RowItems>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => getTableHeader(column, '#'),
@@ -168,7 +180,7 @@ const columnVisibility = ref({
 const UButton = resolveComponent('UButton')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 
-function getTableHeader(column: Column<RowCells>, label: string) {
+function getTableHeader(column: Column<RowItems>, label: string) {
   const isSorted = column.getIsSorted()
 
   return h(UButton, {
@@ -194,17 +206,11 @@ const toast = useToast()
 const { copy } = useClipboard()
 const currentOrigin = ref('')
 
-function getRowItems(row: Row<RowCells>) {
+function getRowItems(row: Row<RowItems>) {
   return [
     {
-      type: 'label',
-      label: 'Open/Link'
-    },
-    {
-      type: 'separator'
-    },
-    {
       label: 'Open Page',
+      icon: 'i-lucide-link',
       onSelect() {
         navigateTo(`${row.original.value}`, {
           external: false
@@ -216,6 +222,7 @@ function getRowItems(row: Row<RowCells>) {
     },
     {
       label: 'Copy Link',
+      icon: 'i-lucide-copy',
       onSelect() {
         copy(currentOrigin.value + row.original.value)
 
@@ -224,6 +231,18 @@ function getRowItems(row: Row<RowCells>) {
           color: 'success',
           icon: 'i-lucide-circle-check'
         })
+      }
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: row.getIsExpanded() ? 'Collapse' : 'Expand',
+      id: 'homeButtonRef',
+      title: row.getIsExpanded() ? 'Collapse or just open a new row to auto collapse the open row!' : JSON.stringify(row.original),
+      icon: row.getIsExpanded() ? 'i-fluent-arrow-collapse-all-24-regular' : 'i-fluent-arrow-expand-all-24-regular',
+      onSelect() { // on right click on row
+        row.toggleExpanded()
       }
     }
   ]
@@ -234,6 +253,37 @@ onMounted(() => {
     currentOrigin.value = window.location.origin
   }
 })
+
+/* Start of expandable rows */
+// 2. The internal "real" state
+const _expanded = ref({})
+
+// 3. The "smart" wrapper state
+const expanded = computed({
+  get: () => _expanded.value,
+  set: (newVal) => {
+    const keys = Object.keys(newVal)
+
+    // If user is trying to open a second row
+    if (keys.length > 1) {
+      // Find the key that exists in newVal but NOT in our current _expanded state
+      const latestKey = keys.find(key => !_expanded.value[key as keyof typeof _expanded.value])
+
+      // If we found a new key, make that the ONLY expanded row
+      // Otherwise, if they clicked the same row to close it, latestKey will be undefined
+      _expanded.value = latestKey ? { [latestKey]: true } : {}
+    } else {
+      // Standard behavior for 0 or 1 row
+      _expanded.value = newVal
+    }
+  }
+})
+
+// The magic "Select" function
+function onSelect(row: Row<RowItems>) {
+  // If the row is already open, close it. If not, open only this one.
+  expanded.value = expanded.value[row.id] ? {} : { [row.id]: true }
+}
 </script>
 
 <template>
@@ -283,10 +333,47 @@ onMounted(() => {
       v-model:column-visibility="columnVisibility"
       v-model:sorting="sorting"
       v-model:global-filter="globalFilter"
-      :data="data"
+      v-model:expanded="expanded"
+      :data="rowItems || []"
+      :rows="rowItems || []"
       :columns="columns"
       class="flex-1 whitespace-normal"
       :ui="{ td: 'whitespace-normal' }"
-    />
+      @select="(_, row) => onSelect(row)"
+    >
+      <template #expanded="{ row }">
+        <div class="p-6 bg-gray-50/50 dark:bg-white/5">
+          <div class="pl-4 border-l-4 border-primary-500 rounded-sm">
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
+              Detailed View: {{ row.original.id }}
+            </h4>
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+              <p>ID: {{ row.id }}</p>
+              <p v-if="row.original.description">
+                {{ row.original.description }}
+              </p>
+              <p v-else>
+                DESCRIPTION: {{ row.original }}
+              </p>
+              <p>
+                Status:
+                <UBadge
+                  size="xs"
+                  label="Active"
+                  variant="subtle"
+                />
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+    </UTable>
   </div>
 </template>
+
+<style scoped>
+/* Optional: Make the cursor look clickable when hovering over rows */
+:deep(tbody tr) {
+  cursor: pointer;
+}
+</style>
