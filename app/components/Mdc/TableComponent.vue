@@ -10,14 +10,12 @@ const props = defineProps({
   postil: String
 })
 
-const postilApi = ref(false)
-if (props.postil !== undefined) postilApi.value = true
-else postilApi.value = false
+const postilArg = ref(false)
 
 type RowItems = {
   id: string
   postil: string
-  tag: string
+  tags: string
   label: string
   bible: string
   value: string
@@ -32,16 +30,18 @@ const { data: rowItems } = await useFetch<RowItems[]>(
     transform: (data /* : {}[] */) => {
       return data
         ?.filter((row) => {
-          // If postilApi.value is false, return true (keep everything)
+          if (props.postil !== undefined) postilArg.value = true
+          else postilArg.value = false
+          // If postilArg.value is false, return true (keep everything)
           // Else If shouldFilter is true, only keep "${props.postil}"
-          return !postilApi.value || row.postil === props.postil
+          return !postilArg.value || row.postil === props.postil
         })
         .map(row => ({
           ...row,
-          // your additional transformations here
+          // undefine code necessary for api/select-menu
           id: row.id === undefined ? '' : row.id,
           postil: row.postil === undefined ? '' : row.postil,
-          tag: row.tag === undefined ? '' : row.tag,
+          tags: row.tags === undefined ? '' : row.tags,
           label: row.label === undefined ? '' : row.label,
           bible: row.bible === undefined ? '' : row.bible,
           value: row.value === undefined ? '' : row.value
@@ -110,9 +110,9 @@ const columns: TableColumn<RowItems>[] = [
 
   },
   {
-    accessorKey: 'tag',
-    header: ({ column }) => getTableHeader(column, 'Tag'),
-    cell: ({ row }) => `${row.getValue('tag')}`
+    accessorKey: 'tags',
+    header: ({ column }) => getTableHeader(column, 'Tags'),
+    cell: ({ row }) => `${row.getValue('tags')}`
   },
   {
     accessorKey: 'label',
@@ -169,7 +169,7 @@ const table = useTemplateRef('table')
 const columnVisibility = ref({
   id: false,
   postil: false,
-  tag: false,
+  tags: false,
   label: true,
   bible: true,
   value: false,
@@ -284,6 +284,16 @@ function onSelect(row: Row<RowItems>) {
   // If the row is already open, close it. If not, open only this one.
   expanded.value = expanded.value[row.id] ? {} : { [row.id]: true }
 }
+
+// For the expanded rows
+function getTags(inputString, getRest = false) {
+  const words = inputString.split(',').map(w => w.trim())
+
+  if (getRest) {
+    return words.slice(1).join(', ')
+  }
+  return words[0]
+}
 </script>
 
 <template>
@@ -342,26 +352,35 @@ function onSelect(row: Row<RowItems>) {
       @select="(_, row) => onSelect(row)"
     >
       <template #expanded="{ row }">
-        <div class="p-6 bg-gray-50/50 dark:bg-white/5">
+        <div class="pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
           <div class="pl-4 border-l-4 border-primary-500 rounded-sm">
             <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
-              Detailed View: {{ row.original.id }}
+              {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}
             </h4>
             <div class="text-sm text-gray-600 dark:text-gray-400">
-              <p>ID: {{ row.id }}</p>
-              <p v-if="row.original.description">
-                {{ row.original.description }}
-              </p>
-              <p v-else>
-                DESCRIPTION: {{ row.original }}
-              </p>
-              <p>
-                Status:
+              <p class="pb-1">
                 <UBadge
-                  size="xs"
-                  label="Active"
+                  size="md"
+                  :label="row.original.bible"
                   variant="subtle"
                 />
+                &nbsp;{{ getTags(row.original.tags, true) }}
+              </p>
+              <p v-if="row.original.description">
+                &emsp;{{ row.original.description }}
+              </p>
+              <p v-else>
+                &emsp;{{ row.original }}
+              </p>
+              <p class="flex justify-end">
+                <UButton
+                  :to="row.original.value"
+                  size="xs"
+                  variant="outline"
+                  trailing-icon="i-lucide-arrow-right"
+                >
+                  Open Page
+                </UButton>
               </p>
             </div>
           </div>
