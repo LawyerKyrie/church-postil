@@ -3,7 +3,7 @@ import { h, resolveComponent } from 'vue'
 import { upperFirst } from 'scule'
 import type { TableColumn } from '@nuxt/ui'
 import type { Column, Row, SortingFn } from '@tanstack/vue-table'
-import { useClipboard } from '@vueuse/core'
+import { useClipboard, useWindowSize } from '@vueuse/core'
 
 const props = defineProps({
   apiFile: String,
@@ -26,25 +26,20 @@ type RowItems = {
 const { data: rowItems } = await useFetch<RowItems[]>(
   `/api/${props.apiFile}`,
   {
-    key: 'da-christmas-sermons',
-    transform: (data /* : {}[] */) => {
+    key: 'api-sermons',
+    transform: (data) => {
       return data
         ?.filter((row) => {
-          if (props.postil !== undefined) postilArg.value = true
-          else postilArg.value = false
-          // If postilArg.value is false, return true (keep everything)
-          // Else If shouldFilter is true, only keep "${props.postil}"
-          return !postilArg.value || row.postil === props.postil
+          postilArg.value = props.postil !== undefined
+          // If we have a specific value, match it exactly.
+          // If we don't, only return rows that have a postil value.
+          return postilArg.value
+            ? row.postil === props.postil
+            : row.postil !== undefined
         })
         .map(row => ({
-          ...row,
-          // undefine code necessary for api/select-menu
-          id: row.id === undefined ? '' : row.id,
-          postil: row.postil === undefined ? '' : row.postil,
-          tags: row.tags === undefined ? '' : row.tags,
-          label: row.label === undefined ? '' : row.label,
-          bible: row.bible === undefined ? '' : row.bible,
-          value: row.value === undefined ? '' : row.value
+          ...row
+          // description: row.description === undefined ? '' : row.description
         })) || []
     }
     // lazy: true
@@ -55,10 +50,10 @@ const { data: rowItems } = await useFetch<RowItems[]>(
 // https://gemini.google.com/share/e49b936b49a0
 const BOOK_ORDER: Record<string, number> = {
   'ecclus': 2, '2 Mos': 2,
-  'isaiah': 23, 'es': 23, 'sirach': 0, 'sirak': 0, 'sir': 0,
+  'isaiah': 23, 'es': 23, 'sirach': 39, 'sirak': 39, 'sir': 39,
   'matt': 40, 'mark': 41, 'luke': 42, 'luk': 42, 'john': 43, 'joh': 43,
   'acts': 44, 'apg': 44, 'rom': 45, '1 cor': 46, '1 kor': 46, '2 cor': 47, '2 kor': 47,
-  'gal': 48, 'eph': 49, 'ef': 49, 'phil': 50, 'fil': 50, 'col': 53, 'kol': 51, '1 thess': 52, '2 thess': 53,
+  'gal': 48, 'eph': 49, 'ef': 49, 'phil': 50, 'fil': 50, 'col': 53, 'kol': 51, '1 thess': 52, '1 tess': 52, '2 thess': 53, '2 tess': 53,
   '1 tim': 54, '2 tim': 55, 'titus': 56, 'tit': 56, 'philem': 57, 'filem': 57, 'hebr': 58, 'heb': 58, 'james': 59, 'jak': 59, '1 pet': 60, '2 pet': 61,
   '1 john': 62, '2 john': 63, '3 john': 64, 'jude': 65, 'jud': 65, 'rev': 66, 'åb': 66
 }
@@ -164,17 +159,36 @@ const columns: TableColumn<RowItems>[] = [
 const globalFilter = ref('') // Start with this filter
 
 /*   VISIBILITY  */
-const table = useTemplateRef('table')
+const table = useTemplateRef('table') // Select Column View Dropdown Menu
 
-const columnVisibility = ref({
-  id: false,
-  postil: false,
-  tags: false,
-  label: true,
-  bible: true,
-  value: false,
-  menu: true
-})
+const { width } = useWindowSize()
+const columnVisibility = ref({})
+
+watch(width, (newVal) => { // set columnVisibility on screen width
+  columnVisibility.value = {
+    ...columnVisibility.value,
+    id: false,
+    postil: false, // updating value below
+    tags: false, // updating value below
+    label: true,
+    bible: true,
+    value: false,
+    menu: true
+  }
+
+  if (newVal > 540) {
+    columnVisibility.value = {
+      ...columnVisibility.value,
+      postil: true,
+      tags: true
+    }
+  } else if (newVal > 440 && newVal < 540) {
+    columnVisibility.value = {
+      ...columnVisibility.value,
+      tags: true
+    }
+  }
+}, { immediate: true })
 
 /* Sorting */
 const UButton = resolveComponent('UButton')
@@ -309,7 +323,7 @@ function getTags(inputString, getRest = false) {
         />
       </div>
       <div class="w-5/16 px-4 py-3.5 justify-end border-b border-accented">
-        <!-- columnVisibility -->
+        <!-- Select Column View -->
         <UDropdownMenu
           :items="
             table?.tableApi
@@ -348,11 +362,11 @@ function getTags(inputString, getRest = false) {
       :rows="rowItems || []"
       :columns="columns"
       class="flex-1 whitespace-normal"
-      :ui="{ td: 'whitespace-normal' }"
+      :ui="{ th: 'pt-1, pb-1', td: 'pt-1 pb-1 whitespace-normal' }"
       @select="(_, row) => onSelect(row)"
     >
       <template #expanded="{ row }">
-        <div class="pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
+        <div class="-ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
           <div class="pl-4 border-l-4 border-primary-500 rounded-sm">
             <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
               {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}
@@ -379,7 +393,7 @@ function getTags(inputString, getRest = false) {
                   variant="outline"
                   trailing-icon="i-lucide-arrow-right"
                 >
-                  Open Page
+                  Read Sermon
                 </UButton>
               </p>
             </div>

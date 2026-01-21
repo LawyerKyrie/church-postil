@@ -87,7 +87,7 @@ type RowCells = {
 }
 
 const { data: sermons } = await useFetch<RowCells[]>(
-  `/api/${locale.value}/select-menu`, {
+  `/api/${locale.value}/sermons`, {
     key: 'church-postil',
     transform: (
       data

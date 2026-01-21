@@ -40,7 +40,7 @@ const scrollToTop = () => {
 onMounted(() => {
   if (navigator.userAgent.includes('Windows'))
     return isMobile.value = false
-  else if (width.value < 500)
+  else if (width.value < 540)
     return isMobile.value = true
 })
 

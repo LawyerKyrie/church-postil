@@ -1,6 +1,6 @@
 // List of sermons in Luther's Church Postil
 const daSermons = [
-  // { label: 'Advent Postil', type: 'label' },
+  { label: 'Advent Postil; Advents søndagene', type: 'label' },
 
   { id: 111, postil: 'Advent', tags: 'Epistel', label: '1.Søn.i Adv.', bible: 'Rom 13: 11-14', value: '/da/advent/epistle1' },
   { id: 112, postil: 'Advent', tags: 'Evangelium', label: '1.Søn.i Adv.', bible: 'Matt 21: 1-9', value: '/da/advent/gospel1' },
@@ -11,8 +11,8 @@ const daSermons = [
   { id: 141, postil: 'Advent', tags: 'Epistel', label: '4.Søn.i Adv.', bible: 'Filem 4: 4-7', value: '/da/advent/epistle4' },
   { id: 142, postil: 'Advent', tags: 'Evangelium', label: '4.Søn.i Adv.', bible: 'Joh 1: 19-28', value: '/da/advent/gospel4' },
 
-  // { type: 'separator' },
-  // { label: 'Jule Postil; Julaften - Helligtrekongersdag', type: 'label' },
+  { type: 'separator' },
+  { label: 'Jule Postil; Juleaften - Helligtrekongersd.', type: 'label' },
 
   { id: 241, postil: 'Jul', tags: 'Epistel', label: 'Juleaften', bible: 'Tit 2: 11-15', value: '/da/christmas/epistle-juleaften' },
   { id: 242, postil: 'Jul', tags: 'Evangelium', label: 'Juleaften', bible: 'Luk 2: 1-14', value: '/da/christmas/gospel-juleaften' },
@@ -31,8 +31,8 @@ const daSermons = [
   { id: 331, postil: 'Jul', tags: 'Epistel', label: 'Tre Konger', bible: 'Es 60: 1-6', value: '/da/christmas/epistle-helligtrekonger' },
   { id: 332, postil: 'Jul', tags: 'Evangelium', label: 'Tre Konger', bible: 'Matt 2: 1-12', value: '/da/christmas/gospel-helligtrekonger' },
 
-  // { type: 'separator' },
-  // { label: 'Vinter Postil; Epiphany - The Holy Week', type: 'label' },
+  { type: 'separator' },
+  { label: 'Faste Postil; 1.Åbenbaringssøn. - Langfre.', type: 'label' },
 
   { id: 411, postil: 'Vinter', tags: 'Epistel', label: '1.S.e.Åbenb.', bible: 'Rom 12: 1-6', value: '/da/lent/epiphany-epistle01' },
   { id: 412, postil: 'Vinter', tags: 'Evangelium', label: '1. s.e.Åbenb.', bible: 'Luk 2: 42-52', value: '/da/lent/epiphany-gospel01' },
@@ -44,15 +44,34 @@ const daSermons = [
   { id: 442, postil: 'Vinter', tags: 'Evangelium', label: '4. s.e.Åbenb.', bible: 'Matt 8: 23-27', value: '/da/lent/epiphany-gospel04' },
   { id: 451, postil: 'Vinter', tags: 'Epistel', label: '5. s.e.Åbenb.', bible: 'Kol 3: 12-17', value: '/da/lent/epiphany-epistle05' },
   { id: 452, postil: 'Vinter', tags: 'Evangelium', label: '5. s.e.Åbenb.', bible: 'Matt 13: 24-30', value: '/da/lent/epiphany-gospel05' },
-  { id: 461, postil: 'Vinter', tags: 'Epistel', label: 'Septuagesima', bible: '1 Kor 9: 24-10,5', value: '/da/lent/septuagesima-epistle' },
-  { id: 462, postil: 'Vinter', tags: 'Evangelium', label: 'Septuagesima', bible: 'Matt 20: 1-16', value: '/da/lent/septuagesima-gospel' },
-  { id: 471, postil: 'Vinter', tags: 'Epistel', label: 'Seksagesima', bible: '2 Kor 11: 19-12,9', value: '/da/lent/sexagesima-epistle' },
-  { id: 472, postil: 'Vinter', tags: 'Evangelium', label: 'Seksagesima', bible: 'Luk 8: 5-15', value: '/da/lent/sexagesima-gospel' },
-  { id: 481, postil: 'Vinter', tags: 'Epistel', label: 'Fastelavenss.', bible: '1 Kor 13: 1-13', value: '/da/lent/fastelavens-sondag-epistle' },
-  { id: 482, postil: 'Vinter', tags: 'Evangelium', label: 'Fastelavenss.', bible: 'Luk 18, 31-43', value: '/da/lent/fastelavens-sondag-gospel' },
 
-  // { type: 'separator' }
-  // { label: '1. Sommer Postil', type: 'label' },
+  { id: 461, postil: 'Vinter', tags: 'Epistel', label: 'Septuagesima', bible: '1 Kor 9: 24-10,5', value: '/da/lent/pre-lent-epistle01' },
+  { id: 462, postil: 'Vinter', tags: 'Evangelium', label: 'Septuagesima', bible: 'Matt 20: 1-16', value: '/da/lent/pre-lent-gospel01' },
+  { id: 471, postil: 'Vinter', tags: 'Epistel', label: 'Seksagesima', bible: '2 Kor 11: 19-12,9', value: '/da/lent/pre-lent-epistle02' },
+  { id: 472, postil: 'Vinter', tags: 'Evangelium', label: 'Seksagesima', bible: 'Luk 8: 5-15', value: '/da/lent/pre-lent-gospel02' },
+  { id: 481, postil: 'Vinter', tags: 'Epistel', label: 'Fastelavenss.', bible: '1 Kor 13: 1-13', value: '/da/lent/pre-lent-epistle03' },
+  { id: 482, postil: 'Vinter', tags: 'Evangelium', label: 'Fastelavenss.', bible: 'Luk 18, 31-43', value: '/da/lent/pre-lent-gospel03' },
+
+  { id: 511, postil: 'Vinter', tags: 'Epistel', label: '1.Søn.i Faste', bible: '2 Kor 5: 1-10', value: '/da/lent/lent-epistle01' },
+  { id: 512, postil: 'Vinter', tags: 'Evangelium', label: '1.Søn.i Faste', bible: 'Matt 4: 1-11', value: '/en/lent/lent-gospel01' },
+  { id: 521, postil: 'Vinter', tags: 'Epistel', label: '2.Søn.i Faste', bible: '1 Thess 4: 1-7', value: '/en/lent/lent-epistle02' },
+  { id: 522, postil: 'Vinter', tags: 'Evangelium', label: '2.Søn.i Faste', bible: 'Matt 15: 21-28', value: '/en/lent/lent-gospel02' },
+  { id: 531, postil: 'Vinter', tags: 'Epistel', label: '3.Søn.i Faste', bible: 'Ef 5: 1-9', value: '/en/lent/lent-epistle03' },
+  { id: 532, postil: 'Vinter', tags: 'Evangelium', label: '3.Søn.i Faste', bible: 'Luk 11: 14-23', value: '/da/lent/gospel03' },
+  { id: 541, postil: 'Vinter', tags: 'Epistel', label: '4.Søn.i Faste', bible: 'Gal 4: 21-31', value: '/da/lent/lent-epistle04' },
+  { id: 542, postil: 'Vinter', tags: 'Epistel', label: '4.Søn.i Faste', bible: 'Joh 6: 1-15', value: '/da/lent/lent-gospel04' },
+
+  { id: 544, postil: 'Vinter', tags: 'Evangelium', label: 'Maria Bebud.', bible: 'Luk 1, 26-38', value: '/da/lent/marys-annunciation-day' },
+
+  { id: 551, postil: 'Vinter', tags: 'Epistel', label: '5.Søn.i Faste', bible: 'Heb 9: 11-15', value: '/da/lent/lent-epistle05' },
+  { id: 552, postil: 'Vinter', tags: 'Evangelium', label: '5.Søn.i Faste', bible: 'Joh 8: 46-59', value: '/da/lent/lent-gospel05' },
+
+  { id: 601, postil: 'Vinter', tags: 'Epistel', label: 'Palmesøndag', bible: 'Fil 2: 5-11', value: '/da/lent/holy-week-palm-sunday' },
+  { id: 602, postil: 'Vinter', tags: 'Evangelium', label: 'Anger+Tilgiv.', bible: '1 Kor 11: 23-26', value: '/da/lent/holy-week-lords-supper' },
+  { id: 603, postil: 'Vinter', tags: 'Evangelium', label: 'Langfredag', bible: 'Matt 27: 27-50', value: '/da/lent/holy-week-good-friday' },
+
+  { type: 'separator' },
+  { label: 'Påske Postil; Søn. e. Påske - Pinse - Tref.', type: 'label' },
 
   { id: 1011, postil: 'Sommer', tags: 'Epistel', label: '1.Søn.e.påske', bible: '1 Joh 5: 4-12', value: '/da/easter/epistle01' },
   { id: 1012, postil: 'Sommer', tags: 'Evangelium', label: '1.Søn.e.påske', bible: 'Joh 20: 19-31', value: '/da/easter/gospel01' },
@@ -62,13 +81,27 @@ const daSermons = [
   { id: 1032, postil: 'Sommer', tags: 'Evangelium', label: '3.Søn.e.påske', bible: 'Joh 16: 16-23', value: '/da/easter/gospel03' },
   { id: 1041, postil: 'Sommer', tags: 'Epistel', label: '4.Søn.e.påske', bible: 'Jak 1: 16-21', value: '/da/easter/epistle04' },
   { id: 1042, postil: 'Sommer', tags: 'Evangelium', label: '4.Søn.e.påske', bible: 'Joh 16: 5-15', value: '/da/easter/gospel04' },
+  { id: 1052, postil: 'Sommer', tags: 'Evangelium', label: '5.Søn.e.påske', bible: 'Joh 16: 23-30', value: '/da/easter/gospel05' },
 
-  // { type: 'separator' }
-  // { label: '1. Trinity I Postil', type: 'label' },
+  { id: 1055, postil: 'Sommer', tags: 'Epistel', label: 'K.Himmelfart', bible: 'Mark 16, 14-20', value: '/da/easter/ascension-day' },
+
+  { id: 1061, postil: 'Sommer', tags: 'Epistel', label: '6.Søn.e.påske', bible: '1 Pet 4, 7-11', value: '/da/easter/epistle06' },
+  { id: 1062, postil: 'Sommer', tags: 'Evangelium', label: '6.Søn.e.påske', bible: 'Joh 15, 26-16, 4', value: '/da/easter/gospel06' },
+
+  { id: 1071, postil: 'Sommer', tags: 'Epistel', label: 'Pinsedag', bible: 'ApG 2, 1-13', value: '/da/easter/epistle07' },
+  { id: 1072, postil: 'Sommer', tags: 'Evangelium', label: 'Pinsedag', bible: 'Joh 14, 23-31', value: '/da/easter/gospel07' },
+  { id: 1082, postil: 'Sommer', tags: 'Epistel', label: '2.Pinsedag', bible: 'Joh 3, 16-21', value: '/da/easter/gospel08' },
+  { id: 1092, postil: 'Sommer', tags: 'Evangelium', label: '3.Pinsedag', bible: 'Joh 10, 1-11', value: '/da/easter/gospel09' },
+  { id: 1101, postil: 'Sommer', tags: 'Epistel', label: 'Trinitatis s.', bible: 'Rom 11, 33-36', value: '/da/easter/epistle10' },
+  { id: 1102, postil: 'Sommer', tags: 'Evangelium', label: 'Trinitatis s.', bible: 'Joh 3: 1-15', value: '/da/easter/gospel10' },
+  { id: 1112, postil: 'Sommer', tags: 'Evangelium', label: 'Trin.2.sermon', bible: 'Joh 3: 1-15', value: '/da/easter/gospel11' },
+
+  { type: 'separator' },
+  { label: 'Trinity I; 1 - 12. Søndag efter Trefoldighed', type: 'label' },
 
   { id: 2011, postil: 'Trinity I', tags: 'Epistel', label: '1.Søn.e.Tref.', bible: 'Rom 11: 33-36', value: '/da/trinity1/epistle01' },
   { id: 2012, postil: 'Trinity I', tags: 'Evangelium', label: '1.Søn.e.Tref.', bible: 'Luk 16: 19-31', value: '/da/trinity1/gospel01' },
-  { id: 2021, postil: 'Trinity I', tags: 'Epistel', label: '2.Søn.e.Tref.', bible: '1 Joh 3: 13-18', value: '/da/trinity1/epistle2' },
+  { id: 2021, postil: 'Trinity I', tags: 'Epistel', label: '2.Søn.e.Tref.', bible: '1 Joh 3: 13-18', value: '/da/trinity1/epistle02' },
   { id: 2022, postil: 'Trinity I', tags: 'Evangelium', label: '2.Søn.e.Tref.', bible: 'Luk 14: 16-24', value: '/da/trinity1/gospel02' },
   { id: 2031, postil: 'Trinity I', tags: 'Epistel', label: '3.Søn.e.Tref.', bible: '1 Pet 5: 5-11', value: '/da/trinity1/epistle03' },
   { id: 2032, postil: 'Trinity I', tags: 'Evangelium', label: '3.Søn.e.Tref.', bible: 'Luk 15: 1-10', value: '/da/trinity1/gospel03' },
@@ -91,8 +124,8 @@ const daSermons = [
   { id: 2121, postil: 'Trinity I', tags: 'Epistel', label: '12.Søn.e.Tref.', bible: '2 Kor 3: 4-11', value: '/da/trinity1/epistle12' },
   { id: 2122, postil: 'Trinity I', tags: 'Evangelium', label: '12.Søn.e.Tref.', bible: 'Mark 7: 31-37', value: '/da/trinity1/gospel12' },
 
-  // { type: 'separator' }
-  // { label: '1. Trinity II Postil', type: 'label' },
+  { type: 'separator' },
+  { label: 'Trinity II; 13- 26. Søn. efter Trefoldighed', type: 'label' },
 
   { id: 2131, postil: 'Trinity II', tags: 'Epistel', label: '13.Søn.e.Tref.', bible: 'Gal 3: 15-22', value: '/da/trinity2/epistle13' },
   { id: 2132, postil: 'Trinity II', tags: 'Evangelium', label: '13.Søn.e.Tref.', bible: 'Luk 10, 23-37', value: '/da/trinity2/gospel13' },
@@ -112,7 +145,7 @@ const daSermons = [
   { id: 2202, postil: 'Trinity II', tags: 'Evangelium', label: '29.Søn.e.Tref.', bible: 'Matt 22: 1-14', value: '/da/trinity2/gospel20' },
   { id: 2211, postil: 'Trinity II', tags: 'Epistel', label: '21.Søn.e.Tref.', bible: 'Ef 6: 10-17', value: '/da/trinity2/epistle21' },
   { id: 2212, postil: 'Trinity II', tags: 'Evangelium', label: '21.Søn.e.Tref.', bible: 'Joh 4: 46-54', value: '/da/trinity2/gospel21' },
-  { id: 2215, postil: 'Trinity II', tags: 'Evangelium', label: 'AlleHelgensd.', bible: 'Matt 5: 1-12', value: '/da/trinity2/evangelium-alle-helgens-dag' },
+  { id: 2215, postil: 'Trinity II', tags: 'Evangelium', label: 'AlleHelgensd.', bible: 'Matt 5: 1-12', value: '/da/trinity2/all-saints-day' },
   { id: 2221, postil: 'Trinity II', tags: 'Epistel', label: '22.Søn.e.Tref.', bible: 'Fil 1: 3-11', value: '/da/trinity2/epistle22' },
   { id: 2222, postil: 'Trinity II', tags: 'Evangelium', label: '22.Søn.e.Tref.', bible: 'Matt 18: 23-35', value: '/da/trinity2/gospel22' },
   { id: 2231, postil: 'Trinity II', tags: 'Epistel', label: '23.Søn.e.Tref.', bible: 'Fil 3: 17-21', value: '/da/trinity2/epistle23' },
@@ -122,9 +155,9 @@ const daSermons = [
   { id: 2251, postil: 'Trinity II', tags: 'Epistel', label: '25.Søn.e.Tref.', bible: '1 Thess 4: 13-18', value: '/da/trinity2/epistle25' },
   { id: 2252, postil: 'Trinity II', tags: 'Evangelium', label: '25.Søn.e.Tref.', bible: 'Matt 24: 15-28', value: '/da/trinity2/gospel25' },
   { id: 2261, postil: 'Trinity II', tags: 'Epistel', label: '26.Søn.e.Tref.', bible: '2Thess 1: 3-10', value: '/da/trinity2/epistle26' },
-  { id: 2262, postil: 'Trinity II', tags: 'Evangelium', label: '26.Søn.e.Tref.', bible: 'Matt 25: 31-42', value: '/da/trinity2/gospel26' }
+  { id: 2262, postil: 'Trinity II', tags: 'Evangelium', label: '26.Søn.e.Tref.', bible: 'Matt 25: 31-42', value: '/da/trinity2/gospel26' },
 
-  // { type: 'separator' }
+  { type: 'separator' }
 ]
 
 export default defineEventHandler(() => {
