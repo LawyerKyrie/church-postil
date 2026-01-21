@@ -31,6 +31,10 @@ export default defineNuxtConfig({
     '/': { prerender: true }
     // '/da': { redirect: '/en', prerender: false }
   },
+  sourcemap: {
+    server: false,
+    client: false
+  },
 
   experimental: {
     asyncContext: true
@@ -39,12 +43,15 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-07-11',
 
   nitro: {
+    timing: true,
     prerender: {
       routes: [
         '/'
       ],
       crawlLinks: true,
-      autoSubfolderIndex: false
+      autoSubfolderIndex: false,
+      concurrency: 1,
+      interval: 100
     }
   },
 
