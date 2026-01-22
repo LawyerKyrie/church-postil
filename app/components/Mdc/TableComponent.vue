@@ -308,6 +308,31 @@ function getTags(inputString, getRest = false) {
   }
   return words[0]
 }
+
+/* CATCH JSON BIBLE VERSE */
+// Define the shape of your data
+interface Bible {
+  ref: string
+  category: string
+  tags: string
+  text: string
+  description: string
+}
+
+type BibleData = Record<string, Bible>
+
+const loadedBible = ref<Bible | null>(null)
+
+let cachedData: BibleData | null = null
+
+async function catchBible(targetId: string) {
+  // Only fetch if we haven't already
+  if (!cachedData) {
+    const response = await fetch('../json/bibleid.json')
+    cachedData = await response.json()
+  }
+  loadedBible.value = cachedData[targetId] || null
+}
 </script>
 
 <template>
@@ -362,23 +387,65 @@ function getTags(inputString, getRest = false) {
       :rows="rowItems || []"
       :columns="columns"
       class="flex-1 whitespace-normal"
-      :ui="{ th: 'pt-1, pb-1', td: 'pt-1 pb-1 whitespace-normal' }"
+      :ui="{
+        th: 'pt-1, pb-1',
+        td: 'pt-1 pb-1 whitespace-normal'
+      }"
       @select="(_, row) => onSelect(row)"
     >
       <template #expanded="{ row }">
-        <div class="-ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
-          <div class="pl-4 border-l-4 border-primary-500 rounded-sm">
+        <div class="expand-container -ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
+          <div class="expand-content pl-4 border-l-4 border-primary-500 rounded-sm">
             <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
               {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}
             </h4>
             <div class="text-sm text-gray-600 dark:text-gray-400">
               <p class="pb-1">
-                <UBadge
-                  size="md"
-                  :label="row.original.bible"
-                  variant="subtle"
-                />
-                &nbsp;{{ getTags(row.original.tags, true) }}
+                <UPopover arrow>
+                  <UButton
+                    :label="row.original.bible"
+                    title="Click Gets Bible Text"
+                    size="xs"
+                    variant="outline"
+                    @click="catchBible(row.original.id)"
+                  />
+                  <template #content="{ close }">
+                    <!-- <div> -->
+                    <div
+                      v-if="loadedBible"
+                      class="ml-2 mr-2 mt-0 mb-0"
+                    >
+                      <p>{{ loadedBible.text }}</p>
+                    </div>
+                    <div
+                      v-if="loadedBible"
+                      class="flex items-center justify-between gap-4"
+                    >
+                      <!-- {{ loadedBible.ref }} -->
+                      <UBadge
+                        size="sm"
+                        :label="loadedBible.tags"
+                        variant="subtle"
+                        class="mb-1 ml-2"
+                      />
+
+                      <UButton
+                        color="neutral"
+                        variant="ghost"
+                        icon="i-lucide-x"
+                        class="justify-end"
+                        @click="close"
+                      />
+                    </div>
+                    <!-- </div> -->
+                  </template>
+                </UPopover>
+                <span v-if="loadedBible">
+                  &nbsp;{{ loadedBible.tags }}
+                </span>
+                <span v-else>
+                  &nbsp;{{ getTags(row.original.tags, true) }}
+                </span>
               </p>
               <p v-if="row.original.description">
                 &emsp;{{ row.original.description }}
@@ -388,13 +455,13 @@ function getTags(inputString, getRest = false) {
               </p>
               <p class="flex justify-end">
                 <UButton
+                  label="Read Sermon"
                   :to="row.original.value"
+                  title="Open Luther's Sermon"
                   size="xs"
                   variant="outline"
                   trailing-icon="i-lucide-arrow-right"
-                >
-                  Read Sermon
-                </UButton>
+                />
               </p>
             </div>
           </div>
@@ -408,5 +475,53 @@ function getTags(inputString, getRest = false) {
 /* Optional: Make the cursor look clickable when hovering over rows */
 :deep(tbody tr) {
   cursor: pointer;
+}
+
+/* Target the row, the cells, and every text-bearing element inside */
+:deep(tr[data-expanded="true"]),
+:deep(tr[data-expanded="true"] td),
+:deep(tr[data-expanded="true"] td *) {
+  color: #00C16A !important; /* This is Tailwind's green-900 */
+  font-weight: 500 !important;
+}
+/* Dark mode adjustment */
+.dark :deep(tr[data-expanded="true"]),
+.dark :deep(tr[data-expanded="true"] td),
+.dark :deep(tr[data-expanded="true"] td *) {
+  color: #0A5331 !important; /* This is Tailwind's green-600 */
+}
+
+/*
+https://gemini.google.com/share/3638933429ae
+https://ui.nuxt.com/docs/getting-started/theme/design-system
+*/
+
+/* 1. Keep your parent row highlight using the attribute selector we found */
+:deep(tr[data-expanded="true"]) {
+  background-color: rgb(var(--color-primary-50) / 0.3);
+  transition: background-color 0.3s ease;
+}
+/* 2. The Sliding Animation for your specific container */
+.expand-container {
+  overflow: hidden; /* Clips the content while it slides */
+  animation: slideDown 0.35s ease-out forwards;
+  /* Ensures the container starts at zero height for the animation */
+  max-height: 500px;
+}
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    max-height: 500px; /* Adjust to a size larger than your content */
+    transform: translateY(0);
+  }
+}
+/* 3. Smooth transition for the parent row highlight */
+:deep(tr) {
+  transition: background-color 0.2s ease-in-out;
 }
 </style>

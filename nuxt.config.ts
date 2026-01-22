@@ -52,6 +52,7 @@ export default defineNuxtConfig({
       autoSubfolderIndex: false,
       concurrency: 1,
       interval: 100
+      // failOnError: false
     }
   },
 
