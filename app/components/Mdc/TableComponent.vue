@@ -395,97 +395,118 @@ async function catchBible(targetId: string) {
         </UDropdownMenu>
       </div>
     </div>
-    <UTable
-      ref="table"
-      v-model:column-visibility="columnVisibility"
-      v-model:sorting="sorting"
-      v-model:global-filter="globalFilter"
-      v-model:expanded="expanded"
-      :data="rowItems || []"
-      :rows="rowItems || []"
-      :columns="columns"
-      class="flex-1 whitespace-normal"
-      :ui="{
-        th: 'pt-1, pb-1',
-        td: 'pt-1 pb-1 whitespace-normal'
-      }"
-      @select="(_, row) => onSelect(row)"
-    >
-      <template #expanded="{ row }">
-        <div class="expand-container -ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
-          <div class="expand-content pl-4 border-l-4 border-primary-500 rounded-sm">
-            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
-              {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}
-            </h4>
-            <div class="text-sm text-gray-600 dark:text-gray-400">
-              <p class="pb-1">
-                <UPopover arrow>
-                  <UButton
-                    :label="row.original.bible"
-                    title="Click Gets Bible Text"
-                    size="xs"
-                    variant="outline"
-                    @click="catchBible(row.original.id)"
-                  />
-                  <template #content="{ close }">
-                    <!-- <div> -->
-                    <div
-                      v-if="loadedBible"
-                      class="ml-2 mr-2 mt-0 mb-0"
-                    >
-                      <p>{{ loadedBible.text }}</p>
-                    </div>
-                    <div
-                      v-if="loadedBible"
-                      class="flex items-center justify-between gap-4"
-                    >
-                      <!-- {{ loadedBible.ref }} -->
-                      <UBadge
-                        size="sm"
-                        :label="loadedBible.tags"
-                        variant="subtle"
-                        class="mb-1 ml-2"
-                      />
-
+    <ClientOnly>
+      <div v-if="rowItems.length > 0">
+        <UTable
+          ref="table"
+          v-model:column-visibility="columnVisibility"
+          v-model:sorting="sorting"
+          v-model:global-filter="globalFilter"
+          v-model:expanded="expanded"
+          :data="rowItems || []"
+          :rows="rowItems || []"
+          :columns="columns"
+          class="flex-1 whitespace-normal"
+          :ui="{
+            th: 'pt-1, pb-1',
+            td: 'pt-1 pb-1 whitespace-normal'
+          }"
+          @select="(_, row) => onSelect(row)"
+        >
+          <template #expanded="{ row }">
+            <div class="expand-container -ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
+              <div class="expand-content pl-4 border-l-4 border-primary-500 rounded-sm">
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
+                  {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}
+                </h4>
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                  <p class="pb-1">
+                    <UPopover arrow>
                       <UButton
-                        color="neutral"
-                        variant="ghost"
-                        icon="i-lucide-x"
-                        class="justify-end"
-                        @click="close"
+                        :label="row.original.bible"
+                        title="Click Gets Bible Text"
+                        size="xs"
+                        variant="outline"
+                        @click="catchBible(row.original.id)"
                       />
-                    </div>
-                    <!-- </div> -->
-                  </template>
-                </UPopover>
-                <span v-if="loadedBible">
-                  &nbsp;{{ loadedBible.tags }}
-                </span>
-                <span v-else>
-                  &nbsp;{{ getTags(row.original.tags, true) }}
-                </span>
-              </p>
-              <p v-if="row.original.description">
-                &emsp;{{ row.original.description }}
-              </p>
-              <p v-else>
-                &emsp;{{ row.original }}
-              </p>
-              <p class="flex justify-end">
-                <UButton
-                  label="Read Sermon"
-                  :to="row.original.value"
-                  title="Open Luther's Sermon"
-                  size="xs"
-                  variant="outline"
-                  trailing-icon="i-lucide-arrow-right"
-                />
-              </p>
+                      <template #content="{ close }">
+                        <!-- <div> -->
+                        <div
+                          v-if="loadedBible"
+                          class="ml-2 mr-2 mt-0 mb-0"
+                        >
+                          <p>{{ loadedBible.text }}</p>
+                        </div>
+                        <div
+                          v-if="loadedBible"
+                          class="flex items-center justify-between gap-4"
+                        >
+                          <!-- {{ loadedBible.ref }} -->
+                          <UBadge
+                            size="sm"
+                            :label="loadedBible.tags"
+                            variant="subtle"
+                            class="mb-1 ml-2"
+                          />
+
+                          <UButton
+                            color="neutral"
+                            variant="ghost"
+                            icon="i-lucide-x"
+                            class="justify-end"
+                            @click="close"
+                          />
+                        </div>
+                        <!-- </div> -->
+                      </template>
+                    </UPopover>
+                    <span v-if="loadedBible">
+                      &nbsp;{{ loadedBible.tags }}
+                    </span>
+                    <span v-else>
+                      &nbsp;{{ getTags(row.original.tags, true) }}
+                    </span>
+                  </p>
+                  <p v-if="row.original.description">
+                    &emsp;{{ row.original.description }}
+                  </p>
+                  <p v-else>
+                    &emsp;{{ row.original }}
+                  </p>
+                  <p class="flex justify-end">
+                    <UButton
+                      label="Read Sermon"
+                      :to="row.original.value"
+                      title="Open Luther's Sermon"
+                      size="xs"
+                      variant="outline"
+                      trailing-icon="i-lucide-arrow-right"
+                    />
+                  </p>
+                </div>
+              </div>
             </div>
+          </template>
+        </UTable>
+      </div>
+      <div v-else>
+        <UEmpty
+          icon="i-lucide-table"
+          title="No rows found"
+          description="It looks like you haven't added any rows."
+        />
+      </div>
+      <template #fallback>
+        <div class="flex items-center gap-4">
+          <USkeleton class="h-12 w-12 rounded-full" />
+
+          <div class="grid gap-2">
+            <USkeleton class="h-4 w-[250px]" />
+            <USkeleton class="h-4 w-[200px]" />
           </div>
         </div>
       </template>
-    </UTable>
+    </ClientOnly>
   </div>
 </template>
 
