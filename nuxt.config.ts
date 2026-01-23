@@ -44,6 +44,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-07-11',
 
   nitro: {
+    preset: 'vercel',
     timing: true,
     prerender: {
       routes: [

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Analytics } from '@vercel/analytics/nuxt'
 import { useI18n } from 'vue-i18n'
 import * as locales from '@nuxt/ui/locale'
 
@@ -38,6 +39,8 @@ useHead({
 <template>
   <UApp :locale="$localesList[locale]">
     <NuxtLoadingIndicator />
+
+    <Analytics />
 
     <BannerMessage />
 

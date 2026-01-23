@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
+import { useI18n } from 'vue-i18n'
 
 definePageMeta({
   layout: 'docs'
@@ -20,9 +21,25 @@ const { data: page } = await useAsyncData(
       .path(path)
       .first()
 )
-
+/*
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+}
+*/
+const { locale } = useI18n()
+
+const detectedLocale = computed(() => {
+  if (route.path.startsWith('/da')) return 'da'
+  if (path.startsWith('/en')) return 'en'
+  return locale.value // fallback to default i18n state
+})
+
+if (!page.value) {
+  throw createError({
+    statusCode: 404,
+    message: `Page not found in ${detectedLocale.value} at ${path}`,
+    fatal: true
+  })
 }
 
 const { data: surround } = await useAsyncData(`${path}-surround`, () => {
