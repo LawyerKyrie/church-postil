@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     '@nuxtjs/mcp-toolkit',
     '@vueuse/nuxt'
   ],
+  // ssr maybe fixing open page in new tab/ windows
+  ssr: true,
 
   devtools: {
     enabled: true
@@ -28,8 +30,7 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    '/': { prerender: true }
-    // '/da': { redirect: '/en', prerender: false }
+    '/': { prerender: true /* , redirect: '/new-path' */ }
   },
   sourcemap: {
     server: false,
@@ -70,7 +71,19 @@ export default defineNuxtConfig({
       }
     }
   },
-
+  /*
+  i18n: {
+    locales: ['en', 'da'],
+    defaultLocale: 'en',
+    // 'prefix_except_default' hides the /en but shows /da
+    // 'prefix' always shows the /en or /da in the URL
+    strategy: 'prefix',
+    detectBrowserLanguage: {
+      useCookie: true,
+      fallbackLocale: 'en'
+    }
+  },
+  */
   icon: {
     provider: 'iconify'
   },

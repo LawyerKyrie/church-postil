@@ -26,7 +26,7 @@ Luther's [Church Postil]{.text-primary}
   ---
   icon: i-iconoir-language
   size: xl
-  to: /en/?action=selectLanguage
+  to: /en/?action=selectEnglish
   trailing-icon: i-lucide-arrow-right
 
   ---
@@ -39,7 +39,7 @@ Luther's [Church Postil]{.text-primary}
   color: neutral
   variant: outline
   size: xl
-  to: /da/?action=selectLanguage
+  to: /da/?action=selectDanish
   trailing-icon: i-lucide-arrow-right
 
   ---

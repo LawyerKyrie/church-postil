@@ -223,14 +223,32 @@ const currentOrigin = ref('')
 function getRowItems(row: Row<RowItems>) {
   return [
     {
-      label: 'Open Page',
+      label: 'Open Sermon',
       icon: 'i-lucide-link',
       onSelect() {
         navigateTo(`${row.original.value}`, {
-          external: false
+          external: true,
+          open: {
+            target: '_blank'
+          }
         })
       }
     },
+    /*
+    {
+      label: 'New Window',
+      icon: 'i-lucide-link',
+      onSelect() {
+        navigateTo(`${row.original.value}`, {
+          external: true,
+          open: {
+            target: '_blank',
+            windowFeatures: { width: 800, height: 600 }
+          }
+        })
+      }
+    },
+    */
     {
       type: 'separator'
     },

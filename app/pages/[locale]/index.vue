@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import * as locales from '@nuxt/ui/locale'
 
 const { locale } = useI18n()
-const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
+// const { path } = useRoute()
 
 const { data: page } = await useAsyncData(
-  `/en/index`, () => queryCollection('docs')
-    .path(`/en/`)
+  `/${locale.value}/index`,
+  () => queryCollection('docs')
+    .path(`/${locale.value}/`)
     .first()
 )
 
@@ -49,9 +49,20 @@ onMounted(() => {
   const urlParams = new URLSearchParams(window.location.search)
   const action = urlParams.get('action') // Gets the value of the 'action' parameter
 
-  if (action === 'selectLanguage') {
-    locale.value = 'en'
-    showToast(`${uiLocale.value.name} is selected`, `Open menu or select postil below!`)
+  // Run a function based on the value
+  if (action === 'selectDanish') {
+    if (locale.value !== 'da') {
+      locale.value = 'da'
+      navigateTo(`/`)
+      showToast(`Danske prædikener valgt`, `Åpne meny eller velg postille nedenfor!`)
+      // alert('Data fra URL query parameter i DA')
+    }
+  } else if (action === 'selectEnglish') {
+    if (locale.value !== 'en') {
+      locale.value = 'en'
+      navigateTo(`/`)
+      showToast(`English Sermons Selected`, `Open Menu or Select Sermons below!`)
+    }
   }
 })
 </script>

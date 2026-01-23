@@ -4,7 +4,8 @@ import { useI18n } from 'vue-i18n'
 const { locale } = useI18n()
 
 const { data: page } = await useAsyncData(
-  `/${locale.value}/index`, () => queryCollection('docs')
+  `/${locale.value}/index`,
+  () => queryCollection('docs')
     .path(`/${locale.value}/`)
     .first()
 )
