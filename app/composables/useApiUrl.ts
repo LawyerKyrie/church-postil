@@ -10,6 +10,7 @@ export const useApiUrl = (path: string) => {
   if (import.meta.server) {
     return `${apiBase}/${cleanPath}`
   }
+  console.log('The clean path is: ', cleanPath)
 
   return `/${cleanPath}`
 }

@@ -48,6 +48,4 @@ Luther's [Church Postil]{.text-primary}
 
 ::
 
-::client-only
-  ::MdcTableComponent
-::client-only
+::MdcTableComponent

@@ -43,6 +43,20 @@ const fetchUrl = computed(() => {
   return useApiUrl(`api/${targetPath}`)
 })
 
+/*
+const { data: rows } = await useAsyncData(
+  `table-${path}`,
+  async () => {
+    // Log exactly what $fetch is about to receive
+    console.log('--- FETCH ATTEMPT ---')
+    console.log('Full URL:', fetchUrl.value)
+    console.log('Is Server?:', import.meta.server)
+
+    return await $fetch(fetchUrl.value)
+  }
+)
+*/
+
 const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
     key: `ssr-table-${path}`,
@@ -51,6 +65,7 @@ const { data: rowItems, status, error } = await useFetch<RowItems[]>(
     ) => {
       return data
         ?.filter((row) => {
+          // console.log('Full URL:', fetchUrl.value)
           postilArg.value = props.postil !== undefined
           // If we have a specific value, match it exactly.
           // If we don't, only return rows that have a postil value.
