@@ -1,17 +1,21 @@
+// composables/useApiUrl.ts
 export const useApiUrl = (path: string) => {
   const config = useRuntimeConfig()
-  const apiBase = config.public.apiBase
 
-  // Remove leading slash from path to prevent double slashes //
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path
+  // 1. Try to get the domain from the environment
+  // 2. On Vercel, 'process.env.VERCEL_URL' is automatically available
+  const apiBase = config.public.apiBase || `https://${process.env.VERCEL_URL}` || 'http://localhost:3000'
 
-  // On the server, we MUST use the absolute URL
-  // On the client, we can keep it relative for better proxy handling
+  const cleanPath = path.startsWith('/') ? path : `/${path}`
+
+  // On the server, we need the full URL
   if (import.meta.server) {
-    return `${apiBase}/${cleanPath}`
+    // If we are on Vercel, they prefer relative internal calls or the full VERCEL_URL
+    return `${apiBase}${cleanPath}`
   }
-  console.log('The clean path is: ', cleanPath)
 
-  return `/${cleanPath}`
+  // On the client, always use relative
+  return cleanPath
 }
-// Source: https://gemini.google.com/share/45a999326719
+
+// Source: https://gemini.google.com/share/b1c4c41a85a8
