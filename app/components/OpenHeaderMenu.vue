@@ -78,38 +78,40 @@ const flatNavigation = computed(() => {
 type RowCells = {
   id: string
   postil: string
-  tag: string
+  tags: string
   label: string
   bible: string
   value: string
   type: never
   icon: string // creates one tab on sermons
+  description: string
 }
 
 const { data: sermons } = await useFetch<RowCells[]>(
-  `/api/${locale.value}/sermons`, {
+  `/api/${locale.value}`, {
     key: 'church-postil',
     transform: (
       data
     ) => {
-      return data?.map(sermon => ({
-        ...sermon,
-        label: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
-        icon: sermon.icon === undefined ? '&nbsp;' : sermon.icon, // This creates a tab on sermons
-        tooltip: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
-        onSelect: () => {
-          showToast(`${sermon.label} selected`, `Sermon opens in a new window`)
-          navigateTo(`${sermon.value}`, {
-            external: false
-            /*
-            open: {
-              target: '_blank',
-              windowFeatures: { width: 800, height: 600 }
-            }
-            */
-          })
-        }
-      }))
+      return data
+        ?.map(sermon => ({
+          ...sermon,
+          label: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
+          icon: sermon.icon === undefined ? '&nbsp;' : sermon.icon, // This creates a tab on sermons
+          tooltip: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
+          onSelect: () => {
+            showToast(`${sermon.label} selected`, `Sermon opens in a new window`)
+            navigateTo(`${sermon.value}`, {
+              external: false
+              /*
+              open: {
+                target: '_blank',
+                windowFeatures: { width: 800, height: 600 }
+              }
+              */
+            })
+          }
+        }))
     },
     lazy: true
   }

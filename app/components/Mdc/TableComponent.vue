@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { h, resolveComponent } from 'vue'
 import { upperFirst } from 'scule'
@@ -5,8 +6,9 @@ import type { TableColumn } from '@nuxt/ui'
 import type { Column, Row, SortingFn } from '@tanstack/vue-table'
 import { useClipboard, useWindowSize } from '@vueuse/core'
 
+const { path } = useRoute()
+
 const props = defineProps({
-  apiFile: String,
   postil: String
 })
 
@@ -22,12 +24,21 @@ type RowItems = {
   type: never
   description: string
 }
+const lang = path.startsWith('/da') ? 'da' : 'en'
+// 1. Construct the URL as a plain string first
+// 2. Add the query manually to the string to avoid the 'query' property error
+const apiFile = computed(() => {
+  if (path.includes('uddrag')) {
+    return `${path.slice(1)}`
+  } else return `${lang}`
+})
 
-const { data: rowItems } = await useFetch<RowItems[]>(
-  `/api/${props.apiFile}`,
-  {
-    key: 'api-sermons',
-    transform: (data) => {
+const { data: rowItems, status, error } = await useFetch<RowItems[]>(
+  `/api/${apiFile.value}`, { // locale.value or path to "uddrag"-files
+    key: `ssr-table-${path}`,
+    transform: (
+      data
+    ) => {
       return data
         ?.filter((row) => {
           postilArg.value = props.postil !== undefined
@@ -37,12 +48,9 @@ const { data: rowItems } = await useFetch<RowItems[]>(
             ? row.postil === props.postil
             : row.postil !== undefined
         })
-        .map(row => ({
-          ...row
-          // description: row.description === undefined ? '' : row.description
-        })) || []
-    }
-    // lazy: true
+    },
+    server: true,
+    lazy: false
   }
 )
 
@@ -234,7 +242,7 @@ function getRowItems(row: Row<RowItems>) {
         })
       }
     },
-    /*
+    //
     {
       label: 'New Window',
       icon: 'i-lucide-link',
@@ -248,7 +256,7 @@ function getRowItems(row: Row<RowItems>) {
         })
       }
     },
-    */
+    //
     {
       type: 'separator'
     },
@@ -395,118 +403,149 @@ async function catchBible(targetId: string) {
         </UDropdownMenu>
       </div>
     </div>
-    <ClientOnly>
-      <div v-if="rowItems.length > 0">
-        <UTable
-          ref="table"
-          v-model:column-visibility="columnVisibility"
-          v-model:sorting="sorting"
-          v-model:global-filter="globalFilter"
-          v-model:expanded="expanded"
-          :data="rowItems || []"
-          :rows="rowItems || []"
-          :columns="columns"
-          class="flex-1 whitespace-normal"
-          :ui="{
-            th: 'pt-1, pb-1',
-            td: 'pt-1 pb-1 whitespace-normal'
-          }"
-          @select="(_, row) => onSelect(row)"
-        >
-          <template #expanded="{ row }">
-            <div class="expand-container -ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
-              <div class="expand-content pl-4 border-l-4 border-primary-500 rounded-sm">
-                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
-                  {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}
-                </h4>
-                <div class="text-sm text-gray-600 dark:text-gray-400">
-                  <p class="pb-1">
-                    <UPopover arrow>
-                      <UButton
-                        :label="row.original.bible"
-                        title="Click Gets Bible Text"
-                        size="xs"
-                        variant="outline"
-                        @click="catchBible(row.original.id)"
-                      />
-                      <template #content="{ close }">
-                        <!-- <div> -->
-                        <div
-                          v-if="loadedBible"
-                          class="ml-2 mr-2 mt-0 mb-0"
-                        >
-                          <p>{{ loadedBible.text }}</p>
-                        </div>
-                        <div
-                          v-if="loadedBible"
-                          class="flex items-center justify-between gap-4"
-                        >
-                          <!-- {{ loadedBible.ref }} -->
-                          <UBadge
-                            size="sm"
-                            :label="loadedBible.tags"
-                            variant="subtle"
-                            class="mb-1 ml-2"
-                          />
-
-                          <UButton
-                            color="neutral"
-                            variant="ghost"
-                            icon="i-lucide-x"
-                            class="justify-end"
-                            @click="close"
-                          />
-                        </div>
-                        <!-- </div> -->
-                      </template>
-                    </UPopover>
-                    <span v-if="loadedBible">
-                      &nbsp;{{ loadedBible.tags }}
-                    </span>
-                    <span v-else>
-                      &nbsp;{{ getTags(row.original.tags, true) }}
-                    </span>
-                  </p>
-                  <p v-if="row.original.description">
-                    &emsp;{{ row.original.description }}
-                  </p>
-                  <p v-else>
-                    &emsp;{{ row.original }}
-                  </p>
-                  <p class="flex justify-end">
-                    <UButton
-                      label="Read Sermon"
-                      :to="row.original.value"
-                      title="Open Luther's Sermon"
-                      size="xs"
-                      variant="outline"
-                      trailing-icon="i-lucide-arrow-right"
-                    />
-                  </p>
-                </div>
-              </div>
-            </div>
-          </template>
-        </UTable>
+    <div class="church-postil-table">
+      <div
+        v-if="status === 'pending'"
+        class="flex items-center gap-4 "
+      >
+        <USkeleton class="h-12 w-12 rounded-full" />
+        <!-- <p>Loading records...</p> -->
+        <div class="grid gap-2">
+          <USkeleton class="h-4 w-[250px]" />
+          <USkeleton class="h-4 w-[200px]" />
+        </div>
       </div>
-      <div v-else>
-        <UEmpty
-          icon="i-lucide-table"
-          title="No rows found"
-          description="It looks like you haven't added any rows."
+
+      <div v-else-if="error">
+        <UError
+          :clear="{
+            color: 'neutral',
+            size: 'xl',
+            icon: 'i-lucide-arrow-left',
+            class: 'rounded-full'
+          }"
+          :error="{
+            statusCode: 404,
+            statusMessage: 'No Table Rows',
+            message: error.message
+          }"
         />
       </div>
-      <template #fallback>
-        <div class="flex items-center gap-4">
-          <USkeleton class="h-12 w-12 rounded-full" />
 
-          <div class="grid gap-2">
-            <USkeleton class="h-4 w-[250px]" />
-            <USkeleton class="h-4 w-[200px]" />
+      <!-- <div v-else-if="rowItems.length > 0"> -->
+      <!-- <ClientOnly> -->
+      <UTable
+        ref="table"
+        v-model:column-visibility="columnVisibility"
+        v-model:sorting="sorting"
+        v-model:global-filter="globalFilter"
+        v-model:expanded="expanded"
+        :data="rowItems || []"
+        :rows="rowItems || []"
+        :columns="columns"
+        class="flex-1 whitespace-normal"
+        :ui="{
+          th: 'pt-1, pb-1',
+          td: 'pt-1 pb-1 whitespace-normal'
+        }"
+        @select="(_, row) => onSelect(row)"
+      >
+        <template #expanded="{ row }">
+          <div class="expand-container -ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
+            <div class="expand-content pl-4 border-l-4 border-primary-500 rounded-sm">
+              <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
+                {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}
+              </h4>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                <p class="pb-1">
+                  <UPopover arrow>
+                    <UButton
+                      :label="row.original.bible"
+                      title="Click Gets Bible Text"
+                      size="xs"
+                      variant="outline"
+                      @click="catchBible(row.original.id)"
+                    />
+                    <template #content="{ close }">
+                      <!-- <div> -->
+                      <div
+                        v-if="loadedBible"
+                        class="ml-2 mr-2 mt-0 mb-0"
+                      >
+                        <p>{{ loadedBible.text }}</p>
+                      </div>
+                      <div
+                        v-if="loadedBible"
+                        class="flex items-center justify-between gap-4"
+                      >
+                        <!-- {{ loadedBible.ref }} -->
+                        <UBadge
+                          size="sm"
+                          :label="loadedBible.tags"
+                          variant="subtle"
+                          class="mb-1 ml-2"
+                        />
+
+                        <UButton
+                          color="neutral"
+                          variant="ghost"
+                          icon="i-lucide-x"
+                          class="justify-end"
+                          @click="close"
+                        />
+                      </div>
+                      <!-- </div> -->
+                    </template>
+                  </UPopover>
+                  <span v-if="loadedBible">
+                    &nbsp;{{ loadedBible.tags }}
+                  </span>
+                  <span v-else>
+                    &nbsp;{{ getTags(row.original.tags, true) }}
+                  </span>
+                </p>
+                <p v-if="row.original.description">
+                  &emsp;{{ row.original.description }}
+                </p>
+                <p v-else>
+                  &emsp;{{ row.original }}
+                </p>
+                <p class="flex justify-end">
+                  <UButton
+                    label="Read Sermon"
+                    :to="row.original.value"
+                    title="Open Luther's Sermon"
+                    size="xs"
+                    variant="outline"
+                    trailing-icon="i-lucide-arrow-right"
+                  />
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </template>
-    </ClientOnly>
+        </template>
+      </UTable>
+      <!-- </ClientOnly> -->
+      <!--
+      </div>
+      <div v-else>
+        {{ rowItems }}
+        <UEmpty
+          icon="i-lucide-table"
+          title="No Rows Found"
+          description="Hmm, There is an error loading table rows."
+          :actions="[
+            {
+              icon: 'i-lucide-refresh-cw',
+              label: 'Refresh',
+              color: 'neutral',
+              variant: 'subtle'
+            }
+          ]"
+        />
+      </div>
+    -->
+    </div>
   </div>
 </template>
 

@@ -1,0 +1,11 @@
+{
+  "welcome": "Velkommen til nettstedet vårt!",
+  "homeLink": "Hjem",
+  "aboutLink": "Om oss",
+  "selectLocale": {
+    "label": "Velg språk"
+  },
+  "error": {
+    "notFound": "Ups, siden ble ikke funnet."
+  }
+}

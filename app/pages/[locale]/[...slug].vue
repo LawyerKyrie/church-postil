@@ -51,11 +51,14 @@ const { data: surround } = await useAsyncData(`${path}-surround`, () => {
 const title = page.value.seo?.title || page.value.title
 const description = page.value.seo?.description || page.value.description
 
+const currentOrigin = ref('https://church-postil.vercel.app')
+
 useSeoMeta({
   title,
   ogTitle: title,
   description,
-  ogDescription: description
+  ogDescription: description,
+  ogUrl: () => `${currentOrigin.value}${path}`
 })
 
 const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))

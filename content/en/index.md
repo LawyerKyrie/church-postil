@@ -49,5 +49,5 @@ Luther's [Church Postil]{.text-primary}
 ::
 
 ::client-only
-  ::MdcTableComponent{apiFile="en/sermons"}
+  ::MdcTableComponent
 ::client-only

@@ -1,0 +1,11 @@
+{
+  "welcome": "Welcome to our website!",
+  "homeLink": "Home",
+  "aboutLink": "About Us",
+  "selectLocale": {
+    "label": "Select Language"
+  },
+  "error": {
+    "notFound": "Oops, page not found."
+  }
+}

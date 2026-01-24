@@ -37,7 +37,7 @@ useHead({
 </script>
 
 <template>
-  <UApp :locale="$localesList[locale]">
+  <UApp>
     <NuxtLoadingIndicator />
 
     <Analytics />

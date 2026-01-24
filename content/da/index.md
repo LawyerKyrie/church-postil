@@ -48,5 +48,5 @@ Luthers [Kirke Postille]{.text-primary}
 ::
 
 ::client-only
-  ::MdcTableComponent{apiFile="da/sermons"}
+  ::MdcTableComponent
 ::client-only
