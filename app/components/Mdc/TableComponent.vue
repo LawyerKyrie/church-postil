@@ -7,6 +7,7 @@ import type { Column, Row, SortingFn } from '@tanstack/vue-table'
 import { useClipboard, useWindowSize } from '@vueuse/core'
 
 const { path } = useRoute()
+// Construct the full URL using our helper
 
 const props = defineProps({
   postil: String
@@ -24,17 +25,26 @@ type RowItems = {
   type: never
   description: string
 }
-const lang = path.startsWith('/da') ? 'da' : 'en'
-// 1. Construct the URL as a plain string first
-// 2. Add the query manually to the string to avoid the 'query' property error
-const apiFile = computed(() => {
+
+const fetchUrl = computed(() => {
+  // 1. Your existing logic to determine which API file/folder to hit
+  const lang = path.startsWith('/da') ? 'da' : 'en'
+
+  let targetPath = ''
   if (path.includes('uddrag')) {
-    return `${path.slice(1)}`
-  } else return `${lang}`
+    targetPath = path.slice(1) // e.g., "da/uddrag"
+  } else {
+    targetPath = lang // e.g., "da"
+  }
+
+  // 2. Wrap it in the helper to add the Domain on the Server
+  // This produces: http://localhost:3000/api/da/uddrag (on Server)
+  // or: /api/da/uddrag (on Client)
+  return useApiUrl(`api/${targetPath}`)
 })
 
 const { data: rowItems, status, error } = await useFetch<RowItems[]>(
-  `/api/${apiFile.value}`, { // locale.value or path to "uddrag"-files
+  fetchUrl.value, {
     key: `ssr-table-${path}`,
     transform: (
       data

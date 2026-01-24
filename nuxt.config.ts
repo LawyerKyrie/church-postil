@@ -29,6 +29,12 @@ export default defineNuxtConfig({
       }
     }
   },
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:3000'
+    }
+  },
   routeRules: {
     '/': { prerender: true /* , redirect: '/new-path' */ }
   },
@@ -72,19 +78,6 @@ export default defineNuxtConfig({
       }
     }
   },
-  /*
-  i18n: {
-    locales: ['en', 'da'],
-    defaultLocale: 'en',
-    // 'prefix_except_default' hides the /en but shows /da
-    // 'prefix' always shows the /en or /da in the URL
-    strategy: 'prefix',
-    detectBrowserLanguage: {
-      useCookie: true,
-      fallbackLocale: 'en'
-    }
-  },
-  */
   icon: {
     provider: 'iconify'
   },
