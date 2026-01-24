@@ -13,8 +13,6 @@ const props = defineProps({
   postil: String
 })
 
-const postilArg = ref(false)
-
 type RowItems = {
   id: string
   postil: string
@@ -57,22 +55,22 @@ const { data: rows } = await useAsyncData(
 )
 */
 
+// 1. Calculate your argument OUTSIDE the fetch
+const isPostilDefined = props.postil !== undefined
+
 const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
     key: `ssr-table-${path}`,
-    transform: (
-      data
-    ) => {
-      return data
-        ?.filter((row) => {
-          // console.log('Full URL:', fetchUrl.value)
-          postilArg.value = props.postil !== undefined
-          // If we have a specific value, match it exactly.
-          // If we don't, only return rows that have a postil value.
-          return postilArg.value
-            ? row.postil === props.postil
-            : row.postil !== undefined
-        })
+    // Simplify transform: only handle the array filtering
+    transform: (data) => {
+      // DEFENSIVE: If data is missing or not an array, return empty list
+      if (!Array.isArray(data)) return []
+
+      return data.filter((row) => {
+        return isPostilDefined
+          ? row.postil === props.postil
+          : row.postil !== undefined
+      })
     },
     server: true,
     lazy: false
