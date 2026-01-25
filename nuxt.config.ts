@@ -32,7 +32,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:3000'
+      apiBase: process.env.NUXT_PUBLIC_API_BASE
+        || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
     }
   },
   routeRules: {
@@ -68,6 +69,17 @@ export default defineNuxtConfig({
     shim: false,
     strict: false,
     typeCheck: true
+  },
+  hooks: {
+    ready() {
+      const apiBase = process.env.NUXT_PUBLIC_API_BASE
+        || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+
+      console.log('--- SERVER STARTUP AUDIT ---')
+      console.log('Final API Base URL:', apiBase)
+      console.log('Source: ', process.env.NUXT_PUBLIC_API_BASE ? 'Dashboard' : (process.env.VERCEL_URL ? 'Vercel System' : 'Local Fallback'))
+      console.log('---------------------------')
+    }
   },
 
   eslint: {
