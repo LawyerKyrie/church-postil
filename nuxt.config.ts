@@ -64,6 +64,11 @@ export default defineNuxtConfig({
       // failOnError: false
     }
   },
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 1000 // Set the limit to 1000 KiB
+    }
+  },
 
   typescript: {
     shim: false,
@@ -78,7 +83,7 @@ export default defineNuxtConfig({
       console.log('--- SERVER STARTUP AUDIT ---')
       console.log('Final API Base URL:', apiBase)
       console.log('Source: ', process.env.NUXT_PUBLIC_API_BASE ? 'Dashboard' : (process.env.VERCEL_URL ? 'Vercel System' : 'Local Fallback'))
-      console.log('---------------------------')
+      console.log('-------------------_--------')
     }
   },
 

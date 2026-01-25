@@ -48,7 +48,7 @@ const { data: rows } = await useAsyncData(
   `table-${path}`,
   async () => {
     // Log exactly what $fetch is about to receive
-    console.log('--- FETCH ATTEMPT ssr api test2 ---')
+    console.log('--- FETCH ATTEMPT mdc/SsrApiTest3.vue ---')
     console.log('Full URL:', fetchUrl.value)
     console.log('Is Server?:', import.meta.server)
     console.log('the rows is: ', rows)
@@ -56,6 +56,8 @@ const { data: rows } = await useAsyncData(
     return await $fetch(fetchUrl.value)
   }
 )
+
+console.log('Rows = ', rows)
 
 // 1. Calculate your argument OUTSIDE the fetch
 // const isPostilDefined = props.postil !== undefined

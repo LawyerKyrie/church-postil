@@ -41,19 +41,18 @@ const fetchUrl = computed(() => {
   return useApiUrl(`api/${targetPath}`)
 })
 
-/*
 const { data: rows } = await useAsyncData(
   `table-${path}`,
   async () => {
     // Log exactly what $fetch is about to receive
-    console.log('--- FETCH ATTEMPT ---')
+    console.log('--- FETCH ATTEMPT (mdc/TableComponent ---')
     console.log('Full URL:', fetchUrl.value)
     console.log('Is Server?:', import.meta.server)
 
     return await $fetch(fetchUrl.value)
   }
 )
-*/
+console.log('Rows = ', rows)
 
 // 1. Calculate your argument OUTSIDE the fetch
 const isPostilDefined = props.postil !== undefined
