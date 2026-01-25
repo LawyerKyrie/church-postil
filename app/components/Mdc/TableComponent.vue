@@ -80,13 +80,16 @@ const { data: rowItems, status, error } = await useFetch<RowItems[]>(
 /* Adding custom sort function for bible column */
 // https://gemini.google.com/share/e49b936b49a0
 const BOOK_ORDER: Record<string, number> = {
-  'ecclus': 2, '2 Mos': 2,
-  'isaiah': 23, 'es': 23, 'sirach': 39, 'sirak': 39, 'sir': 39,
+  'ecclus': 2, '2 Mos': 2, 'is': 23, 'isaiah': 23, 'es': 23,
+  'sirach': 39, 'sirak': 39, 'sir': 39,
   'matt': 40, 'mark': 41, 'luke': 42, 'luk': 42, 'john': 43, 'joh': 43,
   'acts': 44, 'apg': 44, 'rom': 45, '1 cor': 46, '1 kor': 46, '2 cor': 47, '2 kor': 47,
-  'gal': 48, 'eph': 49, 'ef': 49, 'phil': 50, 'fil': 50, 'col': 53, 'kol': 51, '1 thess': 52, '1 tess': 52, '2 thess': 53, '2 tess': 53,
-  '1 tim': 54, '2 tim': 55, 'titus': 56, 'tit': 56, 'philem': 57, 'filem': 57, 'hebr': 58, 'heb': 58, 'james': 59, 'jak': 59, '1 pet': 60, '2 pet': 61,
-  '1 john': 62, '2 john': 63, '3 john': 64, 'jude': 65, 'jud': 65, 'rev': 66, 'åb': 66
+  'gal': 48, 'eph': 49, 'ef': 49, 'phil': 50, 'fil': 50, 'col': 53, 'kol': 51,
+  '1 thess': 52, '1 tess': 52, '2 thess': 53, '2 tess': 53, '1 tim': 54, '2 tim': 55,
+  'titus': 56, 'tit': 56, 'philem': 57, 'filem': 57, 'hebr': 58, 'heb': 58,
+  'james': 59, 'jak': 59, '1 pet': 60, '2 pet': 61,
+  '1 john': 62, '1 joh': 62, '2 john': 63, '2 joh': 63, '3 john': 64, '3 joh': 64,
+  'jude': 65, 'jud': 65, 'rev': 66, 'åb': 66
 }
 
 type BibleBook = keyof typeof BOOK_ORDER
