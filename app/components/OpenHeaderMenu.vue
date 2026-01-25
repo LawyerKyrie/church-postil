@@ -113,6 +113,7 @@ const { data: sermons } = await useFetch<RowCells[]>(
           }
         }))
     },
+    server: true,
     lazy: false
   }
 )
