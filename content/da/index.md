@@ -47,4 +47,4 @@ Luthers [Kirke Postille]{.text-primary}
 
 ::
 
-::MdcTableComponent
+::TableComponent

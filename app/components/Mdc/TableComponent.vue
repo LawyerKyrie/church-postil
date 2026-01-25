@@ -63,6 +63,7 @@ const { data: rowItems, status, error } = await useFetch<RowItems[]>(
     key: `ssr-table-${path}`,
     // Simplify transform: only handle the array filtering
     transform: (data) => {
+      console.log('log from my api table component')
       // DEFENSIVE: If data is missing or not an array, return empty list
       if (!Array.isArray(data)) return []
 
