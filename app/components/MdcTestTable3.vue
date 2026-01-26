@@ -1,28 +1,26 @@
 <script setup>
-const route = useRoute()
-
-// We use useAsyncData but we tell it to fetch from the server context
-const { data, error } = await useAsyncData(`nitro-fix-${route.path}`, () => {
-  // On the server, this calls the function directly.
-  // On the client, it makes a clean absolute request.
-  return $fetch('/api/test3', {
-    headers: useRequestHeaders(['cookie']) // Passes auth if needed
-  })
+const { data, error } = await useFetch('/api/test3', {
+  // This unique key is vital to prevent it from grabbing the index page's cache
+  key: 'table-final-validation',
+  // Force the server to fetch this before sending the page to the browser
+  server: true,
+  // This tells Nuxt to ignore the current page's folder depth
+  baseURL: '/'
 })
 </script>
 
 <template>
-  <div style="border: 2px solid magenta; padding: 10px;">
-    <h4>Nitro Direct Proxy</h4>
-    <p>Status: {{ error ? '❌' : (data ? '✅' : '⏳') }}</p>
-
-    <div v-if="data">
-      <p>Data Check: {{ Array.isArray(data) ? 'Array Found!' : 'Still String/HTML' }}</p>
-      <pre v-if="Array.isArray(data)">{{ data }}</pre>
-      <div v-else class="html-debug">
-        <p>Preview of returned text:</p>
-        <code>{{ String(data).substring(0, 50) }}</code>
-      </div>
+  <div style="border: 2px solid green; padding: 10px;">
+    <div v-if="data && Array.isArray(data)">
+      <p>✅ Success! Data is here.</p>
+      <pre>{{ data }}</pre>
+    </div>
+    <div v-else-if="typeof data === 'string'">
+      <p>❌ Still getting HTML. Preview:</p>
+      <code>{{ data.substring(0, 30) }}</code>
+    </div>
+    <div v-else-if="error">
+      <p>❌ Error: {{ error.message }}</p>
     </div>
   </div>
 </template>
