@@ -1,6 +1,14 @@
 <script setup>
 const route = useRoute()
 
+// useFetch is "smart" - if we give it a relative path on the server, 
+// Nitro (Nuxt's engine) will call the function directly without HTTP.
+const { data, error } = await useFetch('/api/test3', {
+  key: `internal-v5-${route.path}`,
+  // This is the secret: Tell Nuxt NOT to use the full domain
+  baseURL: '/'
+})
+/*
 // 1. Manually determine the base URL
 // On the server (Vercel), we use the system variable.
 // On the client, we use an empty string (browser handles it).
@@ -21,9 +29,23 @@ const { data, error } = await useAsyncData(`fetch-${route.path}`, async () => {
     baseURL: baseUrl
   })
 })
+*/
 </script>
 
 <template>
+  <div style="border: 2px solid orange; padding: 10px;">
+    <h4>Internal Nitro Fetch</h4>
+    <div v-if="error">❌ Server Error: {{ error.statusCode }}</div>
+    <div v-else-if="data">
+      <p>Data Type: {{ Array.isArray(data) ? 'Array' : typeof data }}</p>
+      <pre v-if="Array.isArray(data)">{{ data }}</pre>
+      <div v-else style="color: red;">
+        ⚠️ Received HTML instead of data. This means Vercel is redirecting the request.
+      </div>
+    </div>
+    <div v-else>⏳ Loading... (If stuck here, API returned undefined)</div>
+  </div>
+  <!--
   <div style="border: 3px solid blue; padding: 15px;">
     <h3>Connection Diagnostics</h3>
 
@@ -54,4 +76,5 @@ const { data, error } = await useAsyncData(`fetch-${route.path}`, async () => {
       </div>
     </div>
   </div>
+  -->
 </template>
