@@ -13,6 +13,11 @@ export default defineNuxtConfig({
   // ssr maybe fixing open page in new tab/ windows
   ssr: true,
 
+  components: [
+    { path: '~/components/mdc', pathPrefix: false },
+    '~/components'
+  ],
+
   devtools: {
     enabled: true
   },
@@ -37,7 +42,8 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    '/': { prerender: true /* , redirect: '/new-path' */ }
+    '/': { prerender: true }, // Good for SEO/Speed on the home page
+    '/api/**': { cors: true } // Optional: helps if you ever fetch from other domains
   },
   sourcemap: {
     server: false,
@@ -57,7 +63,7 @@ export default defineNuxtConfig({
       routes: [
         '/'
       ],
-      crawlLinks: true,
+      crawlLinks: true, // required for ssr api call
       autoSubfolderIndex: false,
       concurrency: 1,
       interval: 100
