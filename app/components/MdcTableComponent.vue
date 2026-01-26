@@ -31,6 +31,8 @@ const fetchUrl = computed(() => {
   let targetPath = ''
   if (path.includes('uddrag')) {
     targetPath = path.slice(1) // e.g., "da/uddrag"
+  } else if (path.includes('test')) {
+    targetPath = path.slice(1)
   } else {
     targetPath = lang // e.g., "da"
   }
