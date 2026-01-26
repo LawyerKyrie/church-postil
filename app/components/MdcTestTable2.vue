@@ -18,24 +18,28 @@
         </li>
       </ul>
       <p v-else>
-        ⚠️ The API returned an empty array [ ].
+        "⚠️ The API returned an empty array [ ]."
       </p>
     </div>
   </div>
 </template>
 
 <script setup>
+const { path } = useRoute()
+
 // Using an absolute path starting with / ensures it works from any sub-page
-const { data, status, error } = await useFetch('/api/test2', {
-  key: `baseline-key-fixed-${path}-${Math.random()}`, // Unique key prevents cache collisions
-  server: true,
-  lazy: false
+const { data, status, error } = await useFetch(
+  '/api/test2',
+  {
+    key: `baseline-key-fixed-${Math.random()}`, // Unique key prevents cache collisions
+    server: true,
+    lazy: false
 })
 
 // This log will appear in your Vercel 'Functions' logs
 if (import.meta.server) {
   console.log('--- BASELINE CHECK ---')
-  console.log('Path:', useRoute().path)
+  console.log('Path:', path)
   console.log('Data count:', data.value?.length)
 }
 </script>

@@ -54,7 +54,7 @@ const { data: rows } = await useAsyncData(
     console.log('Full URL:', fetchUrl.value)
     console.log('Is Server?:', import.meta.server)
 
-    return await $fetch('/api/en') // $fetch(fetchUrl.value)
+    return await $fetch('/api/da') // $fetch(fetchUrl.value)
   }
 )
 console.log('Rows = ', rows[5])
