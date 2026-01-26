@@ -150,7 +150,7 @@ export default defineEventHandler(() => {
     { id: 6251, postil: 'Trinity II', tags: 'Epistel', label: '25.Søn.e.Tref.', bible: '1 Thess 4: 13-18', value: '/da/trinity2/epistle25' },
     { id: 6252, postil: 'Trinity II', tags: 'Evangelium', label: '25.Søn.e.Tref.', bible: 'Matt 24: 15-28', value: '/da/trinity2/gospel25' },
     { id: 6261, postil: 'Trinity II', tags: 'Epistel', label: '26.Søn.e.Tref.', bible: '2Thess 1: 3-10', value: '/da/trinity2/epistle26' },
-    { id: 6262, postil: 'Trinity II', tags: 'Evangelium', label: '26.Søn.e.Tref.', bible: 'Matt 25: 31-42', value: '/da/trinity2/gospel26' },
+    { id: 6262, postil: 'Trinity II', tags: 'Evangelium', label: '26.Søn.e.Tref.', bible: 'Matt 25: 31-42', value: '/da/trinity2/gospel26' }
 
   ]
   console.log('Api call from api/da/select.ts')

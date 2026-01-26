@@ -138,7 +138,7 @@ export default defineEventHandler(() => {
     { id: 6251, postil: 'Trinity II', tags: 'Epistle', label: '25.Sun.a.Trin.', bible: '1 Thess 4: 13-18', value: '/da/trinity2/epistle25' },
     { id: 6252, postil: 'Trinity II', tags: 'Gospel', label: '25.Sun.a.Trin.', bible: 'Matt 24: 15-28', value: '/da/trinity2/gospel25' },
     { id: 6261, postil: 'Trinity II', tags: 'Epistle', label: '26.Sun.a.Trin.', bible: '2Thess 1: 3-10', value: '/da/trinity2/epistle26' },
-    { id: 6262, postil: 'Trinity II', tags: 'Gospel', label: '26.Sun.a.Trin.', bible: 'Matt 25: 31-42', value: '/da/trinity2/gospel26' },
+    { id: 6262, postil: 'Trinity II', tags: 'Gospel', label: '26.Sun.a.Trin.', bible: 'Matt 25: 31-42', value: '/da/trinity2/gospel26' }
 
   ]
 

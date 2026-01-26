@@ -87,6 +87,8 @@ type RowCells = {
   description: string
 }
 
+const { path } = useRoute()
+
 const fetchUrl = computed(() => {
   // 1. Your existing logic to determine which API file/folder to hit
   const lang = path.startsWith('/da') ? 'da' : 'en'
