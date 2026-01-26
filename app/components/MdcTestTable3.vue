@@ -1,9 +1,12 @@
 <script setup>
 const route = useRoute()
-const { data, error } = await useAsyncData(
-  `truth-fetch-${route.path}`,
-  () => $fetch('/api/test3')
-)
+
+// const config = useRuntimeConfig()
+const { data } = await useAsyncData('test-fetch', () => {
+  // Use $fetch with the full URL to bypass any path resolution issues
+  const baseUrl = import.meta.dev ? '' : `https://${process.env.VERCEL_URL}`
+  return $fetch(`${baseUrl}/api/test3`)
+})
 </script>
 
 <template>
@@ -29,6 +32,11 @@ const { data, error } = await useAsyncData(
           <strong>Warning:</strong> Received HTML instead of JSON!
         </p>
         <pre style="background: #eee; font-size: 10px;">{{ data.substring(0, 200) }}...</pre>
+
+        <br>
+        <h3>The URL path?</h3>
+        <p>Current Path: {{ route.path }}</p>
+        <p>Attempted API URL: /api/test3</p>
       </div>
     </div>
   </div>
