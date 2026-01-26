@@ -1,103 +1,28 @@
 <script setup>
 const route = useRoute()
 
-const url = useRequestURL() // Get the full URL (e.g., https://site.vercel.app)
-
-// We construct the origin manually to ensure no sub-folders are added
-const apiBase = url.origin
-
-const { data, error } = await useAsyncData(`final-fix-${route.path}`, () => {
+// We use useAsyncData but we tell it to fetch from the server context
+const { data, error } = await useAsyncData(`nitro-fix-${route.path}`, () => {
+  // On the server, this calls the function directly.
+  // On the client, it makes a clean absolute request.
   return $fetch('/api/test3', {
-    baseURL: apiBase
+    headers: useRequestHeaders(['cookie']) // Passes auth if needed
   })
 })
-/*
-// useFetch is "smart" - if we give it a relative path on the server,
-// Nitro (Nuxt's engine) will call the function directly without HTTP.
-const { data, error } = await useFetch('/api/test3', {
-  key: `internal-v5-${route.path}`,
-  // This is the secret: Tell Nuxt NOT to use the full domain
-  baseURL: '/'
-})
-*/
-/*
-// 1. Manually determine the base URL
-// On the server (Vercel), we use the system variable.
-// On the client, we use an empty string (browser handles it).
-const getBaseUrl = () => {
-  if (import.meta.env.SSR) {
-    return process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
-  }
-  return ''
-}
-
-const { data, error } = await useAsyncData(`fetch-${route.path}`, async () => {
-  const baseUrl = getBaseUrl()
-  const apiPath = '/api/test3' // Ensure the leading slash is here!
-
-  console.log('Fetching from:', baseUrl + apiPath)
-
-  return await $fetch(apiPath, {
-    baseURL: baseUrl
-  })
-})
-*/
 </script>
 
 <template>
-  <div style="border: 2px solid cyan; padding: 10px;">
-    <p><strong>Origin:</strong> {{ apiBase }}</p>
-    <p><strong>Status:</strong> {{ error ? '❌' : (data ? '✅' : '⏳') }}</p>
+  <div style="border: 2px solid magenta; padding: 10px;">
+    <h4>Nitro Direct Proxy</h4>
+    <p>Status: {{ error ? '❌' : (data ? '✅' : '⏳') }}</p>
 
     <div v-if="data">
-      <p>Type: {{ typeof data }}</p>
-      <pre>{{ data }}</pre>
-    </div>
-  </div>
-  <!--
-  <div style="border: 2px solid orange; padding: 10px;">
-    <h4>Internal Nitro Fetch</h4>
-    <div v-if="error">❌ Server Error: {{ error.statusCode }}</div>
-    <div v-else-if="data">
-      <p>Data Type: {{ Array.isArray(data) ? 'Array' : typeof data }}</p>
+      <p>Data Check: {{ Array.isArray(data) ? 'Array Found!' : 'Still String/HTML' }}</p>
       <pre v-if="Array.isArray(data)">{{ data }}</pre>
-      <div v-else style="color: red;">
-        ⚠️ Received HTML instead of data. This means Vercel is redirecting the request.
-      </div>
-    </div>
-    <div v-else>⏳ Loading... (If stuck here, API returned undefined)</div>
-  </div>
-  -->
-  <!--
-  <div style="border: 3px solid blue; padding: 15px;">
-    <h3>Connection Diagnostics</h3>
-
-    <p><strong>Data Type:</strong> {{ Array.isArray(data) ? 'Array' : typeof data }}</p>
-
-    <div
-      v-if="error"
-      style="color: red;"
-    >
-      <p><strong>Error Detected:</strong> {{ error.statusCode }}</p>
-      <pre>{{ error.message }}</pre>
-    </div>
-
-    <div v-else>
-      <p v-if="Array.isArray(data)">
-        <strong>Row Count:</strong> {{ data.length }}
-      </p>
-      <div v-else-if="typeof data === 'string'">
-        <p style="color: orange;">
-          <strong>Warning:</strong> Received HTML instead of JSON!
-        </p>
-        <pre style="background: #eee; font-size: 10px;">{{ data.substring(0, 200) }}...</pre>
-
-        <br>
-        <h3>The URL path?</h3>
-        <p>Current Path: {{ route.path }}</p>
-        <p>Attempted API URL: /api/test3</p>
+      <div v-else class="html-debug">
+        <p>Preview of returned text:</p>
+        <code>{{ String(data).substring(0, 50) }}</code>
       </div>
     </div>
   </div>
-  -->
 </template>
