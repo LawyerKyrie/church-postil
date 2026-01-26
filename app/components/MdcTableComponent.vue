@@ -64,8 +64,9 @@ const isPostilDefined = props.postil !== undefined
 
 const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
-    key: `api-table-key-${Math.random()}`,
+    key: `api-table-${path}-${Math.random()}`,
     // Simplify transform: only handle the array filtering
+    baseURL: '/',
     transform: (data) => {
       console.log('log from my api table component')
       // DEFENSIVE: If data is missing or not an array, return empty list

@@ -34,6 +34,7 @@ export default defineNuxtConfig({
       }
     }
   },
+  /*
   runtimeConfig: {
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
@@ -41,6 +42,7 @@ export default defineNuxtConfig({
         || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
     }
   },
+  */
   routeRules: {
     '/': { prerender: true }, // Good for SEO/Speed on the home page
     '/api/**': { cors: true } // Optional: helps if you ever fetch from other domains

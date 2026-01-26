@@ -3,14 +3,13 @@ import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
 import { useI18n } from 'vue-i18n'
 
-definePageMeta({
-  layout: 'docs'
-})
-
 const { path } = useRoute()
 const { toc } = useAppConfig()
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
+definePageMeta({
+  layout: 'docs'
+})
 // const { data: page } = await useAsyncData(path, () => queryCollection('docs').path(path).first())
 
 const { data: page } = await useAsyncData(

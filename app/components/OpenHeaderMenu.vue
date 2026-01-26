@@ -4,6 +4,8 @@ import * as locales from '@nuxt/ui/locale'
 import type { AccordionItem, TabsItem } from '@nuxt/ui'
 import { findPageChildren } from '@nuxt/content/utils'
 
+const { path } = useRoute()
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const { $updateThePageOnLanguageChange } = useNuxtApp() as any
 
@@ -87,8 +89,6 @@ type RowCells = {
   description: string
 }
 
-const { path } = useRoute()
-
 const fetchUrl = computed(() => {
   // 1. Your existing logic to determine which API file/folder to hit
   const lang = path.startsWith('/da') ? 'da' : 'en'
@@ -112,7 +112,8 @@ const fetchUrl = computed(() => {
 const { data: sermons } = await useFetch<RowCells[]>(
   fetchUrl.value, // `/api/${locale.value}/select`
   {
-    key: `api-select-menu-key-${path}-${Math.random()}`,
+    key: `api-select-menu-${path}-${Math.random()}`,
+    baseURL: '/',
     transform: (
       data
     ) => {

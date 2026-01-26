@@ -3,14 +3,17 @@
 const route = useRoute()
 
 // 2. Then use it in your fetch
-const { data, error } = await useFetch('/api/test3', {
-  // This unique key is vital to prevent it from grabbing the index page's cache
-  key: `table-final-validation-${route.path}`,
-  // Force the server to fetch this before sending the page to the browser
-  server: true,
-  // This tells Nuxt to ignore the current page's folder depth
-  baseURL: '/'
-})
+const { data, error } = await useFetch(
+  '/api/test3',
+  {
+    // This unique key is vital to prevent it from grabbing the index page's cache
+    key: `table-final-validation-${route.path}`,
+    // Force the server to fetch this before sending the page to the browser
+    server: true,
+    // This tells Nuxt to ignore the current page's folder depth
+    baseURL: '/'
+  }
+)
 // Source: https://gemini.google.com/share/034145cb3b75
 </script>
 

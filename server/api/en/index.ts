@@ -159,7 +159,5 @@ export default defineEventHandler(() => {
     { type: 'separator' }
   ]
 
-  console.log('Api call from api/en/index.ts - enSermons = ', enSermons[5])
-
   return enSermons
 })

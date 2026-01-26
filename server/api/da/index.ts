@@ -161,7 +161,6 @@ export default defineEventHandler(() => {
 
     { type: 'separator' }
   ]
-  console.log('Api call from api/da/index.ts')
 
   return daSermons
 })
