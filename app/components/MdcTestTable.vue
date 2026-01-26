@@ -32,7 +32,7 @@
 <script setup>
 // We use a RELATIVE path here.
 // Nuxt Nitro should handle this internally on Vercel.
-const { data, pending, error } = await useFetch('/api/test', {
+const { data, pending, error } = await useFetch('/api/en/test', {
   server: true,
   lazy: false
 })
