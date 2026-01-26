@@ -27,7 +27,7 @@
 <script setup>
 // Using an absolute path starting with / ensures it works from any sub-page
 const { data, status, error } = await useFetch('/api/en/test2', {
-  key: 'baseline-test-fixed', // Unique key prevents cache collisions
+  key: `baseline-key-fixed-${path}-${Math.random()}`, // Unique key prevents cache collisions
   server: true,
   lazy: false
 })
