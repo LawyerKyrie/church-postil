@@ -1,11 +1,25 @@
 <script setup>
 const route = useRoute()
 
-// const config = useRuntimeConfig()
-const { data } = await useAsyncData('test-fetch', () => {
-  // Use $fetch with the full URL to bypass any path resolution issues
-  const baseUrl = import.meta.dev ? '' : `https://${process.env.VERCEL_URL}`
-  return $fetch(`${baseUrl}/api/test3`)
+// 1. Manually determine the base URL
+// On the server (Vercel), we use the system variable.
+// On the client, we use an empty string (browser handles it).
+const getBaseUrl = () => {
+  if (import.meta.env.SSR) {
+    return process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+  }
+  return ''
+}
+
+const { data, error } = await useAsyncData(`fetch-${route.path}`, async () => {
+  const baseUrl = getBaseUrl()
+  const apiPath = '/api/test3' // Ensure the leading slash is here!
+
+  console.log('Fetching from:', baseUrl + apiPath)
+
+  return await $fetch(apiPath, {
+    baseURL: baseUrl
+  })
 })
 </script>
 
