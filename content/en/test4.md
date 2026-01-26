@@ -1,10 +1,10 @@
 ---
-title: Test3
-description: Test3
+title: Test4
+description: Test4 with tablecomponent 3
 navigation:
   icon: i-heroicons-book-open
 ---
 
-## Test3
+## Test4
 
-::MdcTestTable3
+::MdcTableComponent3

@@ -34,7 +34,8 @@ const { data, status, error } = await useFetch(
     key: `baseline-key-fixed-${Math.random()}`, // Unique key prevents cache collisions
     server: true,
     lazy: false
-})
+  }
+)
 
 // This log will appear in your Vercel 'Functions' logs
 if (import.meta.server) {
