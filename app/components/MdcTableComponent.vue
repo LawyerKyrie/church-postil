@@ -48,7 +48,7 @@ const { data: rows } = await useAsyncData(
   `table-${path}`,
   async () => {
     // Log exactly what $fetch is about to receive
-    console.log('--- FETCH ATTEMPT (mdc/TableComponent ---')
+    console.log('--- FETCH ATTEMPT (MdcTableComponent ---')
     console.log('Full URL:', fetchUrl.value)
     console.log('Is Server?:', import.meta.server)
 
@@ -62,7 +62,7 @@ const isPostilDefined = props.postil !== undefined
 
 const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
-    key: `ssr-table-${path}`,
+    key: `ssr-${path}-table`,
     // Simplify transform: only handle the array filtering
     transform: (data) => {
       console.log('log from my api table component')
