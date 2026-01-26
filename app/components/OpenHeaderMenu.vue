@@ -87,9 +87,30 @@ type RowCells = {
   description: string
 }
 
+const fetchUrl = computed(() => {
+  // 1. Your existing logic to determine which API file/folder to hit
+  const lang = path.startsWith('/da') ? 'da' : 'en'
+
+  let targetPath = ''
+  if (path.includes('uddrag')) {
+    targetPath = path.slice(1) // e.g., "da/uddrag"
+  } else {
+    targetPath = lang // e.g., "da"
+  }
+
+  console.log('useApiUrl(`api/${targetPath}`) gives this result')
+  console.log(useApiUrl(`api/${targetPath}`))
+
+  // 2. Wrap it in the helper to add the Domain on the Server
+  // This produces: http://localhost:3000/api/da/uddrag (on Server)
+  // or: /api/da/uddrag (on Client)
+  return useApiUrl(`api/${targetPath}`)
+})
+
 const { data: sermons } = await useFetch<RowCells[]>(
-  `/api/${locale.value}`, {
-    key: 'church-postil-abcd',
+  fetchUrl.value, // `/api/${locale.value}/select`
+  {
+    key: 'church-postil-select-menu-table-data',
     transform: (
       data
     ) => {
