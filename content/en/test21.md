@@ -7,4 +7,4 @@ navigation:
 
 ## Test21
 
-::MdcTableComponent3
+::MdcTestTable3
