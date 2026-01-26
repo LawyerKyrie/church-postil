@@ -1,13 +1,25 @@
 <script setup>
 const route = useRoute()
 
-// useFetch is "smart" - if we give it a relative path on the server, 
+const url = useRequestURL() // Get the full URL (e.g., https://site.vercel.app)
+
+// We construct the origin manually to ensure no sub-folders are added
+const apiBase = url.origin
+
+const { data, error } = await useAsyncData(`final-fix-${route.path}`, () => {
+  return $fetch('/api/test3', {
+    baseURL: apiBase
+  })
+})
+/*
+// useFetch is "smart" - if we give it a relative path on the server,
 // Nitro (Nuxt's engine) will call the function directly without HTTP.
 const { data, error } = await useFetch('/api/test3', {
   key: `internal-v5-${route.path}`,
   // This is the secret: Tell Nuxt NOT to use the full domain
   baseURL: '/'
 })
+*/
 /*
 // 1. Manually determine the base URL
 // On the server (Vercel), we use the system variable.
@@ -33,6 +45,16 @@ const { data, error } = await useAsyncData(`fetch-${route.path}`, async () => {
 </script>
 
 <template>
+  <div style="border: 2px solid cyan; padding: 10px;">
+    <p><strong>Origin:</strong> {{ apiBase }}</p>
+    <p><strong>Status:</strong> {{ error ? '❌' : (data ? '✅' : '⏳') }}</p>
+
+    <div v-if="data">
+      <p>Type: {{ typeof data }}</p>
+      <pre>{{ data }}</pre>
+    </div>
+  </div>
+  <!--
   <div style="border: 2px solid orange; padding: 10px;">
     <h4>Internal Nitro Fetch</h4>
     <div v-if="error">❌ Server Error: {{ error.statusCode }}</div>
@@ -45,6 +67,7 @@ const { data, error } = await useAsyncData(`fetch-${route.path}`, async () => {
     </div>
     <div v-else>⏳ Loading... (If stuck here, API returned undefined)</div>
   </div>
+  -->
   <!--
   <div style="border: 3px solid blue; padding: 15px;">
     <h3>Connection Diagnostics</h3>
