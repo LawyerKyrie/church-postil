@@ -142,7 +142,7 @@ export default defineEventHandler(() => {
 
   ]
 
-  console.log('Api call from api/en/index.ts - enSermons = ', enSermons)
+  console.log('Api call from api/en/index.ts - enSermons = ', enSermons[6])
 
   return enSermons
 })

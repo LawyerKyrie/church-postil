@@ -1,10 +1,10 @@
 ---
-title: Index Copy
-description: Index Copy
+title: Test2
+description: Test2
 navigation:
   icon: i-heroicons-book-open
 ---
 
-## Index Copy
+## Test2
 
 ::MdcTableComponent

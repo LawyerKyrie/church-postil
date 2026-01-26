@@ -55,7 +55,7 @@ const { data: rows } = await useAsyncData(
     return await $fetch(fetchUrl.value)
   }
 )
-console.log('Rows = ', rows)
+console.log('Rows = ', rows[5])
 
 // 1. Calculate your argument OUTSIDE the fetch
 const isPostilDefined = props.postil !== undefined
