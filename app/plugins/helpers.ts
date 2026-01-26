@@ -48,10 +48,10 @@ export default defineNuxtPlugin(() => {
       const isAlreadyOpen = clickedLi.classList.contains('is-open')
 
       // ACCORDION: Close all sibling LIs at this specific level
-      const siblings = clickedLi.parentElement.children
-      for (const sibling of siblings) {
-        sibling.classList.remove('is-open')
-      }
+      const siblings = clickedLi.parentElement?.children
+      if (siblings !== undefined)
+        for (const sibling of siblings)
+          sibling.classList.remove('is-open')
 
       // Toggle the clicked one
       if (!isAlreadyOpen) {
@@ -94,17 +94,18 @@ export default defineNuxtPlugin(() => {
         targetElement.dispatchEvent(ctrlKEvent)
       },
       tocHashArr(lastHash) {
-        const hashArr = []
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const hashArr = [] as any
         hashArr.push(lastHash)
         const lastAnchor = document.querySelector(`li > a[href="${lastHash}"]`)
-        let currentElement = lastAnchor.parentElement
+        let currentElement = lastAnchor?.parentElement
 
         // Loop until there are no more parent elements
         while (currentElement) {
           // Check if the current element is an <li>
           if (currentElement.tagName.toLowerCase() === 'li') {
             const anchor = currentElement.children[0]
-            const href = anchor.getAttribute('href')
+            const href = anchor?.getAttribute('href')
             hashArr.push(href)
           }
           // Move up to the next parent

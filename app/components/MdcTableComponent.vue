@@ -35,6 +35,9 @@ const fetchUrl = computed(() => {
     targetPath = lang // e.g., "da"
   }
 
+  console.log('useApiUrl(`api/${targetPath}`) gives this result')
+  console.log(useApiUrl(`api/${targetPath}`))
+
   // 2. Wrap it in the helper to add the Domain on the Server
   // This produces: http://localhost:3000/api/da/uddrag (on Server)
   // or: /api/da/uddrag (on Client)
@@ -105,8 +108,8 @@ const tanstackBibleSort: SortingFn<any> = (rowA, rowB, colName) => {
 
     return {
       book: match[1],
-      chapter: parseInt(match[2], 10) || 0,
-      verse: parseInt(match[3], 10) || 0
+      chapter: match[2] ? parseInt(match[2], 10) : '',
+      verse: match[3] ? parseInt(match[3], 10) : ''
     }
   }
 
@@ -119,11 +122,20 @@ const tanstackBibleSort: SortingFn<any> = (rowA, rowB, colName) => {
 
   if (rankA !== rankB) return rankA - rankB
 
+  /*
   // 2. Compare Chapter (Tie-breaker 1)
   if (a.chapter !== b.chapter) return a.chapter - b.chapter
 
   // 3. Compare Verse (Tie-breaker 2)
   return a.verse - b.verse
+  */
+
+  // 2. Compare Chapter (Tie-breaker 1)
+  if (a.chapter !== b.chapter) {
+    return Number(a.chapter) - Number(b.chapter)
+  }
+  // 3. Compare Verse (Tie-breaker 2)
+  return Number(a.verse) - Number(b.verse)
 }
 
 const columns: TableColumn<RowItems>[] = [
@@ -383,7 +395,8 @@ async function catchBible(targetId: string) {
     const response = await fetch('../json/bibleid.json')
     cachedData = await response.json()
   }
-  loadedBible.value = cachedData[targetId] || null
+  if (cachedData)
+    loadedBible.value = cachedData[targetId] || null
 }
 </script>
 

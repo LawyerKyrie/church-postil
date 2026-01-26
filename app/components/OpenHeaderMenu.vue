@@ -82,9 +82,9 @@ type RowCells = {
   label: string
   bible: string
   value: string
-  // type: never
-  // icon: string // creates one tab on sermons
-  // description: string
+  type: never
+  icon: string // creates one tab on sermons
+  description: string
 }
 
 const { data: sermons } = await useFetch<RowCells[]>(
@@ -97,8 +97,8 @@ const { data: sermons } = await useFetch<RowCells[]>(
         ?.map(sermon => ({
           ...sermon,
           label: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
-          // icon: sermon.icon === undefined ? '&nbsp;' : sermon.icon, // This creates a tab on sermons
-          // tooltip: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
+          icon: sermon.icon === undefined ? '&nbsp;' : sermon.icon, // This creates a tab on sermons
+          tooltip: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
           onSelect: () => {
             showToast(`${sermon.label} selected`, `Sermon opens in a new window`)
             navigateTo(`${sermon.value}`, {

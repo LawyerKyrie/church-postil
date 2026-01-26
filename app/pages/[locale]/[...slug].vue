@@ -68,7 +68,8 @@ defineOgImageComponent('Docs', {
 })
 
 const links = computed(() => {
-  const links = []
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const links: any[] = []
   if (toc?.bottom?.edit) {
     links.push({
       icon: 'i-lucide-external-link',
@@ -97,7 +98,7 @@ function clickOnContentToc(event) {
 
 watch(tocMenuRef, (newValue, oldValue) => {
   if (oldValue === null) // Happening only once
-    tocMenuRef.value = newValue.closest('nav[data-state]') as HTMLElement
+    tocMenuRef.value = newValue?.closest('nav[data-state]') as HTMLElement
 })
 
 /* FINISH SAVING TOC NAV MENU REF */
@@ -105,7 +106,7 @@ watch(tocMenuRef, (newValue, oldValue) => {
 // Close the toc menu on click outside the toc menu
 onMounted(() => {
   document.addEventListener('click', function (event) {
-    if (isTocOpen.value) {
+    if (isTocOpen.value && tocMenuRef.value !== null) {
       const containsElement = event.composedPath().includes(tocMenuRef.value)
       if (!containsElement) {
         isTocOpen.value = false
