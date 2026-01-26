@@ -31,6 +31,8 @@ if (import.meta.server) {
     </p>
     <div v-else>
       <p>✅ Rows found: {{ data?.length || 0 }}</p>
+      <p>Type of data: {{ typeof data }}</p>
+      <pre>{{ data }}</pre>
       <ul v-if="data?.length">
         <li
           v-for="item in data"
