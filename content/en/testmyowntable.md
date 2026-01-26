@@ -7,4 +7,4 @@ navigation:
 
 ## Test myowntable
 
-::MdcTableComponent
+::MdcTableComponent2
