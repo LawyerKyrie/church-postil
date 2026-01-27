@@ -110,7 +110,6 @@ const { data: sermons } = await useFetch<RowCells[]>(
   fetchUrl.value, // `/api/${locale.value}/select`
   {
     key: `api-select-menu-${path}-${Math.random()}`,
-    // baseURL: '/',
     transform: (
       data
     ) => {

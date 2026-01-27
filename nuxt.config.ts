@@ -75,9 +75,7 @@ export default defineNuxtConfig({
       routes: [
         '/',
         '/en',
-        '/da',
-        '/da/uddrag',
-        '/en/test3'
+        '/da'
       ],
       crawlLinks: true, // required for ssr api call
       autoSubfolderIndex: false,

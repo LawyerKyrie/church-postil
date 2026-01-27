@@ -64,7 +64,6 @@ const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
     key: `api-table-${path}-${Math.random()}`,
     // Simplify transform: only handle the array filtering
-    // baseURL: '/',
     transform: (data) => {
       // DEFENSIVE: If data is missing or not an array, return empty list
       if (!Array.isArray(data)) return []
