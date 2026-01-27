@@ -37,15 +37,13 @@ const fetchUrl = computed(() => {
     targetPath = lang // e.g., "da"
   }
 
-  console.log('useApiUrl(`api/${targetPath}`) gives this result')
-  console.log(useApiUrl(`api/${targetPath}`))
-
   // 2. Wrap it in the helper to add the Domain on the Server
   // This produces: http://localhost:3000/api/da/uddrag (on Server)
   // or: /api/da/uddrag (on Client)
   return useApiUrl(`api/${targetPath}`)
 })
 
+/*
 const { data: rows } = await useAsyncData(
   `table-${path}`,
   async () => {
@@ -57,7 +55,7 @@ const { data: rows } = await useAsyncData(
     return await $fetch(fetchUrl.value)
   }
 )
-console.log('Rows = ', rows[5])
+*/
 
 // 1. Calculate your argument OUTSIDE the fetch
 const isPostilDefined = props.postil !== undefined
@@ -66,9 +64,8 @@ const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
     key: `api-table-${path}-${Math.random()}`,
     // Simplify transform: only handle the array filtering
-    baseURL: '/',
+    // baseURL: '/',
     transform: (data) => {
-      console.log('log from my api table component')
       // DEFENSIVE: If data is missing or not an array, return empty list
       if (!Array.isArray(data)) return []
 

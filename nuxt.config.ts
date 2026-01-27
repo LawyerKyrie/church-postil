@@ -25,6 +25,14 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   content: {
+    database: {
+      type: 'sqlite',
+      // The module creates this file automatically at this path
+      filename: './content.sqlite'
+    },
+    experimental: {
+      sqliteConnector: 'native'
+    },
     build: {
       markdown: {
         toc: {
@@ -33,6 +41,8 @@ export default defineNuxtConfig({
         }
       }
     }
+    // This ensures the database is pre-compiled and read-only
+    // cacheQueries: true
   },
   /*
   runtimeConfig: {
@@ -63,7 +73,11 @@ export default defineNuxtConfig({
     timing: true,
     prerender: {
       routes: [
-        '/'
+        '/',
+        '/en',
+        '/da',
+        '/da/uddrag',
+        '/en/test3'
       ],
       crawlLinks: true, // required for ssr api call
       autoSubfolderIndex: false,
