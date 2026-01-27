@@ -13,6 +13,11 @@ export default defineNuxtConfig({
   // ssr maybe fixing open page in new tab/ windows
   ssr: true,
 
+  components: [
+    { path: '~/components/mdc', pathPrefix: false },
+    '~/components'
+  ],
+
   devtools: {
     enabled: true
   },
@@ -20,6 +25,14 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   content: {
+    database: {
+      type: 'sqlite',
+      // The module creates this file automatically at this path
+      filename: './.nuxt/content.cache.db'
+    },
+    experimental: {
+      sqliteConnector: 'native'
+    },
     build: {
       markdown: {
         toc: {
@@ -28,15 +41,21 @@ export default defineNuxtConfig({
         }
       }
     }
+    // This ensures the database is pre-compiled and read-only
+    // cacheQueries: true
   },
+  /*
   runtimeConfig: {
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:3000'
+      apiBase: process.env.NUXT_PUBLIC_API_BASE
+        || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
     }
   },
+  */
   routeRules: {
-    '/': { prerender: true /* , redirect: '/new-path' */ }
+    '/': { prerender: true }, // Good for SEO/Speed on the home page
+    '/api/**': { cors: true } // Optional: helps if you ever fetch from other domains
   },
   sourcemap: {
     server: false,
@@ -54,13 +73,20 @@ export default defineNuxtConfig({
     timing: true,
     prerender: {
       routes: [
-        '/'
+        '/',
+        '/en',
+        '/da'
       ],
-      crawlLinks: true,
+      crawlLinks: true, // required for ssr api call
       autoSubfolderIndex: false,
       concurrency: 1,
       interval: 100
       // failOnError: false
+    }
+  },
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 1000 // Set the limit to 1000 KiB
     }
   },
 
@@ -68,6 +94,17 @@ export default defineNuxtConfig({
     shim: false,
     strict: false,
     typeCheck: true
+  },
+  hooks: {
+    ready() {
+      const apiBase = process.env.NUXT_PUBLIC_API_BASE
+        || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+
+      console.log('--- SERVER STARTUP AUDIT ---')
+      console.log('Final API Base URL:', apiBase)
+      console.log('Source: ', process.env.NUXT_PUBLIC_API_BASE ? 'Dashboard' : (process.env.VERCEL_URL ? 'Vercel System' : 'Local Fallback'))
+      console.log('-------------------_--------')
+    }
   },
 
   eslint: {

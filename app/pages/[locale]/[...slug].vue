@@ -1,24 +1,25 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
 import { useI18n } from 'vue-i18n'
 
-definePageMeta({
-  layout: 'docs'
-})
+const route = useRoute()
 
-const { path } = useRoute()
 const { toc } = useAppConfig()
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
+definePageMeta({
+  layout: 'docs'
+})
 // const { data: page } = await useAsyncData(path, () => queryCollection('docs').path(path).first())
 
 const { data: page } = await useAsyncData(
-  `${path}`,
+  `${route.path}`,
   () =>
     queryCollection('docs')
       // .where('path', '=', path)
-      .path(path)
+      .path(route.path)
       .first()
 )
 /*
@@ -30,20 +31,20 @@ const { locale } = useI18n()
 
 const detectedLocale = computed(() => {
   if (route.path.startsWith('/da')) return 'da'
-  if (path.startsWith('/en')) return 'en'
+  if (route.path.startsWith('/en')) return 'en'
   return locale.value // fallback to default i18n state
 })
 
 if (!page.value) {
   throw createError({
     statusCode: 404,
-    message: `Page not found in ${detectedLocale.value} at ${path}`,
+    message: `Page not found in ${detectedLocale.value} at ${route.path}`,
     fatal: true
   })
 }
 
-const { data: surround } = await useAsyncData(`${path}-surround`, () => {
-  return queryCollectionItemSurroundings('docs', `${path}`, {
+const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
+  return queryCollectionItemSurroundings('docs', `${route.path}`, {
     fields: ['description']
   })
 })
@@ -58,7 +59,7 @@ useSeoMeta({
   ogTitle: title,
   description,
   ogDescription: description,
-  ogUrl: () => `${currentOrigin.value}${path}`
+  ogUrl: () => `${currentOrigin.value}${route.path}`
 })
 
 const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
@@ -67,20 +68,27 @@ defineOgImageComponent('Docs', {
   headline: headline.value
 })
 
+// 3. Wrap the logic in a safe Computed block
 const links = computed(() => {
-  const links = []
+  // If page is null (because it's an API route or 404),
+  // return an empty array immediately. No 'return' outside this function!
+  if (!page.value) return []
+
+  const toc = (page.value as any)?.body?.toc
+  const result: any[] = []
+
+  // Now we safely use page.value because we checked it above
   if (toc?.bottom?.edit) {
-    links.push({
+    result.push({
       icon: 'i-lucide-external-link',
       label: 'Edit this page',
-      to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
+      to: `${toc.bottom.edit}/${page.value.stem}.${page.value.extension}`,
       target: '_blank'
     })
   }
 
-  return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
+  return result
 })
-
 // Start working with the toc menu
 
 /* -------- SAVING NAV MENU REF ---------- */
@@ -97,7 +105,7 @@ function clickOnContentToc(event) {
 
 watch(tocMenuRef, (newValue, oldValue) => {
   if (oldValue === null) // Happening only once
-    tocMenuRef.value = newValue.closest('nav[data-state]') as HTMLElement
+    tocMenuRef.value = newValue?.closest('nav[data-state]') as HTMLElement
 })
 
 /* FINISH SAVING TOC NAV MENU REF */
@@ -105,7 +113,7 @@ watch(tocMenuRef, (newValue, oldValue) => {
 // Close the toc menu on click outside the toc menu
 onMounted(() => {
   document.addEventListener('click', function (event) {
-    if (isTocOpen.value) {
+    if (isTocOpen.value && tocMenuRef.value !== null) {
       const containsElement = event.composedPath().includes(tocMenuRef.value)
       if (!containsElement) {
         isTocOpen.value = false
@@ -129,7 +137,6 @@ const handleUpdate = (isOpen: boolean) => {
   }
 }
 
-const route = useRoute()
 const hashArrayRef = ref([])
 
 // Watch for changes in the URL hash (e.g., #second-sunday... etc.)
@@ -144,13 +151,14 @@ watch(() => route.hash, (newHash /* , oldHash */) => {
 <template>
   <UPage v-if="page">
     <UPageHeader
+      v-if="page"
       :title="page.title"
       :description="page.description"
       :headline="headline"
     >
       <template #links>
         <UButton
-          v-for="(link, index) in page.links"
+          v-for="(link, index) in page?.links"
           :key="index"
           v-bind="link"
         />

@@ -4,6 +4,8 @@ import * as locales from '@nuxt/ui/locale'
 import type { AccordionItem, TabsItem } from '@nuxt/ui'
 import { findPageChildren } from '@nuxt/content/utils'
 
+const { path } = useRoute()
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const { $updateThePageOnLanguageChange } = useNuxtApp() as any
 
@@ -87,9 +89,15 @@ type RowCells = {
   description: string
 }
 
+const lang = path.startsWith('/da') ? 'da' : 'en'
+// 1. Construct the URL as a plain string first
+// 2. Add the query manually to the string to avoid the 'query' property error
+const fetchUrl = computed(() => `/api/${lang}`)
+
 const { data: sermons } = await useFetch<RowCells[]>(
-  `/api/${locale.value}`, {
-    key: 'church-postil',
+  fetchUrl.value, // `/api/${locale.value}
+  {
+    key: `api-select-menu-${path}-${Math.random()}`,
     transform: (
       data
     ) => {
@@ -113,6 +121,7 @@ const { data: sermons } = await useFetch<RowCells[]>(
           }
         }))
     },
+    server: true,
     lazy: false
   }
 )

@@ -31,36 +31,23 @@ const fetchUrl = computed(() => {
   let targetPath = ''
   if (path.includes('uddrag')) {
     targetPath = path.slice(1) // e.g., "da/uddrag"
+  } else if (path.includes('test')) {
+    targetPath = path.slice(1) // e.g., en/testfile
   } else {
-    targetPath = lang // e.g., "da"
+    targetPath = lang // e.g., "en"
   }
-
   // 2. Wrap it in the helper to add the Domain on the Server
   // This produces: http://localhost:3000/api/da/uddrag (on Server)
   // or: /api/da/uddrag (on Client)
   return useApiUrl(`api/${targetPath}`)
 })
 
-/*
-const { data: rows } = await useAsyncData(
-  `table-${path}`,
-  async () => {
-    // Log exactly what $fetch is about to receive
-    console.log('--- FETCH ATTEMPT ---')
-    console.log('Full URL:', fetchUrl.value)
-    console.log('Is Server?:', import.meta.server)
-
-    return await $fetch(fetchUrl.value)
-  }
-)
-*/
-
 // 1. Calculate your argument OUTSIDE the fetch
 const isPostilDefined = props.postil !== undefined
 
 const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
-    key: `ssr-table-${path}`,
+    key: `api-table-${path}-${Math.random()}`,
     // Simplify transform: only handle the array filtering
     transform: (data) => {
       // DEFENSIVE: If data is missing or not an array, return empty list
@@ -105,8 +92,8 @@ const tanstackBibleSort: SortingFn<any> = (rowA, rowB, colName) => {
 
     return {
       book: match[1],
-      chapter: parseInt(match[2], 10) || 0,
-      verse: parseInt(match[3], 10) || 0
+      chapter: match[2] ? parseInt(match[2], 10) : '',
+      verse: match[3] ? parseInt(match[3], 10) : ''
     }
   }
 
@@ -119,11 +106,20 @@ const tanstackBibleSort: SortingFn<any> = (rowA, rowB, colName) => {
 
   if (rankA !== rankB) return rankA - rankB
 
+  /*
   // 2. Compare Chapter (Tie-breaker 1)
   if (a.chapter !== b.chapter) return a.chapter - b.chapter
 
   // 3. Compare Verse (Tie-breaker 2)
   return a.verse - b.verse
+  */
+
+  // 2. Compare Chapter (Tie-breaker 1)
+  if (a.chapter !== b.chapter) {
+    return Number(a.chapter) - Number(b.chapter)
+  }
+  // 3. Compare Verse (Tie-breaker 2)
+  return Number(a.verse) - Number(b.verse)
 }
 
 const columns: TableColumn<RowItems>[] = [
@@ -383,8 +379,12 @@ async function catchBible(targetId: string) {
     const response = await fetch('../json/bibleid.json')
     cachedData = await response.json()
   }
-  loadedBible.value = cachedData[targetId] || null
+  if (cachedData)
+    loadedBible.value = cachedData[targetId] || null
 }
+
+// We calculate if we are truly empty only after the fetch is finished
+const isEmpty = computed(() => status.value === 'success' && (!rowItems.value || rowItems.value.length === 0))
 </script>
 
 <template>
@@ -430,6 +430,7 @@ async function catchBible(targetId: string) {
       </div>
     </div>
     <div class="church-postil-table">
+      <!-- PENDING TABLE DIV -->
       <div
         v-if="status === 'pending'"
         class="flex items-center gap-4 "
@@ -441,7 +442,7 @@ async function catchBible(targetId: string) {
           <USkeleton class="h-4 w-[200px]" />
         </div>
       </div>
-
+      <!-- ERROR TABLE DIV -->
       <div v-else-if="error">
         <UError
           :clear="{
@@ -458,9 +459,8 @@ async function catchBible(targetId: string) {
         />
       </div>
 
-      <!-- <div v-else-if="rowItems.length > 0"> -->
-      <!-- <ClientOnly> -->
       <UTable
+        v-else-if="rowItems && rowItems.length > 0"
         ref="table"
         v-model:column-visibility="columnVisibility"
         v-model:sorting="sorting"
@@ -551,10 +551,8 @@ async function catchBible(targetId: string) {
           </div>
         </template>
       </UTable>
-      <!-- </ClientOnly> -->
-      <!--
-      </div>
-      <div v-else>
+      <!-- NO ROWS FOUND -->
+      <div v-else-if="isEmpty">
         {{ rowItems }}
         <UEmpty
           icon="i-lucide-table"
@@ -570,7 +568,6 @@ async function catchBible(targetId: string) {
           ]"
         />
       </div>
-    -->
     </div>
   </div>
 </template>

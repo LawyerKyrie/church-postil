@@ -201,7 +201,7 @@ const handleInputRef = (el: any) => {
 
   // 3. Now ensure we have a real element to query
   if (domNode instanceof HTMLElement || domNode instanceof Element) {
-    const input = domNode.children[0].children[0] as HTMLInputElement // domNode.querySelector('input')
+    const input = domNode.children[0]!.children[0] as HTMLInputElement // domNode.querySelector('input')
 
     if (input) {
       // Your logic here (e.g., input.focus())
