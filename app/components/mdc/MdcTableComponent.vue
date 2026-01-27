@@ -32,30 +32,15 @@ const fetchUrl = computed(() => {
   if (path.includes('uddrag')) {
     targetPath = path.slice(1) // e.g., "da/uddrag"
   } else if (path.includes('test')) {
-    targetPath = path.slice(1)
+    targetPath = path.slice(1) // e.g., en/testfile
   } else {
-    targetPath = lang // e.g., "da"
+    targetPath = lang // e.g., "en"
   }
-
   // 2. Wrap it in the helper to add the Domain on the Server
   // This produces: http://localhost:3000/api/da/uddrag (on Server)
   // or: /api/da/uddrag (on Client)
   return useApiUrl(`api/${targetPath}`)
 })
-
-/*
-const { data: rows } = await useAsyncData(
-  `table-${path}`,
-  async () => {
-    // Log exactly what $fetch is about to receive
-    console.log('--- FETCH ATTEMPT (MdcTableComponent ---')
-    console.log('Full URL:', fetchUrl.value)
-    console.log('Is Server?:', import.meta.server)
-
-    return await $fetch(fetchUrl.value)
-  }
-)
-*/
 
 // 1. Calculate your argument OUTSIDE the fetch
 const isPostilDefined = props.postil !== undefined
@@ -397,6 +382,9 @@ async function catchBible(targetId: string) {
   if (cachedData)
     loadedBible.value = cachedData[targetId] || null
 }
+
+// We calculate if we are truly empty only after the fetch is finished
+const isEmpty = computed(() => status.value === 'success' && (!rowItems.value || rowItems.value.length === 0))
 </script>
 
 <template>
@@ -442,6 +430,7 @@ async function catchBible(targetId: string) {
       </div>
     </div>
     <div class="church-postil-table">
+      <!-- PENDING TABLE DIV -->
       <div
         v-if="status === 'pending'"
         class="flex items-center gap-4 "
@@ -453,7 +442,7 @@ async function catchBible(targetId: string) {
           <USkeleton class="h-4 w-[200px]" />
         </div>
       </div>
-
+      <!-- ERROR TABLE DIV -->
       <div v-else-if="error">
         <UError
           :clear="{
@@ -470,9 +459,8 @@ async function catchBible(targetId: string) {
         />
       </div>
 
-      <!-- <div v-else-if="rowItems.length > 0"> -->
-      <!-- <ClientOnly> -->
       <UTable
+        v-else-if="rowItems && rowItems.length > 0"
         ref="table"
         v-model:column-visibility="columnVisibility"
         v-model:sorting="sorting"
@@ -563,10 +551,8 @@ async function catchBible(targetId: string) {
           </div>
         </template>
       </UTable>
-      <!-- </ClientOnly> -->
-      <!--
-      </div>
-      <div v-else>
+      <!-- NO ROWS FOUND -->
+      <div v-else-if="isEmpty">
         {{ rowItems }}
         <UEmpty
           icon="i-lucide-table"
@@ -582,7 +568,6 @@ async function catchBible(targetId: string) {
           ]"
         />
       </div>
-    -->
     </div>
   </div>
 </template>

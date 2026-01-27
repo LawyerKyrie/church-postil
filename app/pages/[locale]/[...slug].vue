@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
@@ -67,21 +68,27 @@ defineOgImageComponent('Docs', {
   headline: headline.value
 })
 
+// 3. Wrap the logic in a safe Computed block
 const links = computed(() => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const links: any[] = []
+  // If page is null (because it's an API route or 404),
+  // return an empty array immediately. No 'return' outside this function!
+  if (!page.value) return []
+
+  const toc = (page.value as any)?.body?.toc
+  const result: any[] = []
+
+  // Now we safely use page.value because we checked it above
   if (toc?.bottom?.edit) {
-    links.push({
+    result.push({
       icon: 'i-lucide-external-link',
       label: 'Edit this page',
-      to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
+      to: `${toc.bottom.edit}/${page.value.stem}.${page.value.extension}`,
       target: '_blank'
     })
   }
 
-  return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
+  return result
 })
-
 // Start working with the toc menu
 
 /* -------- SAVING NAV MENU REF ---------- */
@@ -144,13 +151,14 @@ watch(() => route.hash, (newHash /* , oldHash */) => {
 <template>
   <UPage v-if="page">
     <UPageHeader
+      v-if="page"
       :title="page.title"
       :description="page.description"
       :headline="headline"
     >
       <template #links>
         <UButton
-          v-for="(link, index) in page.links"
+          v-for="(link, index) in page?.links"
           :key="index"
           v-bind="link"
         />

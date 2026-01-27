@@ -18,7 +18,7 @@ Luther's [Church Postil]{.text-primary}
 
 #description
 
-&nbsp;SsrApiTestLanding page - Choose between English and Danish Church Postil.
+&nbsp;Landing page - Choose between English and Danish Church Postil.
 
 #links
 

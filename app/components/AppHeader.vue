@@ -5,9 +5,9 @@ const openMenu = useOpenMenu() // const globalValue = useGlobalValue()
 
 const handleClose = (isOpen: boolean) => {
   if (!isOpen)
-    openMenu.value = false // globalValue.value = false
+    openMenu.value = false
   else
-    openMenu.value = true // globalValue.value = true
+    openMenu.value = true
 }
 
 defineShortcuts({

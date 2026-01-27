@@ -89,25 +89,13 @@ type RowCells = {
   description: string
 }
 
-const fetchUrl = computed(() => {
-  // 1. Your existing logic to determine which API file/folder to hit
-  const lang = path.startsWith('/da') ? 'da' : 'en'
-
-  let targetPath = ''
-  if (path.includes('uddrag')) {
-    targetPath = path.slice(1) // e.g., "da/uddrag"
-  } else {
-    targetPath = lang // e.g., "da"
-  }
-
-  // 2. Wrap it in the helper to add the Domain on the Server
-  // This produces: http://localhost:3000/api/da/uddrag (on Server)
-  // or: /api/da/uddrag (on Client)
-  return useApiUrl(`api/${targetPath}`)
-})
+const lang = path.startsWith('/da') ? 'da' : 'en'
+// 1. Construct the URL as a plain string first
+// 2. Add the query manually to the string to avoid the 'query' property error
+const fetchUrl = computed(() => `/api/${lang}`)
 
 const { data: sermons } = await useFetch<RowCells[]>(
-  fetchUrl.value, // `/api/${locale.value}/select`
+  fetchUrl.value, // `/api/${locale.value}
   {
     key: `api-select-menu-${path}-${Math.random()}`,
     transform: (
