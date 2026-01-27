@@ -28,7 +28,7 @@ export default defineNuxtConfig({
     database: {
       type: 'sqlite',
       // The module creates this file automatically at this path
-      filename: './content.sqlite'
+      filename: './.nuxt/content.cache.db'
     },
     experimental: {
       sqliteConnector: 'native'

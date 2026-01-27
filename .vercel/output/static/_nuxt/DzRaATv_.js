@@ -1,1 +1,0 @@
-import{e as n,g as c,a5 as l,o as p,l as m,Y as u,t as s}from"./CMQlzLm0.js";const i={base:""},_={__name:"ProseEm",props:{class:{type:String,required:!1}},setup(e){const a=e,t=n(),o=c(()=>s({extend:s(i),...t.ui?.prose?.em||{}}));return(r,f)=>(p(),l("em",{class:u(o.value({class:a.class}))},[m(r.$slots,"default")],2))}};export{_ as default};

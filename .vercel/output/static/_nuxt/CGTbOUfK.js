@@ -1,1 +1,0 @@
-import{e as n,g as r,a5 as c,o as p,l as u,Y as d,t as e}from"./CMQlzLm0.js";const m={base:"bg-muted"},h={__name:"ProseThead",props:{class:{type:null,required:!1}},setup(s){const a=s,t=n(),o=r(()=>e({extend:e(m),...t.ui?.prose?.thead||{}}));return(l,i)=>(p(),c("thead",{class:d(o.value({class:a.class}))},[u(l.$slots,"default")],2))}};export{h as default};
