@@ -1,0 +1,1 @@
+import{e as r,g as l,a5 as c,o as p,l as u,Y as i,t as s}from"./CMQlzLm0.js";const m={base:""},g={__name:"ProseStrong",props:{class:{type:null,required:!1}},setup(e){const a=e,o=r(),t=l(()=>s({extend:s(m),...o.ui?.prose?.strong||{}}));return(n,f)=>(p(),c("strong",{class:i(t.value({class:a.class}))},[u(n.$slots,"default")],2))}};export{g as default};

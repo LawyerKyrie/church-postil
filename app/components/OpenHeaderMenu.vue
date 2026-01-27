@@ -100,9 +100,6 @@ const fetchUrl = computed(() => {
     targetPath = lang // e.g., "da"
   }
 
-  console.log('useApiUrl(`api/${targetPath}`) gives this result')
-  console.log(useApiUrl(`api/${targetPath}`))
-
   // 2. Wrap it in the helper to add the Domain on the Server
   // This produces: http://localhost:3000/api/da/uddrag (on Server)
   // or: /api/da/uddrag (on Client)

@@ -3,7 +3,8 @@ import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
 import { useI18n } from 'vue-i18n'
 
-const { path } = useRoute()
+const route = useRoute()
+
 const { toc } = useAppConfig()
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
@@ -13,11 +14,11 @@ definePageMeta({
 // const { data: page } = await useAsyncData(path, () => queryCollection('docs').path(path).first())
 
 const { data: page } = await useAsyncData(
-  `${path}`,
+  `${route.path}`,
   () =>
     queryCollection('docs')
       // .where('path', '=', path)
-      .path(path)
+      .path(route.path)
       .first()
 )
 /*
@@ -29,20 +30,20 @@ const { locale } = useI18n()
 
 const detectedLocale = computed(() => {
   if (route.path.startsWith('/da')) return 'da'
-  if (path.startsWith('/en')) return 'en'
+  if (route.path.startsWith('/en')) return 'en'
   return locale.value // fallback to default i18n state
 })
 
 if (!page.value) {
   throw createError({
     statusCode: 404,
-    message: `Page not found in ${detectedLocale.value} at ${path}`,
+    message: `Page not found in ${detectedLocale.value} at ${route.path}`,
     fatal: true
   })
 }
 
-const { data: surround } = await useAsyncData(`${path}-surround`, () => {
-  return queryCollectionItemSurroundings('docs', `${path}`, {
+const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
+  return queryCollectionItemSurroundings('docs', `${route.path}`, {
     fields: ['description']
   })
 })
@@ -57,7 +58,7 @@ useSeoMeta({
   ogTitle: title,
   description,
   ogDescription: description,
-  ogUrl: () => `${currentOrigin.value}${path}`
+  ogUrl: () => `${currentOrigin.value}${route.path}`
 })
 
 const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
@@ -129,7 +130,6 @@ const handleUpdate = (isOpen: boolean) => {
   }
 }
 
-const route = useRoute()
 const hashArrayRef = ref([])
 
 // Watch for changes in the URL hash (e.g., #second-sunday... etc.)
