@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { nextTick } from 'vue'
-
 const { header } = useAppConfig()
 const isDrawerOpen = ref(false)
 const openMenu = useOpenMenu() // const globalValue = useGlobalValue()
@@ -15,7 +13,8 @@ const handleClose = (isOpen: boolean) => {
 // const ctrlKMenu = ref(false)
 
 defineShortcuts({
-  m: () => isDrawerOpen.value = !isDrawerOpen.value,
+  m: () => isDrawerOpen.value = !isDrawerOpen.value
+  /*
   meta_k: {
     usingInput: true,
     handler: async () => {
@@ -41,9 +40,9 @@ defineShortcuts({
       })
     }
   }
+  */
 })
 
-/*
 const handleGlobalCommandPaletteFocus = (event: FocusEvent) => {
   const target = event.target as HTMLInputElement
 
@@ -69,7 +68,7 @@ const resetInputsOnGlobalClick = (event: MouseEvent) => {
   // If the user clicks outside or closes, we might want to let the guard
   // protect the input again next time it opens
   const target = event.target as HTMLElement
-  if (!target.closest('.u-command-palette')) {
+  if (!target.closest('input[placeholder="Type a command or search…"]')) {
     const input = document.querySelector('input[placeholder="Type a command or search…"]') as HTMLInputElement
     if (input) delete input.dataset.isUnlocked
   }
@@ -85,7 +84,6 @@ onUnmounted(() => {
   document.removeEventListener('focusin', handleGlobalCommandPaletteFocus)
   document.removeEventListener('mousedown', resetInputsOnGlobalClick)
 })
-*/
 </script>
 
 <template>
