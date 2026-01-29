@@ -42,6 +42,50 @@ defineShortcuts({
     }
   }
 })
+
+/*
+const handleGlobalCommandPaletteFocus = (event: FocusEvent) => {
+  const target = event.target as HTMLInputElement
+
+  // 1. Identify the input (Nuxt UI Command Palette usually has no unique ID,
+  // so we check for class or placeholder)
+  if (target && (target.placeholder === 'Type a command or search…' || target.closest('input[placeholder="Type a command or search…"]'))) {
+    // 2. If it's a "fresh" focus (not yet clicked), lock it
+    if (!target.dataset.isUnlocked) {
+      target.readOnly = true
+
+      // 3. Attach your 'mousedown' logic once to this specific input
+      target.addEventListener('mousedown', () => {
+        target.readOnly = false
+        target.dataset.isUnlocked = 'true'
+        target.focus() // Force focus back after making it editable
+      }, { once: true })
+    }
+  }
+}
+
+// Optional: Reset the state when the menu closes
+const resetInputsOnGlobalClick = (event: MouseEvent) => {
+  // If the user clicks outside or closes, we might want to let the guard
+  // protect the input again next time it opens
+  const target = event.target as HTMLElement
+  if (!target.closest('.u-command-palette')) {
+    const input = document.querySelector('input[placeholder="Type a command or search…"]') as HTMLInputElement
+    if (input) delete input.dataset.isUnlocked
+  }
+}
+
+onMounted(() => {
+  // 'focusin' catches the automatic focus before the keyboard can pop up
+  document.addEventListener('focusin', handleGlobalCommandPaletteFocus)
+  document.addEventListener('mousedown', resetInputsOnGlobalClick)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('focusin', handleGlobalCommandPaletteFocus)
+  document.removeEventListener('mousedown', resetInputsOnGlobalClick)
+})
+*/
 </script>
 
 <template>

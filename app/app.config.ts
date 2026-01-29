@@ -2,7 +2,8 @@ export default defineAppConfig({
   ui: {
     commandPalette: {
       slots: {
-        input: '[&>input]:focus:ring-0 [&>input]:focus:outline-none h-12'
+        input: '[&>input]:[inputmode:none]'
+        // input: '[&>input]:focus:ring-0 [&>input]:focus:outline-none h-12'
       }
     },
     contentToc: {
