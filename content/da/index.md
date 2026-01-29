@@ -17,32 +17,34 @@ orientation: horizontal
 Luthers [Kirke Postille]{.text-primary}
 
 #description
-&nbsp;Front side - Velg mellom engelsk og dansk kirkepostille.
+&nbsp; Mobil vennlig o.l.<br>- Søk/ Filtrer/ Sorter <br>- Dansk/ Engelsk etc.
 
 #links
 
   :::u-button
   ---
-  icon: i-iconoir-language
-  color: neutral
-  variant: outline
+  title: Klikk eller åpne meny med Ctrl K (keyboard-klikk)
+  icon: i-lucide-square-menu
   size: xl
-  to: /en/?action=selectEnglish
+  to: javascript:window.nuxt.$keyboardClickK();void(0);
   trailing-icon: i-lucide-arrow-right
 
   ---
-  Engelsk
+  K Meny
   :::
 
   :::u-button
   ---
-  icon: i-lucide-languages
+  title: Klikk eller åpne hoved meny med M (keyboard-klikk)
+  icon: i-lucide-menu
+  color: neutral
+  variant: outline
   size: xl
-  to: /da/?action=selectDanish
+  to: javascript:window.nuxt.$keyboardClickM();void(0);
   trailing-icon: i-lucide-arrow-right
 
   ---
-  Dansk
+  M Meny
   :::
 
 ::

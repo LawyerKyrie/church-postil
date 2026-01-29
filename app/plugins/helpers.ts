@@ -62,32 +62,11 @@ export default defineNuxtPlugin(() => {
 
   return {
     provide: {
-      keyboardClickK() {
-        const targetElement = document
-        const ctrlKEvent = new KeyboardEvent('keydown', {
-          key: 'k',
-          code: 'KeyK',
-          ctrlKey: true,
-          bubbles: true,
-          cancelable: true
-        })
-        targetElement.dispatchEvent(ctrlKEvent)
-      },
-      keyboardClickM() {
-        const targetElement = document
-        const ctrlKEvent = new KeyboardEvent('keydown', {
-          key: 'm',
-          code: 'KeyK',
-          bubbles: true,
-          cancelable: true
-        })
-        targetElement.dispatchEvent(ctrlKEvent)
-      },
       keyboardClickO() {
         const targetElement = document
         const ctrlKEvent = new KeyboardEvent('keydown', {
           key: 'o',
-          code: 'KeyK',
+          code: 'KeyO',
           bubbles: true,
           cancelable: true
         })
@@ -114,6 +93,44 @@ export default defineNuxtPlugin(() => {
         return hashArr
       },
       collapsibleToc: collapsibleToc
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    handleFilterRef(el: any) {
+      console.log('open up handleFilterRef')
+      if (!el) return
+
+      console.log('passing if(!el')
+
+      // 1. Get the DOM node.
+      // If it's a component, grab $el.
+      let domNode = el.$el ?? el
+
+      // 2. If it's a #text node (nodeType 3), look for the nearest element sibling
+      if (domNode.nodeType === 3 && domNode.nextElementSibling) {
+        domNode = domNode.nextElementSibling
+      }
+
+      console.log('passing if statement')
+
+      // 3. Now ensure we have a real element to query
+      if (domNode instanceof HTMLElement || domNode instanceof Element) {
+        const input = domNode.querySelector('input')
+
+        console.log('Found input?', input)
+
+        if (input) {
+          // Your logic here (e.g., input.focus())
+
+          // Option A: Blur it immediately
+          input.blur()
+
+          // Option B: Make it readonly temporarily so keyboard can't open
+          input.readOnly = true
+          setTimeout(() => {
+            input.readOnly = false
+          }, 100)
+        }
+      }
     }
   }
 })

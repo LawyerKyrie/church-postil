@@ -26,6 +26,39 @@ useSeoMeta({
   ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png',
   twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png'
 })
+
+/*
+onMounted(() => {
+  // Get query parameters from the URL
+  const urlParams = new URLSearchParams(window.location.search)
+  const action = urlParams.get('action') // Gets the value of the 'action' parameter
+
+  // Run a function based on the value
+  if (action === 'queryA') {
+    console.log('queryA')
+  } else if (action === 'kMenu') {
+    console.log('queryB')
+  }
+})
+
+// Watch the entire query object
+const route = useRoute()
+
+watch(
+  () => route.query,
+  (newQuery) => {
+    console.log('Query changed!', newQuery)
+  },
+  { deep: true }
+)
+// OR: Watch a specific parameter (e.g., ?search=...)
+watch(
+  () => route.query.search,
+  (newSearch) => {
+    console.log('Search term is now:', newSearch)
+  }
+)
+*/
 </script>
 
 <template>

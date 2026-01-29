@@ -31,6 +31,7 @@ export default defineNuxtConfig({
       filename: './.nuxt/content.cache.db'
     },
     experimental: {
+      nativeSqlite: true,
       sqliteConnector: 'native'
     },
     build: {

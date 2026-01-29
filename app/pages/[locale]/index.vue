@@ -28,43 +28,38 @@ useSeoMeta({
   twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png'
 })
 
-// Select language from the buttons in the landing page
-
-const toast = useToast()
-function showToast(title, description) {
-  toast.add({
-    title: title,
-    description: description,
-    icon: 'i-lucide-wifi',
-    close: {
-      color: 'primary',
-      variant: 'outline',
-      class: 'rounded-full'
-    }
-  })
-}
-
+/*
 onMounted(() => {
   // Get query parameters from the URL
   const urlParams = new URLSearchParams(window.location.search)
   const action = urlParams.get('action') // Gets the value of the 'action' parameter
 
-  // Run a function based on the value
-  if (action === 'selectDanish') {
-    if (locale.value !== 'da') {
-      locale.value = 'da'
-      navigateTo(`/`)
-      showToast(`Danske prædikener valgt`, `Åpne meny eller velg postille nedenfor!`)
-      // alert('Data fra URL query parameter i DA')
-    }
-  } else if (action === 'selectEnglish') {
-    if (locale.value !== 'en') {
-      locale.value = 'en'
-      navigateTo(`/`)
-      showToast(`English Sermons Selected`, `Open Menu or Select Sermons below!`)
-    }
+  // Do something based on the value
+  if (action === 'queryA') {
+    console.log('queryA')
+  } else if (action === 'queryB') {
+    console.log('queryB')
   }
 })
+
+// Watch the entire query object
+const route = useRoute()
+
+watch(
+  () => route.query,
+  (newQuery) => {
+    console.log('Query changed!', newQuery)
+  },
+  { deep: true }
+)
+// OR: Watch a specific parameter (e.g., ?search=...)
+watch(
+  () => route.query.search,
+  (newSearch) => {
+    console.log('Search term is now:', newSearch)
+  }
+)
+*/
 </script>
 
 <template>

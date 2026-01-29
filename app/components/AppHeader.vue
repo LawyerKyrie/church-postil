@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { nextTick } from 'vue'
+
 const { header } = useAppConfig()
 const isDrawerOpen = ref(false)
 const openMenu = useOpenMenu() // const globalValue = useGlobalValue()
@@ -10,8 +12,35 @@ const handleClose = (isOpen: boolean) => {
     openMenu.value = true
 }
 
+// const ctrlKMenu = ref(false)
+
 defineShortcuts({
-  m: () => isDrawerOpen.value = !isDrawerOpen.value
+  m: () => isDrawerOpen.value = !isDrawerOpen.value,
+  meta_k: {
+    usingInput: true,
+    handler: async () => {
+      // 1. Open the menu (assuming you control it with a ref)
+      // ctrlKMenu.value = true
+      // 2. Wait for the Portal/DOM to render the input
+      await nextTick()
+      // 3. Find the specific input
+      requestAnimationFrame(() => {
+        const input = document.querySelector('input[placeholder="Type a command or search…"]') as HTMLInputElement
+        if (input) {
+          // 4. Lock it immediately (stops mobile keyboard)
+          input.readOnly = true
+          // 5. Add a one-time "Unlock" listener
+          const unlock = () => {
+            input.readOnly = false
+            input.focus()
+            // Listener removed automatically after run
+          }
+          input.addEventListener('mousedown', unlock, { once: true })
+          input.addEventListener('touchstart', unlock, { once: true }) // Essential for mobile
+        }
+      })
+    }
+  }
 })
 </script>
 

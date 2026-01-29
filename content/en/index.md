@@ -18,32 +18,34 @@ Luther's [Church Postil]{.text-primary}
 
 #description
 
-&nbsp;Landing page - Choose between English and Danish Church Postil.
+&nbsp; Mobile Friendly etc.<br>- Search/ Filter/ Sort <br>- English/ Danish ...
 
 #links
 
   :::u-button
   ---
-  icon: i-iconoir-language
+  title: Click or open the Menu with Ctrl K (keyboard-click)
+  icon: i-lucide-square-menu
   size: xl
-  to: /en/?action=selectEnglish
+  to: javascript:window.nuxt.$keyboardClickK();void(0);
   trailing-icon: i-lucide-arrow-right
 
   ---
-  English
+  K Menu
   :::
 
   :::u-button
   ---
-  icon: i-lucide-languages
+  title: Click or opens the Header Menu with M (Keyboard-click)
+  icon: i-lucide-menu
   color: neutral
   variant: outline
   size: xl
-  to: /da/?action=selectDanish
+  to: javascript:window.nuxt.$keyboardClickM();void(0);
   trailing-icon: i-lucide-arrow-right
 
   ---
-  Danish
+  M Menu
   :::
 
 ::

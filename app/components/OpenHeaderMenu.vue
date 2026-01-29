@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import * as locales from '@nuxt/ui/locale'
 import type { AccordionItem, TabsItem } from '@nuxt/ui'
 import { findPageChildren } from '@nuxt/content/utils'
+// import { nextTick } from 'vue'
 
 const { path } = useRoute()
 
@@ -67,7 +68,7 @@ const { data: nav_da } = await useAsyncData('filtered-nav2', () => {
 })
 
 // filtering away the parent, /en or /da
-const flatNavigation = computed(() => {
+const localeNavigation = computed(() => {
   const nav_menu = locale.value === 'en' ? nav_en : nav_da
   if (!nav_menu.value) return []
 
@@ -166,20 +167,49 @@ const footerMenuAccordionTabs = ref<TabsItem[]>([
 
 /* Open the UContentNavigation where it was last open */
 const openedPaths = useState('nav-persistent-state', () => [])
+
+const whenSelectMenuOpens = (/* el: any */) => {
+  document.addEventListener('mousedown', handleSelectMenuInputFocus)
+}
+
+const selectMenu = ref(false)
+
+const handleSelectMenuInputFocus = (event: MouseEvent) => {
+  if (selectMenu.value === false) return
+  // Element in Select Menu was clicked. Checking if it was input field...
+  const target = event.target as HTMLInputElement
+  // Check if the clicked element is our specific search input
+  if (target && target.placeholder === 'Filter Sermons...') {
+    // 1. Remove the read-only state to allow typing
+    target.readOnly = false
+    target.focus() // Ensure it stays focused after the flip
+  }
+}
+
+watch(selectMenu, async (newValue/* , oldValue */) => {
+  if (newValue === false)
+    document.removeEventListener('mousedown', handleSelectMenuInputFocus)
+})
 </script>
 
 <template>
   <UCard>
+    <!-- onFocus: (e) => e.target.removeAttribute('readonly'), -->
     <template #header>
       <USelectMenu
+        :ref="whenSelectMenuOpens"
+        v-model:open="selectMenu"
         :placeholder="`${locale === 'en' ? 'Sermons Luther\'s Church Postil' : 'Prædikener Luthers Postiller'}`"
         icon="i-lucide-search"
         trailing-icon="i-lucide-arrow-down"
         :items="sermons"
         :search-input="{
+          id: 'selectMenuInputFilter',
           placeholder: `${locale === 'en' ? 'Filter Sermons...' : 'Filtrer Prædikener...'}`,
-          icon: 'i-lucide-search'
+          icon: 'i-lucide-search',
+          readonly: true
         }"
+        :ui="{/* input: '[&>input]:cursor-pointer' */ }"
         class="w-full"
       >
         <template #item-label="{ item }">
@@ -202,7 +232,7 @@ const openedPaths = useState('nav-persistent-state', () => [])
         <UContentNavigation
           highlight
           highlight-color="primary"
-          :navigation="flatNavigation"
+          :navigation="localeNavigation"
           type="single"
           :default-open="false"
           class="pl-2 pr-2"
@@ -214,7 +244,7 @@ const openedPaths = useState('nav-persistent-state', () => [])
           v-model:open="openedPaths"
           highlight
           highlight-color="primary"
-          :navigation="flatNavigation"
+          :navigation="localeNavigation"
           type="single"
           :default-open="true"
           class="pl-2 pr-2"

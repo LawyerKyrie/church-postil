@@ -53,11 +53,12 @@ const { data: rowItems, status, error } = await useFetch<RowItems[]>(
       // DEFENSIVE: If data is missing or not an array, return empty list
       if (!Array.isArray(data)) return []
 
-      return data.filter((row) => {
-        return isPostilDefined
-          ? row.postil === props.postil
-          : row.postil !== undefined
-      })
+      return data
+        .filter((row) => {
+          return isPostilDefined
+            ? row.postil === props.postil
+            : row.postil !== undefined
+        })
     },
     server: true,
     lazy: false
@@ -264,7 +265,7 @@ function getRowItems(row: Row<RowItems>) {
         })
       }
     },
-    //
+    /*
     {
       label: 'New Window',
       icon: 'i-lucide-link',
@@ -278,12 +279,12 @@ function getRowItems(row: Row<RowItems>) {
         })
       }
     },
-    //
+    */
     {
       type: 'separator'
     },
     {
-      label: 'Copy Link',
+      label: 'Share Link',
       icon: 'i-lucide-copy',
       onSelect() {
         copy(currentOrigin.value + row.original.value)

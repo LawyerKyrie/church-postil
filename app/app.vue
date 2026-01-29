@@ -42,8 +42,6 @@ useHead({
 
     <Analytics />
 
-    <BannerMessage />
-
     <AppHeader />
 
     <UMain>
