@@ -68,7 +68,7 @@ export default defineEventHandler(() => {
     { id: 3352, postil: 'Vinter', tags: 'Evangelium', label: '5.Søn.i Faste', bible: 'Joh 8: 46-59', value: '/da/lent/lent-gospel05' },
 
     { id: 3401, postil: 'Vinter', tags: 'Epistel', label: 'Palmesøndag', bible: 'Fil 2: 5-11', value: '/da/lent/holy-week-palm-sunday' },
-    { id: 3402, postil: 'Vinter', tags: 'Evangelium', label: 'Anger+Tilgiv.', bible: '1 Kor 11: 23-26', value: '/da/lent/holy-week-lords-supper' },
+    { id: 3402, postil: 'Vinter', tags: 'Evangelium', label: 'Skærtorsdag', bible: '1 Kor 11: 23-26', value: '/da/lent/holy-week-lords-supper' },
     { id: 3403, postil: 'Vinter', tags: 'Evangelium', label: 'Langfredag', bible: 'Matt 27: 27-50', value: '/da/lent/holy-week-good-friday' },
 
     { type: 'separator' },
@@ -101,7 +101,7 @@ export default defineEventHandler(() => {
     { type: 'separator' },
     { label: 'Trinity I; 1 - 12. Søndag efter Trefoldighed', type: 'label' },
 
-    { id: 5011, postil: 'Trinity I', tags: 'Epistel', label: '1.Søn.e.Tref.', bible: 'Rom 11: 33-36', value: '/da/trinity1/epistle01' },
+    { id: 5011, postil: 'Trinity I', tags: 'Epistel', label: '1.Søn.e.Tref.', bible: '1 Joh 4: 16-21', value: '/da/trinity1/epistle01' },
     { id: 5012, postil: 'Trinity I', tags: 'Evangelium', label: '1.Søn.e.Tref.', bible: 'Luk 16: 19-31', value: '/da/trinity1/gospel01' },
     { id: 5021, postil: 'Trinity I', tags: 'Epistel', label: '2.Søn.e.Tref.', bible: '1 Joh 3: 13-18', value: '/da/trinity1/epistle02' },
     { id: 5022, postil: 'Trinity I', tags: 'Evangelium', label: '2.Søn.e.Tref.', bible: 'Luk 14: 16-24', value: '/da/trinity1/gospel02' },

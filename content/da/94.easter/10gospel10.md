@@ -1,6 +1,6 @@
 ---
-title: 1.Søn.e.Trefoldighed - xxx
-description: Evangelium 1.Søndag efter Trefoldighed; xxx
+title: Trefoldigheds søndag - Joh 3, 1-15
+description: Evangelium Trefoldigheds søndag; Joh 3, 1-15
 ---
 
-## x.Søndag efter Trefoldighed; xxx
+## Trefoldigheds søndag; Joh 3, 1-15

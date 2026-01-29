@@ -98,7 +98,7 @@ export default defineEventHandler(() => {
     { type: 'separator' },
     { label: 'Trinity I Postil; 1.- 12.Sun. after Trinitatis', type: 'label' },
 
-    { id: 5011, postil: 'Trinity I', tags: 'Epistle', label: '1.Sun.a.Trin.', bible: 'Rom 11: 33-36', value: '/da/trinity1/epistle01' },
+    { id: 5011, postil: 'Trinity I', tags: 'Epistle', label: '1.Sun.a.Trin.', bible: '1 Joh 4: 16-21', value: '/da/trinity1/epistle01' },
     { id: 5012, postil: 'Trinity I', tags: 'Gospel', label: '1.Sun.a.Trin.', bible: 'Luk 16: 19-31', value: '/da/trinity1/gospel01' },
     { id: 5021, postil: 'Trinity I', tags: 'Epistle', label: '2.Sun.a.Trin.', bible: '1 Joh 3: 13-18', value: '/da/trinity1/epistle2' },
     { id: 5022, postil: 'Trinity I', tags: 'Gospel', label: '2.Sun.a.Trin.', bible: 'Luk 14: 16-24', value: '/da/trinity1/gospel02' },
