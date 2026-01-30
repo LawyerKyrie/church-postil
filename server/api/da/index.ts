@@ -133,7 +133,7 @@ export default defineEventHandler(() => {
     { id: 6132, postil: 'Trinity II', tags: 'Evangelium', label: '13.Søn.e.Tref.', bible: 'Luk 10: 23-37', value: '/da/trinity2/gospel13' },
     { id: 6141, postil: 'Trinity II', tags: 'Epistel', label: '14.Søn.e.Tref.', bible: 'Gal 5: 16-24', value: '/da/trinity2/epistle14' },
     { id: 6142, postil: 'Trinity II', tags: 'Evangelium', label: '14.Søn.e.Tref.', bible: 'Luk 17: 11-19', value: '/da/trinity2/gospel14' },
-    { id: 6151, postil: 'Trinity II', tags: 'Epistel', label: '15.Søn.e.Tref.', bible: 'Gal 5:25 - 6:10', value: '/da/trinity2/epistle15' },
+    { id: 6151, postil: 'Trinity II', tags: 'Epistel', label: '15.Søn.e.Tref.', bible: 'Gal 5: 25 - 6:10', value: '/da/trinity2/epistle15' },
     { id: 6152, postil: 'Trinity II', tags: 'Evangelium', label: '15.Søn.e.Tref.', bible: 'Matt 6: 24-34', value: '/da/trinity2/gospel15' },
     { id: 6161, postil: 'Trinity II', tags: 'Epistel', label: '16.Søn.e.Tref.', bible: 'Ef 3: 13-21', value: '/da/trinity2/epistle16' },
     { id: 6162, postil: 'Trinity II', tags: 'Evangelium', label: '16.Søn.e.Tref.', bible: 'Luk 7: 11-17', value: '/da/trinity2/gospel16' },
@@ -156,7 +156,7 @@ export default defineEventHandler(() => {
     { id: 6242, postil: 'Trinity II', tags: 'Evangelium', label: '24.Søn.e.Tref.', bible: 'Matt 9: 18-26', value: '/da/trinity2/gospel24' },
     { id: 6251, postil: 'Trinity II', tags: 'Epistel', label: '25.Søn.e.Tref.', bible: '1 Thess 4: 13-18', value: '/da/trinity2/epistle25' },
     { id: 6252, postil: 'Trinity II', tags: 'Evangelium', label: '25.Søn.e.Tref.', bible: 'Matt 24: 15-28', value: '/da/trinity2/gospel25' },
-    { id: 6261, postil: 'Trinity II', tags: 'Epistel', label: '26.Søn.e.Tref.', bible: '2Thess 1: 3-10', value: '/da/trinity2/epistle26' },
+    { id: 6261, postil: 'Trinity II', tags: 'Epistel', label: '26.Søn.e.Tref.', bible: '2 Thess 1: 3-10', value: '/da/trinity2/epistle26' },
     { id: 6262, postil: 'Trinity II', tags: 'Evangelium', label: '26.Søn.e.Tref.', bible: 'Matt 25: 31-42', value: '/da/trinity2/gospel26' },
 
     { type: 'separator' }

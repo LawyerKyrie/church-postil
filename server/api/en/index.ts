@@ -88,8 +88,8 @@ export default defineEventHandler(() => {
 
     { id: 4211, postil: 'Summer', tags: 'Epistle', label: 'Pentecost', bible: 'Acts 2: 1-13', value: '/da/easter/epistle07' },
     { id: 4212, postil: 'Summer', tags: 'Gospel', label: 'Pentecost', bible: 'Joh 14: 23-31', value: '/da/easter/gospel07' },
-    { id: 4222, postil: 'Summer', tags: 'Epistle', label: 'Pentecost 2.', bible: 'Joh 3: 16-21', value: '/da/easter/gospel08' },
-    { id: 4232, postil: 'Summer', tags: 'Gospel', label: 'Pentecost 3.', bible: 'Joh 10: 1-11', value: '/da/easter/gospel09' },
+    { id: 4222, postil: 'Summer', tags: 'Epistle', label: '2.Pentecost.', bible: 'Joh 3: 16-21', value: '/da/easter/gospel08' },
+    { id: 4232, postil: 'Summer', tags: 'Gospel', label: '3.Pentecost', bible: 'Joh 10: 1-11', value: '/da/easter/gospel09' },
 
     { id: 4301, postil: 'Summer', tags: 'Epistle', label: 'Trinitatis s.', bible: 'Rom 11: 33-36', value: '/da/easter/epistle10' },
     { id: 4302, postil: 'Summer', tags: 'Gospel', label: 'Trinitatis s.', bible: 'Joh 3: 1-15', value: '/da/easter/gospel10' },
@@ -130,7 +130,7 @@ export default defineEventHandler(() => {
     { id: 6132, postil: 'Trinity II', tags: 'Gospel', label: '13.Sun.a.Trin.', bible: 'Luk 10: 23-37', value: '/da/trinity2/gospel13' },
     { id: 6141, postil: 'Trinity II', tags: 'Epistle', label: '14.Sun.a.Trin.', bible: 'Gal 5: 16-24', value: '/da/trinity2/epistle14' },
     { id: 6142, postil: 'Trinity II', tags: 'Gospel', label: '14.Sun.a.Trin.', bible: 'Luk 17: 11-19', value: '/da/trinity2/gospel14' },
-    { id: 6151, postil: 'Trinity II', tags: 'Epistle', label: '15.Sun.a.Trin.', bible: 'Gal 5:25 - 6:10', value: '/da/trinity2/epistle15' },
+    { id: 6151, postil: 'Trinity II', tags: 'Epistle', label: '15.Sun.a.Trin.', bible: 'Gal 5: 25 - 6:10', value: '/da/trinity2/epistle15' },
     { id: 6152, postil: 'Trinity II', tags: 'Gospel', label: '15.Sun.a.Trin.', bible: 'Matt 6: 24-34', value: '/da/trinity2/gospel15' },
     { id: 6161, postil: 'Trinity II', tags: 'Epistle', label: '16.Sun.a.Trin.', bible: 'Eph 3: 13-21', value: '/da/trinity2/epistle16' },
     { id: 6162, postil: 'Trinity II', tags: 'Gospel', label: '16.Sun.a.Trin.', bible: 'Luk 7: 11-17', value: '/da/trinity2/gospel16' },
@@ -153,7 +153,7 @@ export default defineEventHandler(() => {
     { id: 6242, postil: 'Trinity II', tags: 'Gospel', label: '24.Sun.a.Trin.', bible: 'Matt 9: 18-26', value: '/da/trinity2/gospel24' },
     { id: 6251, postil: 'Trinity II', tags: 'Epistle', label: '25.Sun.a.Trin.', bible: '1 Thess 4: 13-18', value: '/da/trinity2/epistle25' },
     { id: 6252, postil: 'Trinity II', tags: 'Gospel', label: '25.Sun.a.Trin.', bible: 'Matt 24: 15-28', value: '/da/trinity2/gospel25' },
-    { id: 6261, postil: 'Trinity II', tags: 'Epistle', label: '26.Sun.a.Trin.', bible: '2Thess 1: 3-10', value: '/da/trinity2/epistle26' },
+    { id: 6261, postil: 'Trinity II', tags: 'Epistle', label: '26.Sun.a.Trin.', bible: '2 Thess 1: 3-10', value: '/da/trinity2/epistle26' },
     { id: 6262, postil: 'Trinity II', tags: 'Gospel', label: '26.Sun.a.Trin.', bible: 'Matt 25: 31-42', value: '/da/trinity2/gospel26' },
 
     { type: 'separator' }

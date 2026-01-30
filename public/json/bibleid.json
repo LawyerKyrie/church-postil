@@ -85,7 +85,7 @@
   "4302": { "ref": "Joh 3: 1-15", "category": "Easter, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "4303": { "ref": "Joh 3: 1-15", "category": "Easter, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
 
-  "5011": { "ref": "Rom 11: 33-36", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
+  "5011": { "ref": "1 Joh 4: 16-21", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "5012": { "ref": "Luk 16: 19-31", "category": "Trinity, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "5021": { "ref": "1 Joh 3: 13-18", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "5022": { "ref": "Luk 14: 16-24", "category": "Trinity, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
@@ -114,7 +114,7 @@
   "6132": { "ref": "Luk 10: 23-37", "category": "Trinity, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "6141": { "ref": "Gal 5: 16-24", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "6142": { "ref": "Luk 17: 11-19", "category": "Trinity, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
-  "6151": { "ref": "Gal 5:25 - 6:10", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
+  "6151": { "ref": "Gal 5: 25 - 6:10", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "6152": { "ref": "Matt 6: 24-34", "category": "Trinity, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "6161": { "ref": "Ef 3: 13-21", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "6162": { "ref": "Luk 7: 11-17", "category": "Trinity, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
@@ -137,7 +137,7 @@
   "6242": { "ref": "Matt 9: 18-26", "category": "Trinity, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "6251": { "ref": "1 Thess 4: 13-18", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "6252": { "ref": "Matt 24: 15-28", "category": "Trinity, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
-  "6261": { "ref": "2Thess 1: 3-10", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
+  "6261": { "ref": "2 Thess 1: 3-10", "category": "Trinity, Epistle", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" },
   "6262": { "ref": "Matt 25: 31-42", "category": "Trinity, Gospel", "tags": "tag 1, tag 2, tag 3", "text": "Bible text comes here", "description": "This is the description of the text" }
 
 }

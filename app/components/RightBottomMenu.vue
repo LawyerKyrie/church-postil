@@ -1,30 +1,67 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useWindowSize, useWindowScroll } from '@vueuse/core'
+import { useWindowScroll } from '@vueuse/core'
 
-const isMobile = ref(false)
-const { width, height } = useWindowSize()
-const pos = {
-  width: width.value, // not necessary
-  height: height.value, // width.value could be used below
-  get x() {
-    const result = isMobile.value === true ? this.width - 35 : this.width - 48
-    return result.toString()
-  },
-  get y() {
-    const result = this.height - 33
-    return result.toString()
+const pos = computed(() => {
+  // Desktop Default (Bottom Right)
+  let x = window.innerWidth - 40 // 80px = button width + margin
+  let y = window.innerHeight - 50 // 80px = button height + margin
+
+  if (isMobile.value) {
+    // On Mobile, use visualViewport if available for better accuracy
+    const viewportHeight = window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight
+
+    const viewportWidth = window.visualViewport
+      ? window.visualViewport.width
+      : window.innerWidth
+
+    // Align to bottom-right with a 20px padding
+    // We use 50 as an estimate for the button size
+    x = viewportWidth - 40
+    y = viewportHeight - 50
   }
-}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const { $updateThePageOnLanguageChange, $keyboardClickK, $keyboardClickM } = useNuxtApp() as any
-const { locale } = useI18n()
-const oldLocale = locale.value
+  return { x, y }
+})
 
-/* --------------------------------- */
+const showBottomMenu = ref(false)
+const isMobile = ref(false)
+
+// 1. Monitor scroll with idle detection
+const { y, isScrolling } = useWindowScroll({ idle: 200 })
+
+// 2. Single watcher to handle showing/hiding AND mobile detection
+watch(isScrolling, (scrolling) => {
+  // We only care when scrolling STOPS
+  if (!scrolling) {
+    // Perform mobile check only when needed (saves resources)
+    const isWindows = navigator.userAgent.includes('Windows')
+    isMobile.value = !isWindows && window.innerWidth < 540
+
+    // Show menu only if we are past 200px
+    showBottomMenu.value = y.value > 200
+  } else {
+    // Hide menu immediately when scrolling starts
+    showBottomMenu.value = false
+    // Re-setting the state of all the menu buttons
+    inActive.value = true
+    notClosed.value = false
+  }
+})
+
+const notClosed = ref(false)
+
+/* On click outside movable menu the button stays inActive = false */
+watch(notClosed, () => {
+  // This code making the uSwitch button active when it's closing with click outside
+  if (notClosed.value !== true)
+    inActive.value = true
+})
 
 /* Creating popup menu and insert it on the right side */
+const inActive = ref(true)
 const toast = useToast()
 
 const scrollToTop = () => {
@@ -37,18 +74,16 @@ const scrollToTop = () => {
   })
 }
 
-onMounted(() => {
-  if (navigator.userAgent.includes('Windows'))
-    return isMobile.value = false
-  else if (width.value < 540)
-    return isMobile.value = true
-})
-
-const notClosed = ref(false)
-
 defineShortcuts({
   o: () => notClosed.value = !notClosed.value
 })
+
+/* --------------------------------- */
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { $updateThePageOnLanguageChange, $keyboardClickK, $keyboardClickM } = useNuxtApp() as any
+const { locale } = useI18n()
+const oldLocale = locale.value
 
 const isLang = ref(false)
 const toggleLang = () => {
@@ -64,8 +99,6 @@ const toggleLang = () => {
     $updateThePageOnLanguageChange(locale.value, oldLocale)
   }
 }
-
-const inActive = ref(true)
 
 const isHold = ref(false)
 let pressTimer: NodeJS.Timeout | null = null
@@ -152,40 +185,6 @@ const groups = [
   }
 ]
 
-/* Close movable button on scroll */
-const { /* x, */y } = useWindowScroll({ idle: 200,
-  onStop: () => { scrollStopped.value = true }
-})
-
-const scrollStopped = ref(false)
-const showBottomMenu = ref(false)
-
-watch(scrollStopped, () => {
-  showBottomMenu.value = window.scrollY > 200
-  scrollStopped.value = false
-})
-
-// React to scroll changes
-watch(y, (newY) => {
-  if (newY > 100) {
-    if (notClosed.value === true) {
-      if (selectMenuOpen.value === true) return
-      // Handling a problem with the state of the button (nothing serious)
-      inActive.value = true
-      notClosed.value = false
-    } else {
-      showBottomMenu.value = false
-    }
-  }
-})
-
-/* On click outside movable menu the button stays inActive = false */
-watch(notClosed, () => {
-  // This code making the uSwitch button active when it's closing with click outside
-  if (notClosed.value !== true)
-    inActive.value = true
-})
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleInputRef = (el: any) => {
   if (!el) return
@@ -232,6 +231,7 @@ const templateExpandedHandler = () => { /* */ }
         <WrapAndDragEl
           :x-init="pos.x"
           :y-init="pos.y"
+          :mobile="isMobile"
           @touchstart.stop
           @touchmove.stop
         >
@@ -362,3 +362,18 @@ const templateExpandedHandler = () => { /* */ }
     </div>
   </ClientOnly>
 </template>
+
+<style scoped>
+.menu-container {
+  position: fixed; /* Ensure this is fixed */
+  right: 1rem;
+  /* Use env(safe-area-inset-bottom) to stay above mobile home bars */
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  z-index: 9999;
+  /* Prevent interaction issues during scroll */
+  pointer-events: auto;
+  /* Touch-action none can prevent the background from scrolling
+     when you drag the menu */
+  touch-action: none
+}
+</style>

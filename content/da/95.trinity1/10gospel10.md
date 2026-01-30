@@ -1,6 +1,6 @@
 ---
-title: 1.Søn.e.Trefoldighed - xxx
-description: Evangelium 1.Søndag efter Trefoldighed; xxx
+title: 10.Søn.e.Tref. - Luk 19, 41-48
+description: Evangelium 10.Søndag efter Trefoldighed; Luk 19, 41-48
 ---
 
-## x.Søndag efter Trefoldighed; xxx
+## 10.Søndag efter Trefoldighed; Luk 19, 41-48
