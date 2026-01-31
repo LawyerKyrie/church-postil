@@ -32,11 +32,23 @@ const detectedLocale = computed(() => {
 })
 
 if (!page.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: `Page not found in ${detectedLocale.value} at ${route.path}`,
-    fatal: true
-  })
+  // Define the 6 paths that need the suffix
+  const pathsToRedirect = ['/da/advent', '/da/christmas', '/da/lent', '/da/easter', '/da/trinity1', '/da/trinity2']
+
+  if (pathsToRedirect.includes(route.path)) {
+    // Append the suffix and redirect
+    await navigateTo(`${route.path}-postil`, {
+      redirectCode: 302,
+      replace: true
+    })
+  } else {
+    // Only throw the error if it's NOT one of those 6 paths
+    throw createError({
+      statusCode: 404,
+      statusMessage: `Page not found in ${detectedLocale.value} at ${route.path}`,
+      fatal: true
+    })
+  }
 }
 
 const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
@@ -45,8 +57,8 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
   })
 })
 
-const title = page.value.seo?.title || page.value.title
-const description = page.value.seo?.description || page.value.description
+const title = page?.value?.seo?.title || page?.value?.title
+const description = page?.value?.seo?.description || page?.value?.description
 
 const currentOrigin = ref('https://church-postil.vercel.app')
 
@@ -75,6 +87,9 @@ const links = computed(() => {
 
   // Now we safely use page.value because we checked it above
   if (toc?.bottom?.edit) {
+    console.log('Logging because of 404 error on this place:')
+    console.log('toc?.bottom.edit', toc?.bottom?.edit)
+    console.log('result = ', result)
     result.push({
       icon: 'i-lucide-external-link',
       label: 'Edit this page',
