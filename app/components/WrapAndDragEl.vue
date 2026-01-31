@@ -22,8 +22,8 @@ const syncAndClamp = () => {
   const element = el.value
   if (!element) return
 
-  const btnWidth = element.clientWidth || 40
-  const btnHeight = element.clientHeight || 50
+  const btnWidth = element.clientWidth || 30
+  const btnHeight = element.clientHeight || 35
   const margin = 16
 
   const safeBottom = typeof window !== 'undefined'

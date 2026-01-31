@@ -22,11 +22,7 @@ const { data: page } = await useAsyncData(
       .path(route.path)
       .first()
 )
-/*
-if (!page.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
-}
-*/
+
 const { locale } = useI18n()
 
 const detectedLocale = computed(() => {
@@ -38,7 +34,7 @@ const detectedLocale = computed(() => {
 if (!page.value) {
   throw createError({
     statusCode: 404,
-    message: `Page not found in ${detectedLocale.value} at ${route.path}`,
+    statusMessage: `Page not found in ${detectedLocale.value} at ${route.path}`,
     fatal: true
   })
 }
@@ -99,8 +95,12 @@ const tocMenuRef = ref<HTMLElement | null>(null) // found after 1.click
 clickOnContentToc.count = 0
 function clickOnContentToc(event) {
   clickOnContentToc.count++
-  if (clickOnContentToc.count === 1)
+  if (clickOnContentToc.count === 1) {
     tocMenuRef.value = event.target
+  } else {
+    // Close the toc-menu, because no children below this clicked element
+    isTocOpen.value = false
+  }
 }
 
 watch(tocMenuRef, (newValue, oldValue) => {
@@ -155,6 +155,7 @@ watch(() => route.hash, (newHash /* , oldHash */) => {
       :title="page.title"
       :description="page.description"
       :headline="headline"
+      :bibletext="page.bibletext"
     >
       <template #links>
         <UButton

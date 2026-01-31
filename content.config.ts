@@ -14,6 +14,7 @@ export default defineContentConfig({
         include: '**'
       },
       schema: z.object({
+        bibletext: z.string().transform(val => val.replace(/\n/g, '<br>')).optional(),
         links: z.array(z.object({
           label: z.string(),
           icon: z.string(),

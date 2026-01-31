@@ -4,23 +4,21 @@ import { useWindowScroll } from '@vueuse/core'
 
 const pos = computed(() => {
   // Desktop Default (Bottom Right)
-  let x = window.innerWidth - 40 // 80px = button width + margin
-  let y = window.innerHeight - 50 // 80px = button height + margin
+  let x = window.innerWidth - 30 // 80px = button width + margin
+  let y = window.innerHeight - 35 // 80px = button height + margin
 
   if (isMobile.value) {
     // On Mobile, use visualViewport if available for better accuracy
     const viewportHeight = window.visualViewport
       ? window.visualViewport.height
       : window.innerHeight
-
     const viewportWidth = window.visualViewport
       ? window.visualViewport.width
       : window.innerWidth
-
     // Align to bottom-right with a 20px padding
     // We use 50 as an estimate for the button size
-    x = viewportWidth - 40
-    y = viewportHeight - 50
+    x = viewportWidth - 30
+    y = viewportHeight - 35
   }
 
   return { x, y }
@@ -227,138 +225,139 @@ const templateExpandedHandler = () => { /* */ }
       class="fixed -bottom-10 right-2"
     >
       <!-- Extra div with the class-content prevents that content scroll on mobile when trying to drag the menu -->
-      <div class="fixed bottom-0 right-0 w-[90px] h-[200px] z-50 touch-none">
-        <WrapAndDragEl
-          :x-init="pos.x"
-          :y-init="pos.y"
-          :mobile="isMobile"
-          @touchstart.stop
-          @touchmove.stop
+      <!-- This div move the draggable menu upwards -->
+      <!-- <div class="fixed bottom-0 right-0 w-[90px] h-[200px] z-50 touch-none"> -->
+      <WrapAndDragEl
+        :x-init="pos.x"
+        :y-init="pos.y"
+        :mobile="isMobile"
+        @touchstart.stop
+        @touchmove.stop
+      >
+        <UPopover
+          v-model:open="notClosed"
+          arrow
+          :content="{ side: 'top', align: 'start' }"
+          class=""
         >
-          <UPopover
-            v-model:open="notClosed"
-            arrow
-            :content="{ side: 'top', align: 'start' }"
-            class=""
-          >
-            <div class="rotate-90">
-              <USwitch
-                v-model="inActive"
-                :title="inActive === true ? 'Open Menu' : 'Close Menu'"
+          <div class="rotate-90">
+            <USwitch
+              v-model="inActive"
+              :title="inActive === true ? 'Open Menu' : 'Close Menu'"
+              color="secondary"
+              unchecked-icon="i-lucide-x"
+              checked-icon="i-lucide-arrow-left"
+              @mousedown="handlePressStart"
+              @mouseup="handlePressEnd"
+              @touchstart="handlePressStart"
+              @touchend="handlePressEnd"
+              @click="handleClickEvent($event, isHold)"
+            />
+          </div>
+
+          <template #content>
+            <div>
+              <UButton
+                title="Back to Top"
+                icon="i-heroicons-arrow-up-solid"
                 color="secondary"
-                unchecked-icon="i-lucide-x"
-                checked-icon="i-lucide-arrow-left"
-                @mousedown="handlePressStart"
-                @mouseup="handlePressEnd"
-                @touchstart="handlePressStart"
-                @touchend="handlePressEnd"
-                @click="handleClickEvent($event, isHold)"
+                variant="ghost"
+                aria-label="Back to top"
+                class="block"
+                @click="scrollToTop"
               />
-            </div>
+              <UButton
+                title="Toggle Language"
+                :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
+                color="secondary"
+                square
+                variant="ghost"
+                @click="toggleLang"
+              />
 
-            <template #content>
-              <div>
-                <UButton
-                  title="Back to Top"
-                  icon="i-heroicons-arrow-up-solid"
-                  color="secondary"
-                  variant="ghost"
-                  aria-label="Back to top"
-                  class="block"
-                  @click="scrollToTop"
-                />
-                <UButton
-                  title="Toggle Language"
-                  :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
-                  color="secondary"
-                  square
-                  variant="ghost"
-                  @click="toggleLang"
-                />
+              <UPopover
+                v-model:open="selectMenuOpen"
+                :content="{ side: 'right', align: 'start' }"
+                class="overflow-y-auto"
+                :restore-focus="false"
+              >
+                <div>
+                  <UButton
+                    :icon="selectMenuOpen ? 'i-heroicons-x-mark' : 'i-lucide-menu'"
+                    color="secondary"
+                    square
+                    variant="subtle"
+                  />
+                </div>
 
-                <UPopover
-                  v-model:open="selectMenuOpen"
-                  :content="{ side: 'right', align: 'start' }"
-                  class="overflow-y-auto"
-                  :restore-focus="false"
-                >
-                  <div>
-                    <UButton
-                      :icon="selectMenuOpen ? 'i-heroicons-x-mark' : 'i-lucide-menu'"
-                      color="secondary"
-                      square
-                      variant="subtle"
-                    />
-                  </div>
-
-                  <template #content>
-                    <div
-                      class="overflow-x-auto overflow-y-auto"
+                <template #content>
+                  <div
+                    class="overflow-x-auto overflow-y-auto"
+                  >
+                    <!--
+                      Source code:
+                      https://ui.nuxt.com/docs/components/command-palette#with-children-in-items
+                    -->
+                    <UCommandPalette
+                      :ref="handleInputRef"
+                      :groups="groups"
+                      placeholder="Menu Filter..."
+                      class="text-muted"
+                      :autofocus="false"
+                      :ui="{
+                        input: '[&>input]:[inputmode:none]'
+                      }"
                     >
-                      <!--
-                        Source code:
-                        https://ui.nuxt.com/docs/components/command-palette#with-children-in-items
-                      -->
-                      <UCommandPalette
-                        :ref="handleInputRef"
-                        :groups="groups"
-                        placeholder="Menu Filter..."
-                        class="text-muted"
-                        :autofocus="false"
-                        :ui="{
-                          input: '[&>input]:[inputmode:none]'
-                        }"
-                      >
-                        <template #footer>
-                          <div class="flex items-center justify-between gap-2">
-                            <UIcon
-                              name="i-lucide-list-filter"
-                              title="Ctrl K - shortcut to sermon list"
-                              class="size-5 text-dimmed ml-1"
+                      <template #footer>
+                        <div class="flex items-center justify-between gap-2">
+                          <UIcon
+                            name="i-lucide-list-filter"
+                            title="Ctrl K - shortcut to sermon list"
+                            class="size-5 text-dimmed ml-1"
+                          />
+                          <div class="flex items-center  gap-1">
+                            <UButton
+                              color="neutral"
+                              variant="ghost"
+                              label="Select Menu"
+                              size="xs"
+                              class="text-dimmed"
+                              @click="$keyboardClickK"
+                            >
+                              <template #trailing>
+                                <UKbd value="enter" />
+                              </template>
+                            </UButton>
+                            <USeparator
+                              orientation="vertical"
+                              class="h-4"
                             />
-                            <div class="flex items-center  gap-1">
-                              <UButton
-                                color="neutral"
-                                variant="ghost"
-                                label="Select Menu"
-                                size="xs"
-                                class="text-dimmed"
-                                @click="$keyboardClickK"
-                              >
-                                <template #trailing>
-                                  <UKbd value="enter" />
-                                </template>
-                              </UButton>
-                              <USeparator
-                                orientation="vertical"
-                                class="h-4"
-                              />
 
-                              <UButton
-                                color="neutral"
-                                variant="ghost"
-                                label=""
-                                class="text-dimmed"
-                                size="xs"
-                              >
-                                <template #trailing>
-                                  <span class="hidden">{{ templateExpandedHandler() }}</span>
-                                  <UKbd value="meta" />
-                                  <UKbd value="k" />
-                                </template>
-                              </UButton>
-                            </div>
+                            <UButton
+                              color="neutral"
+                              variant="ghost"
+                              label=""
+                              class="text-dimmed"
+                              size="xs"
+                            >
+                              <template #trailing>
+                                <span class="hidden">{{ templateExpandedHandler() }}</span>
+                                <UKbd value="meta" />
+                                <UKbd value="k" />
+                              </template>
+                            </UButton>
                           </div>
-                        </template>
-                      </UCommandPalette>
-                    </div>
-                  </template>
-                </UPopover>
-              </div>
-            </template>
-          </UPopover>
-        </WrapAndDragEl>
-      </div>
+                        </div>
+                      </template>
+                    </UCommandPalette>
+                  </div>
+                </template>
+              </UPopover>
+            </div>
+          </template>
+        </UPopover>
+      </WrapAndDragEl>
+      <!-- </div> -->
     </div>
   </ClientOnly>
 </template>
