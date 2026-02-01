@@ -3,16 +3,14 @@ export default defineEventHandler(() => {
   const uddrag1 = [
     // { label: '1. Uddrag', type: 'label' },
 
-    { id: 3001, postil: 'Uddrag', tags: 'Evangelium', label: 'Julesøndag', bible: 'Luk 2, 33-40', value: '/da/christmas/gospel-julesondag', description: 'To typer forargelser. Den mindste forargelse, forårsager dem, der "synder mod Moselovens anden tavle". Den værste forargelse er forårsaget af dem, der "synder imod Moselovens første tavle, mod troen samt mod Guds ære og hans gerninger."' },
-    { id: 3002, postil: 'Uddrag', tags: 'Epistel', label: 'Julesøndag', bible: 'Gal 4, 1-7', value: '/da/christmas/epistle-julesondag', description: 'Disse versene fra Paulus brev til Galaterne om at vi er Guds arvinger og har barnekår og ikke træller under loven, inneholder den mest viktige Lutherske lærdommen.' },
-    { id: 3003, postil: 'Uddrag', tags: 'Epistel', label: 'Nyårsdag', bible: 'Gal 3, 23-29', value: '/da/christmas/epistle-nyaarsdag', description: 'Luthers prædikner over Galaterbrevet inneholder de viktigste lærdommene. I denne prædikenen er det særlig trøsterigt å lese/ høre om at vi er "Guds barn ved troen" og "arvinger i kraft av Guds løfte."' },
-    { id: 3004, postil: 'Uddrag', tags: 'Epistel', label: '1.Fastesøn.', bible: '2 Kor 6, 1-10', value: '/da/lent/epistle-sunday01' },
-    { id: 3005, postil: 'Uddrag', tags: 'Epistel', label: '2.Åb.Søndag', bible: 'Rom 15: 4-13', value: '/da/lent/epiphany-epistle02' },
-    { id: 3006, postil: 'Uddrag', tags: 'Evangelium', label: '2.Åb.Søndag', bible: 'Luk 21: 25-36', value: '/da/lent/epiphany-gospel02' },
-    { id: 3007, postil: 'Uddrag', tags: 'Epistel', label: '3.Åb.Søndag', bible: '1 Cor 4: 1-5', value: '/da/lent/epiphany-epistle03' },
-    { id: 3008, postil: 'Uddrag', tags: 'Evangelium', label: '3.Åb.Søndag', bible: 'Matt 11: 2-10', value: '/da/lent/epiphany-gospel03', description: 'Barnets tro ved dåpen og fornuftens unødvendige medvirkning, er det viktigste lærdommen i denne prædiken fra Luther.' },
-    { id: 3009, postil: 'Uddrag', tags: 'Epistel', label: '4.Åb.Søndag', bible: 'Phil 4: 4-7', value: '/da/lent/epiphany-epistle04' },
-    { id: 3010, postil: 'Uddrag', tags: 'Evangelium', label: '4.Åb.Søndag', bible: 'John 1: 19-28', value: '/da/lent/epiphany-gospel04' }
+    { id: 102041, postil: 'Uddrag', tags: 'Epistel', label: 'Julesøndag', bible: 'Gal 4, 1-7', value: '/da/christmas/epistle-julesondag', description: 'Disse versene fra Paulus brev til Galaterne om at vi er Guds arvinger og har barnekår og ikke træller under loven, inneholder den mest viktige Lutherske lærdommen.' },
+    { id: 102042, postil: 'Uddrag', tags: 'Evangelium', label: 'Julesøndag', bible: 'Luk 2, 33-40', value: '/da/christmas/gospel-julesondag', description: 'To typer forargelser. Den mindste forargelse, forårsager dem, der "synder mod Moselovens anden tavle". Den værste forargelse er forårsaget af dem, der "synder imod Moselovens første tavle, mod troen samt mod Guds ære og hans gerninger."' },
+    { id: 102051, postil: 'Uddrag', tags: 'Epistel', label: 'Nyårsdag', bible: 'Gal 3, 23-29', value: '/da/christmas/epistle-nyaarsdag', description: 'Luthers prædikner over Galaterbrevet inneholder de viktigste lærdommene. I denne prædikenen er det særlig trøsterigt å lese/ høre om at vi er "Guds barn ved troen" og "arvinger i kraft av Guds løfte."' },
+
+    { id: 103132, postil: 'Uddrag', tags: 'Evangelium', label: '3.Åb.Søndag', bible: 'Matt 8: 1-13', value: '/da/lent/epiphany-gospel03', description: 'Barnets tro ved dåpen og fornuftens unødvendige medvirkning, er det viktigste lærdommen i denne prædiken fra Luther.' },
+    { id: 103141, postil: 'Uddrag', tags: 'Epistel', label: '4.Åb.Søndag', bible: 'Rom 13: 8-10', value: '/da/lent/epiphany-epistle04', description: 'En veldig lærerik prædiken om at kjærligheden skal være lovens forklarer, med henvisning bl.a. til historien om David som spiste av skuebrødene.' },
+
+    { id: 105092, postil: 'Trinity I', tags: 'Evangelium', label: '9.Søn.e.Tref.', bible: 'Luk 16: 1-9', value: '/da/trinity1/gospel09', description: '"Evangeliet [Alle Helgens dag, Matt 5, 12] lover de fromme en belønning." Luther forklarer ikke dette stykket der, men henviser til "prædikenen om den urettfærdige mammon." Etter Luthers tid har protestanter ledet et felttog som har medført at også lutheranere er i oppsoisjon til bruken av ordet lønn.' }
 
     // { type: 'separator' }
   ]

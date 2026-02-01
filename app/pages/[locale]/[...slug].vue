@@ -112,8 +112,8 @@ function clickOnContentToc(event) {
   clickOnContentToc.count++
   if (clickOnContentToc.count === 1) {
     tocMenuRef.value = event.target
-  } else {
-    // Close the toc-menu, because no children below this clicked element
+  } else if (event.target.matches('span[data-slot="linkText"]')) {
+    // console.log('Closing toc menu after click on linkText!')
     isTocOpen.value = false
   }
 }
