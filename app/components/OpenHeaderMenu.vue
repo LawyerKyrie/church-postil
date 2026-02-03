@@ -14,12 +14,12 @@ const openMenu = useOpenMenu()
 const { locale } = useI18n()
 const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
 
-const localeBefore = locale.value // updating it on close click
+const oldLocale = locale.value // updating it on close click
 
 watch(openMenu, (/* newValue, oldValue */) => {
   if (openMenu.value === false) {
-    if (localeBefore !== locale.value) {
-      $updateThePageOnLanguageChange(locale.value, localeBefore)
+    if (oldLocale !== locale.value) {
+      $updateThePageOnLanguageChange(locale.value)
       showToast(`${uiLocale.value.name} selected`, `Updating the page language!`)
     }
   }
@@ -160,7 +160,7 @@ const footerMenuAccordionTabs = ref<TabsItem[]>([
     icon: 'i-lucide-file-question-mark',
     content: `
       - Church Postil is in public domain. 
-      - "Ctrl k" activate the Select Menu.
+      - "Ctrl k" activate the Search Menu.
     `
   }
 ])

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
 const { header } = useAppConfig()
 const isDrawerOpen = ref(false)
 const openMenu = useOpenMenu() // const globalValue = useGlobalValue()
@@ -10,49 +12,18 @@ const handleClose = (isOpen: boolean) => {
     openMenu.value = true
 }
 
-// const ctrlKMenu = ref(false)
-
 defineShortcuts({
   m: () => isDrawerOpen.value = !isDrawerOpen.value
-  /*
-  meta_k: {
-    usingInput: true,
-    handler: async () => {
-      // 1. Open the menu (assuming you control it with a ref)
-      // ctrlKMenu.value = true
-      // 2. Wait for the Portal/DOM to render the input
-      await nextTick()
-      // 3. Find the specific input
-      requestAnimationFrame(() => {
-        const input = document.querySelector('input[placeholder="Type a command or search…"]') as HTMLInputElement
-        if (input) {
-          // 4. Lock it immediately (stops mobile keyboard)
-          input.readOnly = true
-          // 5. Add a one-time "Unlock" listener
-          const unlock = () => {
-            input.readOnly = false
-            input.focus()
-            // Listener removed automatically after run
-          }
-          input.addEventListener('mousedown', unlock, { once: true })
-          input.addEventListener('touchstart', unlock, { once: true }) // Essential for mobile
-        }
-      })
-    }
-  }
-  */
 })
 
 const handleGlobalCommandPaletteFocus = (event: FocusEvent) => {
   const target = event.target as HTMLInputElement
-
   // 1. Identify the input (Nuxt UI Command Palette usually has no unique ID,
   // so we check for class or placeholder)
   if (target && (target.placeholder === 'Type a command or search…' || target.closest('input[placeholder="Type a command or search…"]'))) {
     // 2. If it's a "fresh" focus (not yet clicked), lock it
     if (!target.dataset.isUnlocked) {
       target.readOnly = true
-
       // 3. Attach your 'mousedown' logic once to this specific input
       target.addEventListener('mousedown', () => {
         target.readOnly = false
@@ -84,6 +55,25 @@ onUnmounted(() => {
   document.removeEventListener('focusin', handleGlobalCommandPaletteFocus)
   document.removeEventListener('mousedown', resetInputsOnGlobalClick)
 })
+
+/* ------------- TOGGLE LANGUAGE BUTTON ------------- */
+const { width } = useWindowSize()
+const toast = useToast()
+const notMobile = ref(false)
+notMobile.value = width.value > 385
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { $updateThePageOnLanguageChange } = useNuxtApp() as any
+const { locale } = useI18n()
+
+const isLang = ref(false)
+const toggleLang = () => {
+  isLang.value = isLang.value === true ? false : true
+  locale.value = locale.value === 'en' ? 'da' : 'en'
+
+  toast.add({ title: `${locale.value} Language Selected!` })
+  $updateThePageOnLanguageChange(locale.value)
+}
 </script>
 
 <template>
@@ -134,20 +124,26 @@ onUnmounted(() => {
     <template #right>
       <UContentSearchButton
         v-if="header?.search"
+        title="Search Menu"
         class="lg:hidden"
       />
 
-      <UColorModeButton v-if="header?.colorMode" />
+      <UColorModeButton
+        v-if="header?.colorMode"
+        title="Toggle Color"
+      />
 
-      <!--
-      <template v-if="header?.links">
+      <template v-if="notMobile">
         <UButton
-          v-for="(link, index) of header.links"
-          :key="index"
-          v-bind="{ color: 'neutral', variant: 'ghost', ...link }"
+          title="Toggle Language"
+          :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
+          square
+          color="secondary"
+          variant="ghost"
+          aria-label="Toggle Language"
+          @click="toggleLang"
         />
       </template>
-      -->
     </template>
 
     <!-- View of open menu on mobile screens -->

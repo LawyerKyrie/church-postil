@@ -39,7 +39,7 @@ export default defineAppConfig({
     },
     search: true,
     colorMode: true
-    // links: [{ /* Removed link to GitHub here */ }]
+    // links: [{ /* */ }]
 
   },
   footer: {

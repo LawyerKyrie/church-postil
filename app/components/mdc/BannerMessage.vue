@@ -13,7 +13,7 @@ const handleActionClick = () => {
 
 const actions = ref([
   {
-    label: 'Select Menu',
+    label: 'Search Menu',
     // variant: 'outline',
     onClick: handleActionClick
   }

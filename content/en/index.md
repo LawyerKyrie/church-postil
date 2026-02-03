@@ -24,19 +24,19 @@ Luther's [Church Postil]{.text-primary}
 
   :::u-button
   ---
-  title: Click or open the Menu with Ctrl K (keyboard-click)
+  title: Click opens the Search Menu, or Ctrl K (keyboard-click)
   icon: i-lucide-square-menu
   size: xl
   to: javascript:window.nuxt.$keyboardClickK();void(0);
   trailing-icon: i-lucide-arrow-right
 
   ---
-  K Menu
+  Search
   :::
 
   :::u-button
   ---
-  title: Click or opens the Header Menu with M (Keyboard-click)
+  title: Click opens the Menu, or M (Keyboard-click)
   icon: i-lucide-menu
   color: neutral
   variant: outline
@@ -45,7 +45,7 @@ Luther's [Church Postil]{.text-primary}
   trailing-icon: i-lucide-arrow-right
 
   ---
-  M Menu
+  Menu
   :::
 
 ::

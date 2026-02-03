@@ -32,23 +32,11 @@ const detectedLocale = computed(() => {
 })
 
 if (!page.value) {
-  // Define the 6 paths that need the suffix
-  const pathsToRedirect = ['/da/advent', '/da/christmas', '/da/lent', '/da/easter', '/da/trinity1', '/da/trinity2']
-
-  if (pathsToRedirect.includes(route.path)) {
-    // Append the suffix and redirect
-    await navigateTo(`${route.path}-postil`, {
-      redirectCode: 302,
-      replace: true
-    })
-  } else {
-    // Only throw the error if it's NOT one of those 6 paths
-    throw createError({
-      statusCode: 404,
-      statusMessage: `Page not found in ${detectedLocale.value} at ${route.path}`,
-      fatal: true
-    })
-  }
+  throw createError({
+    statusCode: 404,
+    statusMessage: `Page not found in ${detectedLocale.value} at ${route.path}`,
+    fatal: true
+  })
 }
 
 const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
@@ -87,9 +75,6 @@ const links = computed(() => {
 
   // Now we safely use page.value because we checked it above
   if (toc?.bottom?.edit) {
-    console.log('Logging because of 404 error on this place:')
-    console.log('toc?.bottom.edit', toc?.bottom?.edit)
-    console.log('result = ', result)
     result.push({
       icon: 'i-lucide-external-link',
       label: 'Edit this page',
@@ -112,8 +97,9 @@ function clickOnContentToc(event) {
   clickOnContentToc.count++
   if (clickOnContentToc.count === 1) {
     tocMenuRef.value = event.target
-  } else if (event.target.matches('span[data-slot="linkText"]')) {
-    // console.log('Closing toc menu after click on linkText!')
+  } else if (event.target.matches('span[data-slot="linkText"]')
+    || event.target.matches('a[data-slot="link"]')) {
+    // console.log('Closing toc menu after click on link/linkText!')
     isTocOpen.value = false
   }
 }
@@ -161,6 +147,8 @@ watch(() => route.hash, (newHash /* , oldHash */) => {
     hashArrayRef.value = $tocHashArr(newHash)
   }
 })
+
+const pageContainer = ref(null)
 </script>
 
 <template>
@@ -184,19 +172,26 @@ watch(() => route.hash, (newHash /* , oldHash */) => {
     </UPageHeader>
 
     <UPageBody>
-      <ContentRenderer
-        v-if="page"
-        :value="page"
-      />
+      <div
+        ref="pageContainer"
+        class="relative"
+      >
+        <ContentRenderer
+          v-if="page"
+          :value="page"
+          class="cursor-crosshair"
+        />
 
-      <ClientOnly>
-        <GithubComments />
-        <RightBottomMenu />
-      </ClientOnly>
+        <ClientOnly>
+          <GithubComments />
+          <RightBottomMenu />
+          <AddNoteToMdPage :target="pageContainer" />
+        </ClientOnly>
 
-      <USeparator v-if="surround?.length" />
+        <USeparator v-if="surround?.length" />
 
-      <UContentSurround :surround="surround" />
+        <UContentSurround :surround="surround" />
+      </div>
     </UPageBody>
 
     <template

@@ -347,6 +347,22 @@ function onSelect(row: Row<RowItems>) {
   // If the row is already open, close it. If not, open only this one.
   expanded.value = expanded.value[row.id] ? {} : { [row.id]: true }
 }
+const scrollUpExpandRow = (el: any) => { // if it's to close to bottom
+  // setTimeout(() => {
+  const container = el
+  if (container) {
+    const rect = container.getBoundingClientRect()
+    const distanceToBottom = window.innerHeight - rect.bottom
+
+    // If the bottom of the content is off-screen or too close (less than 50px)
+    if (distanceToBottom < 5) {
+      window.scrollBy({
+        top: 240,
+        behavior: 'smooth'
+      })
+    }
+  }
+}
 
 // For the expanded rows
 function getTags(inputString, getRest = false) {
@@ -478,7 +494,10 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
         @select="(_, row) => onSelect(row)"
       >
         <template #expanded="{ row }">
-          <div class="expand-container -ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5">
+          <div
+            :ref="scrollUpExpandRow"
+            class="expand-container -ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5"
+          >
             <div class="expand-content pl-4 border-l-4 border-primary-500 rounded-sm">
               <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
                 {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}

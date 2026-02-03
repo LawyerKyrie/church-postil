@@ -23,19 +23,19 @@ Luthers [Kirke Postille]{.text-primary}
 
   :::u-button
   ---
-  title: Klikk eller åpne meny med Ctrl K (keyboard-klikk)
+  title: Klikk eller åbne søge meny med Ctrl K (keyboard-klikk)
   icon: i-lucide-square-menu
   size: xl
   to: javascript:window.nuxt.$keyboardClickK();void(0);
   trailing-icon: i-lucide-arrow-right
 
   ---
-  K Meny
+  Søge
   :::
 
   :::u-button
   ---
-  title: Klikk eller åpne hoved meny med M (keyboard-klikk)
+  title: Klikk eller åbne meny med M (keyboard-klikk)
   icon: i-lucide-menu
   color: neutral
   variant: outline
@@ -44,7 +44,7 @@ Luthers [Kirke Postille]{.text-primary}
   trailing-icon: i-lucide-arrow-right
 
   ---
-  M Meny
+  Meny
   :::
 
 ::

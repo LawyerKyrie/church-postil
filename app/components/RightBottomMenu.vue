@@ -76,37 +76,32 @@ defineShortcuts({
   o: () => notClosed.value = !notClosed.value
 })
 
-/* --------------------------------- */
+/* ------------- TOGGLE LANGUAGE BUTTON ------------- */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const { $updateThePageOnLanguageChange, $keyboardClickK, $keyboardClickM } = useNuxtApp() as any
 const { locale } = useI18n()
-const oldLocale = locale.value
 
 const isLang = ref(false)
 const toggleLang = () => {
   isLang.value = isLang.value === true ? false : true
+  locale.value = locale.value === 'en' ? 'da' : 'en'
 
-  if (locale.value === 'en') { // toggle to dan
-    toast.add({ title: 'Danish Language Selected!' })
-    locale.value = 'da'
-    $updateThePageOnLanguageChange(locale.value, oldLocale)
-  } else if (locale.value === 'da') { // toggle to eng
-    toast.add({ title: 'English Language Selected!' })
-    locale.value = 'en'
-    $updateThePageOnLanguageChange(locale.value, oldLocale)
-  }
+  toast.add({ title: `${locale.value} Language Selected!` })
+  $updateThePageOnLanguageChange(locale.value)
 }
+
+/* START PREVENT THE MENU FROM POPPING UP WHEN DRAGGED */
 
 const isHold = ref(false)
 let pressTimer: NodeJS.Timeout | null = null
-const holdTime = 750 // milliseconds for a "hold"
+const holdTime = 350 // milliseconds for a "hold"
 
 const handlePressStart = () => {
   // Clear any existing timer to prevent issues
-  if (pressTimer)
+  if (pressTimer) {
     clearTimeout(pressTimer)
-
+  }
   // Start a timer for the hold action
   pressTimer = setTimeout(() => {
     isHold.value = true
@@ -114,7 +109,6 @@ const handlePressStart = () => {
     else inActive.value = false
   }, holdTime)
 }
-
 const handlePressEnd = (/* event: MouseEvent | TouchEvent */) => {
   if (pressTimer) {
     clearTimeout(pressTimer)
@@ -123,7 +117,6 @@ const handlePressEnd = (/* event: MouseEvent | TouchEvent */) => {
       isHold.value = false
   }
 }
-
 handleClickEvent.stopped = false
 function handleClickEvent(event, condition) {
   if (condition) {
@@ -135,7 +128,8 @@ function handleClickEvent(event, condition) {
   }
 }
 
-/* ----------------------------------- */
+/* END PREVENT THE MENU FROM POPPING UP WHEN DRAGGED */
+
 const selectMenuOpen = ref(false)
 const groups = [
   {
@@ -143,46 +137,31 @@ const groups = [
     label: 'Actions',
     items: [
       {
-        label: 'Content Menu',
-        icon: 'i-lucide-menu',
-        title: 'Keyboard click on M opens this Menu',
-        onClick: $keyboardClickM
-
+        label: 'Add Notes to docs',
+        title: 'Add NOTES with Double Click, and read it next time you open the document (on the same device).',
+        icon: 'i-heroicons-academic-cap',
+        onSelect(e: Event) {
+          e.preventDefault()
+          toast.add({
+            title: 'Add Notes with Double Click!',
+            description: 'Add Notes - and read it next time you open the document.'
+          })
+        }
       },
       {
-        label: 'Language',
-        icon: 'i-lucide-languages',
-        children: [
-          {
-            label: 'English',
-            icon: 'i-lucide-mouse-pointer-click',
-            title: 'Select English Translation',
-            onSelect(e: Event) {
-              e.preventDefault()
-              toast.add({ title: 'English Language Selected!' })
-              locale.value = 'en'
-              if (oldLocale !== 'en')
-                $updateThePageOnLanguageChange(locale.value, oldLocale)
-            }
-          },
-          {
-            label: 'Danish',
-            icon: 'i-lucide-archive',
-            title: 'Select Danish Translation',
-            onSelect(e: Event) {
-              e.preventDefault()
-              toast.add({ title: 'Danish Language Selected!' })
-              locale.value = 'da'
-              if (oldLocale !== 'da')
-                $updateThePageOnLanguageChange(locale.value, oldLocale)
-            }
-          }
-        ]
+        label: 'Toggle Language',
+        title: 'Toggle between Engligish/Danish', //  isLang.value = isLang.value === true ? false : true
+        icon: isLang.value ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled',
+        onSelect(e: Event) {
+          e.preventDefault()
+          toggleLang()
+        }
       }
     ]
   }
 ]
 
+/* -- HANDLING THE BLUR ON INPUT ON STARTUP AND ON TYPING  -- */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleInputRef = (el: any) => {
   if (!el) return
@@ -204,7 +183,16 @@ const handleInputRef = (el: any) => {
       // Your logic here (e.g., input.focus())
 
       // Option A: Blur it immediately
-      input.blur()
+      const rawComp = toRaw(input)
+
+      const inputValue = rawComp.value
+      if (inputValue.trim().length === 0)
+        input.blur() // not keyboard typing
+      else
+        setTimeout(() => {
+          input.blur()
+        }, 3000)
+        // blur input after tree seconds if typing (maybe it needs to be set to 5000)
 
       // Option B: Make it readonly temporarily so keyboard can't open
       input.readOnly = true
@@ -215,7 +203,7 @@ const handleInputRef = (el: any) => {
   }
 }
 
-const templateExpandedHandler = () => { /* */ }
+// const templateExpandedHandler = () => { /* */ }
 </script>
 
 <template>
@@ -247,34 +235,36 @@ const templateExpandedHandler = () => { /* */ }
               color="secondary"
               unchecked-icon="i-lucide-x"
               checked-icon="i-lucide-arrow-left"
-              @mousedown="handlePressStart"
-              @mouseup="handlePressEnd"
+              @pointerdown="handlePressStart"
+              @pointerup="handlePressEnd"
               @touchstart="handlePressStart"
               @touchend="handlePressEnd"
               @click="handleClickEvent($event, isHold)"
             />
           </div>
-
           <template #content>
             <div>
-              <UButton
-                title="Back to Top"
-                icon="i-heroicons-arrow-up-solid"
-                color="secondary"
-                variant="ghost"
-                aria-label="Back to top"
-                class="block"
-                @click="scrollToTop"
-              />
-              <UButton
-                title="Toggle Language"
-                :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
-                color="secondary"
-                square
-                variant="ghost"
-                @click="toggleLang"
-              />
-
+              <div class="w-8">
+                <UButton
+                  title="Back to Top"
+                  icon="i-heroicons-arrow-up-solid"
+                  square
+                  color="secondary"
+                  variant="ghost"
+                  aria-label="Back to top"
+                  class="ghost h-8"
+                  @click="scrollToTop"
+                />
+                <UButton
+                  title="Toggle Language"
+                  :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
+                  color="secondary"
+                  square
+                  variant="ghost"
+                  aria-label="Toggle Language"
+                  @click="toggleLang"
+                />
+              </div>
               <UPopover
                 v-model:open="selectMenuOpen"
                 :content="{ side: 'right', align: 'start' }"
@@ -310,43 +300,30 @@ const templateExpandedHandler = () => { /* */ }
                     >
                       <template #footer>
                         <div class="flex items-center justify-between gap-2">
-                          <UIcon
-                            name="i-lucide-list-filter"
-                            title="Ctrl K - shortcut to sermon list"
-                            class="size-5 text-dimmed ml-1"
+                          <UButton
+                            color="neutral"
+                            icon="i-lucide-square-menu"
+                            variant="ghost"
+                            label="Search"
+                            size="xs"
+                            class="text-dimmed"
+                            trailing-icon="i-lucide-arrow-up"
+                            @click="$keyboardClickK"
                           />
-                          <div class="flex items-center  gap-1">
-                            <UButton
-                              color="neutral"
-                              variant="ghost"
-                              label="Select Menu"
-                              size="xs"
-                              class="text-dimmed"
-                              @click="$keyboardClickK"
-                            >
-                              <template #trailing>
-                                <UKbd value="enter" />
-                              </template>
-                            </UButton>
-                            <USeparator
-                              orientation="vertical"
-                              class="h-4"
-                            />
-
-                            <UButton
-                              color="neutral"
-                              variant="ghost"
-                              label=""
-                              class="text-dimmed"
-                              size="xs"
-                            >
-                              <template #trailing>
-                                <span class="hidden">{{ templateExpandedHandler() }}</span>
-                                <UKbd value="meta" />
-                                <UKbd value="k" />
-                              </template>
-                            </UButton>
-                          </div>
+                          <USeparator
+                            orientation="vertical"
+                            class="h-4"
+                          />
+                          <UButton
+                            color="neutral"
+                            icon="i-lucide-menu"
+                            variant="ghost"
+                            label="Menu"
+                            size="xs"
+                            class="text-dimmed"
+                            trailing-icon="i-lucide-arrow-up"
+                            @click="$keyboardClickM"
+                          />
                         </div>
                       </template>
                     </UCommandPalette>
