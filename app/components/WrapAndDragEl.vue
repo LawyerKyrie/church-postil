@@ -22,7 +22,7 @@ const syncAndClamp = () => {
   const element = el.value
   if (!element) return
 
-  const btnWidth = element.clientWidth || 30
+  const btnWidth = element.clientWidth || 25
   const btnHeight = element.clientHeight || 35
   const margin = 16
 

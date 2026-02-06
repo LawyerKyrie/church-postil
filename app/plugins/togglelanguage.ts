@@ -23,12 +23,13 @@ export default defineNuxtPlugin(() => {
           })
         }
         if (endsWith(newPath, endings)) {
-          // console.log('2.log newPath', newPath)
+          console.log('2.log newPath', newPath)
           if (newPath.startsWith('../da'))
             router.push(`${newPath}-postil`)
           else router.push(`${newPath}`)
-        } else { // if (!endings.some(folder => newPath.includes(folder))) // if path not ends with postil folder
-          // console.log('3.log newPath', newPath)
+        } else if (!endings.some(folder => newPath.includes(folder))) { // if path not ends with postil folder
+          // This if is necessary when en and then click on danish pages in the header menu
+          console.log('3.log newPath', newPath)
           // Checking if the old route exists in the new language code
           const index2LastSlash = newPath.lastIndexOf('/')
           let resultUrl
@@ -41,7 +42,7 @@ export default defineNuxtPlugin(() => {
             }
             return
           }
-        } // else console.log('4.log newPath', newPath)
+        } else console.log('4.log newPath', newPath)
       } // End of function updateThePageOnLanguageChange()
     }
   }

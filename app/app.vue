@@ -38,13 +38,15 @@ useHead({
 
 <template>
   <UApp>
+    <PrintNotesLayer />
+
     <NuxtLoadingIndicator />
 
     <Analytics />
 
     <AppHeader />
 
-    <UMain>
+    <UMain class="main-body-content">
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>

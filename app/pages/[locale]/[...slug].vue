@@ -99,7 +99,7 @@ function clickOnContentToc(event) {
     tocMenuRef.value = event.target
   } else if (event.target.matches('span[data-slot="linkText"]')
     || event.target.matches('a[data-slot="link"]')) {
-    // console.log('Closing toc menu after click on link/linkText!')
+    // console.log('isTocOpen,value = false after click on link/linkText!')
     isTocOpen.value = false
   }
 }
@@ -117,6 +117,7 @@ onMounted(() => {
     if (isTocOpen.value && tocMenuRef.value !== null) {
       const containsElement = event.composedPath().includes(tocMenuRef.value)
       if (!containsElement) {
+        // console.log('isTocOpen,value = false after click outside the toc menu.')
         isTocOpen.value = false
       }
     }
@@ -158,7 +159,6 @@ const pageContainer = ref(null)
       :title="page.title"
       :description="page.description"
       :headline="headline"
-      :bibletext="page.bibletext"
     >
       <template #links>
         <UButton
@@ -185,7 +185,11 @@ const pageContainer = ref(null)
         <ClientOnly>
           <GithubComments />
           <RightBottomMenu />
-          <AddNoteToMdPage :target="pageContainer" />
+          <AddNoteToMdPage
+            v-if="page"
+            :target="pageContainer"
+            :title="page.title"
+          />
         </ClientOnly>
 
         <USeparator v-if="surround?.length" />
@@ -238,7 +242,23 @@ const pageContainer = ref(null)
   </UPage>
 </template>
 
-<style scope>
+<style scooped>
+/* For all elements */
+body::-webkit-scrollbar {
+    width: 15px; /* For vertical scrollbar */
+}
+body::-webkit-scrollbar-thumb {
+    background: #888; /* Dark gray thumb */
+    border-radius: 6px; /* Rounded corners */
+    /* height: 35px */
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Darker on hover */
+}
+
+/* Remove 'scoped' from your <style> tag for this part */
+
 /*
   Style and solution for content toc accordion.
   Uncomment above (line 126) // ulParent.setAttribute('class', 'tree')
@@ -298,17 +318,4 @@ nav > div div:nth-child(2) > ul li.is-open > ul {
 Reference
 https://gemini.google.com/share/59939ee5a006
 */
-/* For all elements */
-body::-webkit-scrollbar {
-    width: 15px; /* For vertical scrollbar */
-}
-body::-webkit-scrollbar-thumb {
-    background: #888; /* Dark gray thumb */
-    border-radius: 6px; /* Rounded corners */
-    /* height: 35px */
-}
-
-body::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Darker on hover */
-}
 </style>

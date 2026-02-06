@@ -62,27 +62,28 @@ export default defineNuxtPlugin(() => {
 
   return {
     provide: {
-      collapsibleToc: collapsibleToc
-    },
-    tocHashArr(lastHash) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const hashArr = [] as any
-      hashArr.push(lastHash)
-      const lastAnchor = document.querySelector(`li > a[href="${lastHash}"]`)
-      let currentElement = lastAnchor?.parentElement
+      collapsibleToc: collapsibleToc,
+      tocHashArr(lastHash) {
+        console.log('Checking if this is started')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const hashArr = [] as any
+        hashArr.push(lastHash)
+        const lastAnchor = document.querySelector(`li > a[href="${lastHash}"]`)
+        let currentElement = lastAnchor?.parentElement
 
-      // Loop until there are no more parent elements
-      while (currentElement) {
-        // Check if the current element is an <li>
-        if (currentElement.tagName.toLowerCase() === 'li') {
-          const anchor = currentElement.children[0]
-          const href = anchor?.getAttribute('href')
-          hashArr.push(href)
+        // Loop until there are no more parent elements
+        while (currentElement) {
+          // Check if the current element is an <li>
+          if (currentElement.tagName.toLowerCase() === 'li') {
+            const anchor = currentElement.children[0]
+            const href = anchor?.getAttribute('href')
+            hashArr.push(href)
+          }
+          // Move up to the next parent
+          currentElement = currentElement.parentElement
         }
-        // Move up to the next parent
-        currentElement = currentElement.parentElement
+        return hashArr
       }
-      return hashArr
     }
   }
 })

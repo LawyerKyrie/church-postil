@@ -61,6 +61,7 @@ const { width } = useWindowSize()
 const toast = useToast()
 const notMobile = ref(false)
 notMobile.value = width.value > 385
+// not watching (width.value) or updating when width changes
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const { $updateThePageOnLanguageChange } = useNuxtApp() as any
@@ -138,7 +139,7 @@ const toggleLang = () => {
           title="Toggle Language"
           :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
           square
-          color="secondary"
+          color="neutral"
           variant="ghost"
           aria-label="Toggle Language"
           @click="toggleLang"
