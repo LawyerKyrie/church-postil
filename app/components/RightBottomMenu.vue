@@ -251,6 +251,15 @@ const handleInputRef = (el: any) => {
 }
 
 // const templateExpandedHandler = () => { /* */ }
+const backupJson = () => {
+  const data = JSON.stringify(allNotes.value, null, 2)
+  const blob = new Blob([data], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `my-scripture-notes-${new Date().toISOString().slice(0, 10)}.json`
+  link.click()
+}
 
 /* -- ADDING NEW COMMAND PALETTE GROUP FOR NOTES -- */
 
@@ -342,6 +351,13 @@ const noteGroups = computed(() => [
                   title: 'Download Md notes!',
                   icon: 'i-lucide-hard-drive-download',
                   onSelect: () => downloadNotes()
+                },
+                {
+                  id: 'backup-notes',
+                  label: 'Backup JSON',
+                  title: 'Backup JSON data!',
+                  icon: 'i-mdi-code-json',
+                  onSelect: () => backupJson()
                 }
               ]
             }
