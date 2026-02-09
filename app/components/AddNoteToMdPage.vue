@@ -24,9 +24,11 @@ const pageNotes = computed({
   }
 })
 
-// Listen for double clicks
-useEventListener(props.target, 'dblclick', (event: MouseEvent) => {
+const savePositionAndNote = (pos /* : { clientX: number, clientY: number } */, text: string) => {
+  console.log('If text in savePostionAndNote? ', text)
   const selection = window.getSelection()
+
+  console.log('Is there a selection? ', selection)
   // Only return if the user has manually dragged across multiple lines/words.
   // 'Range' usually implies a deliberate highlight, while 'Caret' or a
   // single word selection from a dblclick shouldn't block the note.
@@ -36,86 +38,116 @@ useEventListener(props.target, 'dblclick', (event: MouseEvent) => {
   }
   if (!props.target) return
 
-  const rect = props.target.getBoundingClientRect()
-  const top = event.clientY - rect.top
-  const left = event.clientX - rect.left
+  const targetRect = props.target.getBoundingClientRect()
+  // Calculate position relative to the container, NOT the screen
+  const top = pos.clientY - targetRect.top
+  const left = pos.clientX - targetRect.left
 
   // 3. We push to the GLOBAL list, but include the metadata (path and title)
-  allNotes.value.push({
+  const newNote = {
     id: Date.now(),
     path: route.path, // Crucial for the overview page
     title: props.title, // pageTitle: document.title, // Useful for the select menu label
-    text: '',
-    top,
-    left,
-    isOpen: true
-  })
-})
+    text: text,
+    top: top,
+    left: left,
+    isOpen: true,
+    isHighlight: false // This is a bubble, not a highlight
+  }
+
+  allNotes.value.push(newNote)
+}
 
 const deleteNote = (id: number) => {
   // Filters the global list directly
   allNotes.value = allNotes.value.filter(n => n.id !== id)
 }
 
-/*
-Add another alternative when user marks the text
-and making a note of this
-instead of copy/paste it into the bobble.
-*/
-
-const handleMouseUp = (event: MouseEvent) => {
-  // 1. Guard against clicking existing notes
-  if ((event.target as HTMLElement).closest('.pointer-events-auto')) return
-
-  const selection = window.getSelection()
-  if (!selection || selection.rangeCount === 0 || event.detail > 1) return
-
-  const text = selection.toString().trim() || ''
-
-  // New Guard: If selection is basically the whole page, ignore it.
-  const bodyLength = document.body.innerText.length
-  if (text.length > (bodyLength * 0.8)) return
-
-  // 2. THE FIX: Set a character limit (e.g., 500 chars)
-  // and ensure it's not the whole document
-  if (text.length > 0 && text.length < 500 && props.target) {
-    const range = selection.getRangeAt(0)
-    const selectionRect = range.getBoundingClientRect()
-
-    // 3. Distance Guard: Ensure the user actually dragged the mouse
-    // If width is 0, it was just a stray click
-    if (selectionRect.width < 2) return
-
-    const targetRect = props.target.getBoundingClientRect()
-
-    const newNote = {
-      id: Date.now(),
-      title: props.title,
-      text: `"${text}"`,
-      top: (selectionRect.top - targetRect.top),
-      left: (selectionRect.left - targetRect.left),
-      width: selectionRect.width,
-      height: selectionRect.height,
-      isOpen: true,
-      path: route.path,
-      isHighlight: true
-    }
-
-    allNotes.value.push(newNote)
-    selection.removeAllRanges() // Deselect after creating
-  }
-}
-
-// Lifecycle hooks to add/remove the listener
 onMounted(() => {
-  // It's better to listen on a specific 'content' container if possible
-  // e.g., document.querySelector('.prose').addEventListener(...)
-  document.addEventListener('mouseup', handleMouseUp)
+  // We use the same 'Brain' for both Mouse and Touch
+  document.addEventListener('mouseup', handleTextInteraction)
+  document.addEventListener('touchend', handleTextInteraction, { passive: false })
 })
 
 onUnmounted(() => {
-  document.removeEventListener('mouseup', handleMouseUp)
+  document.removeEventListener('mouseup', handleTextInteraction)
+  document.removeEventListener('touchend', handleTextInteraction)
 })
+
+let lastTap = 0
+const lastEventType = '' // To track if we just handled a touch
+
+const handleTextInteraction = async (event: Event) => {
+  const currentTime = Date.now()
+  const tapLength = currentTime - lastTap
+  const isDoubleTap = lastTap > 0 && tapLength < 300 && tapLength > 40
+  lastTap = currentTime
+
+  // 1. Basic Guards
+  const target = event.target as HTMLElement
+  if (target.closest('.u-command-palette') || target.closest('[role="dialog"]')) return
+
+  if (isDoubleTap || (event as UIEvent).detail === 2) {
+    // 2. THE WAIT: Give the browser 100ms to finish selecting the word/dot
+    await new Promise(resolve => setTimeout(resolve, 100))
+
+    const selection = window.getSelection()
+    if (!selection || selection.rangeCount === 0) {
+      console.log('No selection range found - possibly still animating on mobile')
+      return
+    }
+    let text = selection?.toString().trim() || ''
+
+    // 3. THE DOT/PUNCTUATION RULE:
+    // If the selected text is just a single character (like a . , ! ?)
+    // we clear it so the code treats it as an "Empty Space" bubble.
+    if (text.length === 1 && /[\.\,\!\?\;\:]/.test(text)) {
+      text = ''
+    }
+
+    if (text.length === 0) {
+      console.log('Treating as empty space -> Creating Bubble')
+      const pos = event instanceof MouseEvent ? event : (event as TouchEvent).changedTouches[0]
+      savePositionAndNote(pos, '')
+      if (selection) selection.removeAllRanges()
+      lastTap = 0
+      return
+    } else {
+      console.log('Word detected -> Falling through to Highlight mode')
+      // Don't return! Let it fall through to the Highlight logic below.
+    }
+  }
+
+  // ---------------------------------------------------------
+  // MODE B: HIGHLIGHTING
+  // ---------------------------------------------------------
+  const selection = window.getSelection()
+  const text = selection?.toString().trim() || ''
+
+  if (text.length > 0 && text.length < 500 && props.target) {
+    const range = selection?.getRangeAt(0)
+    const rect = range?.getBoundingClientRect()
+
+    if (rect && rect.width > 2) {
+      const targetRect = props.target.getBoundingClientRect()
+
+      const newNote = {
+        id: Date.now(),
+        title: props.title || 'Note',
+        text: `"${text}"`,
+        top: (rect.top - targetRect.top),
+        left: (rect.left - targetRect.left),
+        width: rect.width,
+        height: rect.height,
+        isOpen: true,
+        path: route.path,
+        isHighlight: true
+      }
+      allNotes.value.push(newNote)
+      if (selection) selection.removeAllRanges()
+    }
+  }
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const startDragging = (e: MouseEvent, note: any) => {
@@ -177,6 +209,8 @@ const startDragging = (e: MouseEvent, note: any) => {
             size="xs"
             class="rounded-full shadow-sm translate-x-[-50%] translate-y-[-100%] cursor-move"
             @mousedown="startDragging($event, note)"
+            @touchdown="startDragging($event, note)"
+            @click="console.log('Note possibly created, registering click!')"
           />
 
           <UButton
@@ -214,3 +248,25 @@ const startDragging = (e: MouseEvent, note: any) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.bubbles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Let clicks pass through to the text */
+  z-index: 999; /* Make sure it's on top of EVERYTHING */
+}
+
+.individual-bubble {
+  pointer-events: auto; /* Make the bubble itself clickable */
+}
+
+.scripture-content {
+  -webkit-user-select: text; /* Crucial for iOS */
+  user-select: text;
+  touch-action: manipulation; /* Allows taps/swipes but not double-tap-to-zoom */
+}
+</style>

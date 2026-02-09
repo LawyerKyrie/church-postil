@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // provide global helpers (functions)
 
 export default defineNuxtPlugin(() => {
@@ -6,7 +7,6 @@ export default defineNuxtPlugin(() => {
       created(timeStamp) {
         const dateObj = new Date(timeStamp)
         const date = dateObj.getDate().toString()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let month = dateObj.getMonth() + 1 as any
         month = month.toString()
         const year = dateObj.getFullYear().toString()

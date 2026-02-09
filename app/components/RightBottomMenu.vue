@@ -9,6 +9,7 @@ const { copyRichNotesToGmail } = useExport()
 */
 const { allNotes } = useNotes()
 const { sendToGmail } = useExport()
+const { copyNotesToClipboard } = useClipboard()
 
 // The grouping logic (Keep this here or in useNotes)
 const groupedNotes = computed(() => {
@@ -21,8 +22,29 @@ const groupedNotes = computed(() => {
   return Object.values(groups)
 })
 
-const handleExport = () => {
+const handleCopyToGmaiAsDraft = () => {
   sendToGmail(groupedNotes.value, allNotes.value.length)
+}
+const handleCopyAndGmail = (toGmail) => {
+  if (toGmail)
+    copyNotesToClipboard(groupedNotes.value, true)
+  else
+    copyNotesToClipboard(groupedNotes.value, false)
+}
+
+const mdNotes = () => {
+  const cleanNotes = groupedNotes.value.filter(g => g.items.some(i => i.text.length > 0))
+  $openNotesInNewTab(cleanNotes)
+}
+const styledNotes = () => {
+  // Filter before passing to the function
+  const cleanNotes = groupedNotes.value.filter(g => g.items.some(i => i.text.length > 0))
+  $openStyledNotes(cleanNotes)
+}
+const downloadNotes = () => {
+  // Filter before passing to the function
+  const cleanNotes = groupedNotes.value.filter(g => g.items.some(i => i.text.length > 0))
+  $exportNotesAsFile(cleanNotes)
 }
 
 /* Above is only the gmail send code */
@@ -65,7 +87,7 @@ watch(isScrolling, (scrolling) => {
 
     // Show menu only if we are past 200px
     showBottomMenu.value = y.value > 200
-  } else {
+  } else if (notClosed.value !== true) {
     // Hide menu immediately when scrolling starts
     showBottomMenu.value = false
     // Re-setting the state of all the menu buttons
@@ -108,7 +130,10 @@ const {
   $keyboardClickK,
   $keyboardClickM,
   $created, // for notes
-  $localeDate // for notes
+  $localeDate, // for notes
+  $openNotesInNewTab,
+  $openStyledNotes,
+  $exportNotesAsFile
 } = useNuxtApp() as any
 
 const { locale } = useI18n()
@@ -129,6 +154,7 @@ let pressTimer: NodeJS.Timeout | null = null
 const holdTime = 350 // milliseconds for a "hold"
 
 const handlePressStart = (/* event: MouseEvent | TouchEvent */) => {
+  console.log('handlePressStart')
   // Clear any existing timer to prevent issues
   // buttonRef.value = event.target as HTMLElement
   if (pressTimer) {
@@ -142,6 +168,7 @@ const handlePressStart = (/* event: MouseEvent | TouchEvent */) => {
   }, holdTime)
 }
 const handlePressEnd = (/* event: MouseEvent | TouchEvent */) => {
+  console.log('handlePressEnd')
   if (pressTimer) {
     clearTimeout(pressTimer)
     // If the timer was cleared before the threshold, it was a click/tap
@@ -150,6 +177,7 @@ const handlePressEnd = (/* event: MouseEvent | TouchEvent */) => {
   }
 }
 const handleClickEvent = (event, condition) => { // condition = isHold value
+  console.log('handleClickEvent')
   if (condition) {
     // Stop the event from bubbling up to the parent div's handler
     event.stopPropagation()
@@ -160,7 +188,7 @@ const handleClickEvent = (event, condition) => { // condition = isHold value
 
 /* END PREVENT THE MENU FROM POPPING UP WHEN DRAGGED */
 
-const selectMenuOpen = ref(false)
+// const selectMenuOpen = ref(false)
 const searchTermRef = ref('')
 
 /* -- HANDLING THE BLUR ON INPUT ON STARTUP AND ON TYPING  -- */
@@ -231,7 +259,7 @@ const handleInputRef = (el: any) => {
 // const allNotes = useLocalStorage<any[]>('global-church-notes', [])
 const router = useRouter()
 
-const showDescriptions = ref(true)
+const showDescriptions = ref(false)
 
 // 2. Format the notes for the Command Palette
 
@@ -264,21 +292,58 @@ const noteGroups = computed(() => [
           items: [
             {
               id: 'toggle-desc',
-              label: showDescriptions.value ? 'Hide Path' : 'Show Path',
+              label: showDescriptions.value ? 'Hide Path to Note' : 'Show Path to Note',
               icon: 'i-heroicons-eye',
               onSelect: () => { showDescriptions.value = !showDescriptions.value }
             },
             {
-              id: 'print-notes',
-              label: 'Print My Notes',
-              icon: 'i-heroicons-printer',
-              onSelect: () => handlePrint()
-            },
-            {
-              id: 'gmail-notes',
-              label: 'Export to Gmail',
-              icon: 'i-simple-icons-gmail',
-              onSelect: () => handleExport()
+              label: 'Copy/Past/Print/Download Notes',
+              title: 'Copy to Clipboard and paste it to Gmail etc.',
+              icon: 'i-lucide-share',
+              children: [
+                {
+                  id: 'into-clipboard',
+                  label: 'Copy to Clipboard',
+                  title: 'Copy Notes to Clipboard and manually past them anywhere',
+                  icon: 'i-lucide-copy',
+                  onSelect: () => handleCopyAndGmail(false)
+                },
+                {
+                  id: 'into-clipboard',
+                  label: 'Copy/Paste to Gmail',
+                  title: 'Copy Notes to Clipboard and open Gmail - Past it manually into Gmail',
+                  icon: 'i-lucide-clipboard-copy',
+                  onSelect: () => handleCopyAndGmail(true)
+                },
+                {
+                  id: 'gmail-notes',
+                  label: 'Export to Gmail (PC)',
+                  title: 'Export Notes automatically to Gmail - ONLY ON PC!',
+                  icon: 'i-simple-icons-gmail',
+                  onSelect: () => handleCopyToGmaiAsDraft()
+                },
+                {
+                  id: 'md-notes',
+                  label: 'Open Md Notes',
+                  title: 'Open notes in md format!',
+                  icon: 'i-lucide-notepad-text',
+                  onSelect: () => mdNotes()
+                },
+                {
+                  id: 'styled-notes',
+                  label: 'Print Notes',
+                  title: 'Print Styled notes!',
+                  icon: 'i-heroicons-printer',
+                  onSelect: () => styledNotes()
+                },
+                {
+                  id: 'download-notes',
+                  label: 'Download Notes',
+                  title: 'Download Md notes!',
+                  icon: 'i-lucide-hard-drive-download',
+                  onSelect: () => downloadNotes()
+                }
+              ]
             }
           ]
         }
@@ -288,7 +353,7 @@ const noteGroups = computed(() => [
 ])
 
 // Add these to your command palette's :groups or items array
-
+/*
 const handlePrint = () => {
   // Add a class to the body to help the CSS find its target
   document.body.classList.add('is-printing')
@@ -299,6 +364,7 @@ const handlePrint = () => {
     document.body.classList.remove('is-printing')
   }, 100)
 }
+*/
 </script>
 
 <template>
@@ -361,22 +427,16 @@ const handlePrint = () => {
                   @click="toggleLang"
                 />
               </div>
-              <UPopover
-                v-model:open="selectMenuOpen"
-                :content="{ side: 'right', align: 'start' }"
-                class="overflow-y-auto"
-                :restore-focus="false"
+              <UDrawer
+                handle-only
               >
-                <div>
-                  <UButton
-                    :icon="selectMenuOpen ? 'i-heroicons-x-mark' : 'i-lucide-menu'"
-                    color="secondary"
-                    square
-                    variant="subtle"
-                  />
-                </div>
-
-                <template #content>
+                <UButton
+                  color="secondary"
+                  square
+                  variant="subtle"
+                  icon="i-lucide-menu"
+                />
+                <template #body>
                   <div
                     class="overflow-x-auto overflow-y-auto u-command-palette-parent"
                     :class="{ 'hide-note-details': !showDescriptions }"
@@ -389,7 +449,7 @@ const handlePrint = () => {
                       :ref="handleInputRef"
                       :groups="noteGroups"
                       placeholder="Note Filter..."
-                      class="text-muted"
+                      class="groups text-muted"
                       :autofocus="false"
                       :ui="{
                         input: '[&>input]:[inputmode:none]',
@@ -447,38 +507,54 @@ const handlePrint = () => {
                           </div>
                         </div>
                       </template>
-                      <template #footer>
-                        <div class="flex items-center justify-between gap-2">
-                          <UButton
-                            color="neutral"
-                            icon="i-lucide-square-menu"
-                            variant="ghost"
-                            label="Search"
-                            size="xs"
-                            class="text-dimmed"
-                            trailing-icon="i-lucide-arrow-up"
-                            @click="$keyboardClickK"
-                          />
-                          <USeparator
-                            orientation="vertical"
-                            class="h-4"
-                          />
-                          <UButton
-                            color="neutral"
-                            icon="i-lucide-menu"
-                            variant="ghost"
-                            label="Menu"
-                            size="xs"
-                            class="text-dimmed"
-                            trailing-icon="i-lucide-arrow-up"
-                            @click="$keyboardClickM"
-                          />
-                        </div>
-                      </template>
                     </UCommandPalette>
                   </div>
                 </template>
-              </UPopover>
+                <template #footer>
+                  <div class="flex items-center justify-between gap-2 w-full">
+                    <UButton
+                      color="neutral"
+                      icon="i-lucide-square-menu"
+                      variant="ghost"
+                      label="Search"
+                      size="xs"
+                      class="text-dimmed"
+                      trailing-icon="i-lucide-arrow-up"
+                      @click="$keyboardClickK"
+                    />
+
+                    <USeparator
+                      orientation="vertical"
+                      class="h-4"
+                    />
+
+                    <UButton
+                      color="neutral"
+                      icon="i-lucide-menu"
+                      variant="ghost"
+                      label="Menu"
+                      size="xs"
+                      class="text-dimmed"
+                      trailing-icon="i-lucide-arrow-up"
+                      @click="$keyboardClickM"
+                    />
+
+                    <USeparator
+                      orientation="vertical"
+                      class="h-4"
+                    />
+
+                    <UButton
+                      color="warning"
+                      icon="i-heroicons-x-mark"
+                      variant="ghost"
+                      label="Close"
+                      size="xs"
+                      @click="notClosed = false"
+                    />
+                  </div>
+                </template>
+              </UDrawer>
             </div>
           </template>
         </UPopover>
@@ -489,73 +565,6 @@ const handlePrint = () => {
 </template>
 
 <style scoped>
-.menu-container {
-  position: fixed; /* Ensure this is fixed */
-  right: 1rem;
-  /* Use env(safe-area-inset-bottom) to stay above mobile home bars */
-  bottom: calc(1rem + env(safe-area-inset-bottom));
-  z-index: 9999;
-  /* Prevent interaction issues during scroll */
-  pointer-events: auto;
-  /* Touch-action none can prevent the background from scrolling
-     when you drag the menu */
-  touch-action: none
-}
-
-/* 1. Target the Palette Parent */
-.u-command-palette-parent {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  max-width: 100vw !important;
-  overflow: hidden !important;
-  padding: 0 8px;
-}
-
-/* .u-command-palette className is added in ui above */
-/* 2. The Palette Root (Forcing the width you found) */
-:deep(.u-command-palette) {
-  max-width: calc(100vw - 85px) !important;
-  margin: 0 auto;
-  /* Restore the blue background here if it went transparent */
-  background-color: rgb(var(--color-secondary-500)) !important;
-}
-
-/* 3. The Button (Shrink logic) */
-:deep([data-slot="group"] > button) {
-  width: 100% !important;
-  max-width: calc(100vw - 60px) !important;
-  flex-shrink: 1 !important;
-  flex-basis: auto !important;
-  overflow: hidden !important;
-  display: flex !important;
-}
-
-/* 4. The Wrapper */
-:deep([data-slot="itemWrapper"]) {
-  min-width: 0 !important;
-  flex: 1 1 0% !important;
-  display: block !important;
-}
-
-/* 5. The Label Truncation */
-:deep([data-slot="itemLabel"]) {
-  display: block !important;
-  width: 100% !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  color: white !important; /* Ensures text is visible on blue */
-}
-
-/* Dark Mode handling without the '&' flag */
-:global(.dark) :deep(.u-command-palette) {
-  background-color: rgb(var(--color-secondary-900)) !important;
-}
-
-/* PRINT FUNCTIONALITY FOR THE NOTES */
-/* See app.vue */
-
 /* TOGGLE THE DESCRIPTION */
 /* When the 'hide-note-details' class is active on the parent... */
 .hide-note-details :deep([data-slot="itemSuffix"]),
@@ -569,4 +578,6 @@ const handlePrint = () => {
   padding-bottom: 4px !important;
   min-height: 0 !important;
 }
+
+/*  ------------------------  */
 </style>

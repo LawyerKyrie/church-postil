@@ -36,7 +36,7 @@ const items = [
         title: 'Downloading file to',
         description: '../downloads/church-postil-md-file-download'
       })
-      downloadFile(`/raw${route.path}.md?download`)
+      $downloadFile(`/raw${route.path}.md?download`, 'church-postil-md-page-downloaded.md')
     }
   },
   {
@@ -82,16 +82,8 @@ async function copyPage() {
   copy(await $fetch<string>(`/raw${route.path}.md`))
 }
 
-const downloadFile = (url) => {
-  if (!url) return
-  // Create a temorary element
-  const link = document.createElement('a')
-  link.href = url
-  link.setAttribute('download', 'church-postil-md-file-download')
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { $downloadFile } = useNuxtApp() as any
 </script>
 
 <template>
