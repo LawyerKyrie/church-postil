@@ -258,10 +258,10 @@ function getRowItems(row: Row<RowItems>) {
       icon: 'i-lucide-link',
       onSelect() {
         navigateTo(`${row.original.value}`, {
-          external: true,
+          external: false /* ,
           open: {
             target: '_blank'
-          }
+          } */
         })
       }
     },

@@ -150,6 +150,16 @@ watch(() => route.hash, (newHash /* , oldHash */) => {
 })
 
 const pageContainer = ref(null)
+const noteRef = ref<any>(null)
+const lastActionTime = useLastActionTime() as any // For the "Double-fire" shield
+
+const handleContextMenu = (e: Event) => {
+  const now = Date.now()
+  // If a highlight was created in the last 1 second, prevent the menu
+  if (now - lastActionTime < 1000) {
+    e.preventDefault()
+  }
+}
 </script>
 
 <template>
@@ -174,12 +184,15 @@ const pageContainer = ref(null)
     <UPageBody>
       <div
         ref="pageContainer"
-        class="relative"
+        class="relative scripture-wrapper"
+        @mouseup="noteRef?.handleTextInteraction"
+        @touchend="noteRef?.handleTextInteraction"
+        @contextmenu.prevent="handleContextMenu"
       >
         <ContentRenderer
           v-if="page"
           :value="page"
-          class="cursor-crosshair"
+          class="cursor-crosshair scripture-content"
         />
 
         <ClientOnly>
@@ -187,6 +200,7 @@ const pageContainer = ref(null)
           <RightBottomMenu />
           <AddNoteToMdPage
             v-if="page"
+            ref="noteRef"
             :target="pageContainer"
             :title="page.title"
           />

@@ -13,5 +13,7 @@ export const useGlobalValue = () => {
 }
 
 export const useOpenMenu = () => useState<boolean>('openMenu', () => false)
+export const useTimeStamp = () => useState<number>('timeStamp', () => 0)
+export const useLastActionTime = () => useState<number>('lastActionTime', () => 0)
 
 // export const useCloseElement = () => useState<HTMLButtonElement>('closeElement', () => null)
