@@ -25,6 +25,35 @@ const pageNotes = computed({
 })
 
 onMounted(() => {
+  // Inside onMounted
+  document.addEventListener('selectionchange', () => {
+    if (!isMobile) return
+
+    const selection = window.getSelection() as any
+    const text = selection?.toString().trim() || ''
+
+    // If there is text, the "flips" are active. Show the buttons!
+    if (text.length > 0) {
+      const range = selection?.getRangeAt(0)
+      tempMobileRect.value = range?.getBoundingClientRect()
+      tempMobileText.value = text
+      isSelecting.value = true
+    } else {
+      // If text is cleared, hide the buttons (but only if we aren't clicking 'Confirm')
+      // We can add a small guard here if needed.
+    }
+  })
+  // Optional: Update button position as user drags handles
+  if ('ontouchstart' in window) {
+    document.addEventListener('selectionchange', () => {
+      if (isSelecting.value) {
+        const sel = window.getSelection()
+        if (sel && sel.rangeCount > 0) {
+          tempMobileRect.value = sel.getRangeAt(0).getBoundingClientRect()
+        }
+      }
+    })
+  }
   window.oncontextmenu = function (event) {
     if (event.target.closest('.your-scripture-class')) {
       event.preventDefault()
