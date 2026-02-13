@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-// source: https://gemini.google.com/share/024e9af34e8b
+// source: https://gemini.google.com/share/270f7e60a511
 const props = defineProps<{
   target: HTMLElement | null
   title: string
@@ -45,20 +45,24 @@ onUnmounted(() => {
 // --- Setup/State ---
 const { checkDoubleTap, reset } = useDoubleTap() // Initialize once
 const isSelecting = ref(false)
-let mobileSelectionTimeout: ReturnType<typeof setTimeout> | null = null
+const isMobile = 'ontouchstart' in window
+
 let lastInteractionType = ''
 // let lastActionTime = 0
 // const timeStamp = useTimeStamp()
 const lastActionTime = useLastActionTime() as any// For the "Double-fire" shield
 
+const tempMobileRect = ref<any>(null)
+const tempMobileText = ref<any>(null)
+
 const handleTextInteraction = (event: Event) => {
-  console.log(`[Interaction] Type: ${event.type}, Target:`, event.target)
+  // console.log(`[Interaction] Type: ${event.type}, Target:`, event.target)
   /* -- GUARDING RULES -- */
   const target = event.target as HTMLElement
   // If we are touching the bubble or the popover content...
   // Update this to match your harmonized template
   if (target.closest('.note-item') || target.closest('.p-4')) {
-    console.log('Shielding note from background logic')
+    // console.log('Shielding note from background logic')
     event.stopPropagation()
     return
   }
@@ -74,7 +78,7 @@ const handleTextInteraction = (event: Event) => {
   // GLOBAL GUARD: If we just did something (like saving a highlight),
   // ignore everything else for 300ms.
   if (now - lastActionTime.value < 300) {
-    console.log('Guard active: ignoring ghost event, timeStamp = ', event.timeStamp)
+    // console.log('Guard active: ignoring ghost event, timeStamp = ', event.timeStamp)
     return
   }
 
@@ -95,19 +99,16 @@ const handleTextInteraction = (event: Event) => {
     if (text.length === 0) {
       // LOCK THE DOOR IMMEDIATELY
       lastActionTime.value = Date.now()
-
       // LOG IT so we can see if it still tries to run twice
-      console.log('Creating bubble, locking action time at:', lastActionTime.value)
-
+      // console.log('Creating bubble, locking action time at:', lastActionTime.value)
       const pos = (event instanceof TouchEvent) ? event.changedTouches[0] : (event as MouseEvent)
       createNoteOnDblClick(pos)
 
       // CLEAR SELECTION so the PC doesn't get confused
       window.getSelection()?.removeAllRanges()
-
       return // EXIT IMMEDIATELY
     } else {
-      console.log('Double tap detected, but text was found:', text)
+      // console.log('Double tap detected, but text was found:', text)
       // It selected a word on dblclick? Ignore it as requested.
       selection?.removeAllRanges()
       return
@@ -121,40 +122,23 @@ const handleTextInteraction = (event: Event) => {
 
     const range = selection?.getRangeAt(0)
     const rect = range?.getBoundingClientRect()
-    // Inside your highlight creation logic
-    if (selection) {
-      // selection.removeAllRanges() // This "kills" the blue handles
-    }
 
     if (rect && rect.width > 5) {
-      const isMobile = 'ontouchstart' in window
+      // 1. Capture the text
+      const text = selection?.toString().trim() || ''
 
       if (isMobile) {
-        // 1. Don't auto-save immediately.
-        // 2. Just let the browser show the handles ("flips").
+        /* --- MOBILE: THE WAITING ROOM --- */
+        // Store the RAW screen position for the buttons
+        tempMobileRect.value = rect
+        tempMobileText.value = text
+
+        // Turn on the "Confirm | Cancel" buttons
         isSelecting.value = true
 
-        // Clear the old timeout
-        if (mobileSelectionTimeout) clearTimeout(mobileSelectionTimeout)
-
-        // Wait for the user to PAUSE for 2 seconds before saving
-        mobileSelectionTimeout = setTimeout(() => {
-          const finalSelection = window.getSelection()
-          const finalText = finalSelection?.toString().trim() || ''
-
-          if (finalText.length > 0) {
-            const finalRange = finalSelection?.getRangeAt(0)
-            const finalRect = finalRange?.getBoundingClientRect()
-            if (finalRect) {
-              saveHighlightedText(finalRect, finalText)
-              // Only remove ranges AFTER the user has stopped moving the flips
-              finalSelection?.removeAllRanges()
-              lastActionTime.value = Date.now()
-              reset()
-            }
-          }
-          isSelecting.value = false
-        }, 4000) // Give them 2.5 seconds to adjust the handles
+        // STOP! Do not save. Do not clear selection.
+        // This keeps the blue handles alive.
+        return
       } else {
         // PC: Standard Drag-and-Release highlighting
         // console.log('Log from creating highlight on pc')
@@ -167,7 +151,7 @@ const handleTextInteraction = (event: Event) => {
   }
 }
 
-const createNoteOnDblClick = (pos) => {
+const createNoteOnDblClick = (rect) => {
   if (!props.target) return
 
   // LOCK OUT all background logic immediately
@@ -175,8 +159,8 @@ const createNoteOnDblClick = (pos) => {
 
   const targetRect = props.target.getBoundingClientRect()
   // Calculate position relative to the container, NOT the screen
-  const top = pos.clientY - targetRect.top
-  const left = pos.clientX - targetRect.left
+  const top = rect.clientY + targetRect.top
+  const left = rect.clientX + targetRect.left
 
   // 3. We push to the GLOBAL list, but include the metadata (path and title)
   const newNote = {
@@ -196,12 +180,11 @@ const createNoteOnDblClick = (pos) => {
     const note = allNotes.value.find(n => n.id === newNote.id)
     if (note) note.isOpen = true
   }, 50)
-  console.log(`[Creation] New Note ID: ${newNote.id} at ${top}, ${left}`)
+  // console.log(`[Creation] New Note ID: ${newNote.id} at ${top}, ${left}`)
 }
 
 const deleteNote = (id: number) => {
   // Filters the global list directly
-  console.log('deleteNote log')
   allNotes.value = allNotes.value.filter(n => n.id !== id)
 }
 
@@ -225,12 +208,12 @@ const saveHighlightedText = (rect, text) => {
 
   // 3. Push to the global list (since pageNotes is a computed setter)
   allNotes.value.push(newNote)
-  /*
-  console.log('--- HIGHLIGHT DATA CHECK ---')
-  console.log('ID:', newNote.id)
-  console.log('isHighlight:', newNote.isHighlight) // Should be true
-  console.log('Initial Position:', { top: newNote.top, left: newNote.left })
-  */
+
+  console.log('--- HIGHLIGHT DATA CHECK (bottom of saveHighlightedText after allNotes.value.push(newNote)) ---')
+  console.log('ID: ', newNote.id)
+  console.log('isHighlight: ', newNote.isHighlight) // Should be true
+  console.log('Initial Position: ', { top: newNote.top, left: newNote.left })
+  console.log('newNote.width: ', newNote.width)
 }
 
 /* DRAGGING THE NOTE BOBBLES (ON PC) */
@@ -287,23 +270,9 @@ defineExpose({
   handleTextInteraction
 })
 
-const devLog = (/* ev, el */) => {
-  /*
-  if (ev !== undefined)
-    console.log('zIndex: ', window.getComputedStyle(ev).zIndex)
-  else
-    console.log('zIndex: ', window.getComputedStyle(el).zIndex)
-  */
-}
-
 // Without defineExpose, the function stays "private" inside the child component, and the parent won't be able to "reach in" and trigger it.
-const hiddenTemplateFunction = (/* note */) => {
-  /*
-  console.log('Highlight Depth Check:', { id: note.id })
-  console.log('Highlight Anchor:', { top: note.top, left: note.left, textSnippet: note.text.substring(0, 10) })
-  console.log('Identity Crisis Check:', note.id, 'isHighlight is:', note.isHighlight)
-  */
-}
+
+/*
 const pencilLogger = (el: any, note: any) => {
   if (!el) return
 
@@ -321,6 +290,46 @@ const pencilLogger = (el: any, note: any) => {
     })
   }
 }
+*/
+
+const confirmHighlight = () => {
+  const selection = window.getSelection()
+  const text = selection?.toString().trim() || ''
+
+  if (selection !== null && text.length > 0) {
+    const range = selection.getRangeAt(0)
+    const rect = range.getBoundingClientRect()
+
+    // NOW we create the pencil and the highlight box
+    saveHighlightedText(rect, text)
+
+    // Clear the handles only after the pencil is saved
+    selection.removeAllRanges()
+    lastActionTime.value = Date.now()
+    console.log('confirmHighlight have saved highlighted text, removed all ranges, and set last action time ot Date.now()')
+  }
+
+  isSelecting.value = false
+  reset()
+}
+
+const cancelSelection = (event?: Event) => {
+  if (event) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  // 1. Force the browser to drop the handles
+  window.getSelection()?.removeAllRanges()
+
+  // 2. Hide our UI
+  isSelecting.value = false
+  tempMobileRect.value = null
+
+  // 3. Clear the guard
+  lastActionTime.value = Date.now()
+  reset()
+}
 </script>
 
 <template>
@@ -328,12 +337,36 @@ const pencilLogger = (el: any, note: any) => {
     v-if="target"
     class="notes-layer"
   >
-    <div
-      v-if="isSelecting"
-      class="selection-indicator"
-    >
-      Saving highlight...
-    </div>
+    <Transition name="fade">
+      <div
+        v-if="isSelecting && isMobile"
+        class="fixed z-[3000] pointer-events-auto"
+        :style="{
+          top: (tempMobileRect.top - 35) + 'px',
+          left: (tempMobileRect.left + (tempMobileRect.width / 2) - 25) + 'px'
+        }"
+      >
+        <UButtonGroup
+          orientation="horizontal"
+          class="shadow-2xl border border-primary-500 rounded-lg bg-white"
+        >
+          <UButton
+            icon="i-heroicons-check"
+            title="Confirm, cancel or extend the selected/ highlighted selection!"
+            label="Highlight"
+            size="sm"
+            color="primary"
+            @pointerdown.stop="confirmHighlight"
+          />
+          <UButton
+            icon="i-heroicons-x-mark"
+            color="neutral"
+            size="sm"
+            @pointerdown.stop="cancelSelection"
+          />
+        </UButtonGroup>
+      </div>
+    </Transition>
 
     <div
       v-for="note in pageNotes"
@@ -364,25 +397,20 @@ const pencilLogger = (el: any, note: any) => {
             <!-- class="touch-action-none"  -->
 
             <template v-else>
-              <!--
-              <span
-                :ref="devLog"
-                class="hidden"
-              >
-                {{ hiddenTemplateFunction(note) }}
-              </span>
-            -->
               <div
                 class="highlight-box"
-                :style="{ height: note.height + 'px' }"
+                :style="{
+                  width: note.width + 'px',
+                  height: note.height + 'px'
+                }"
               />
+              <!--  <UButton :ref="(el) => pencilLogger(el, note)" ... -->
               <UButton
-                :ref="(el) => pencilLogger(el, note)"
                 icon="i-heroicons-pencil"
                 variant="ghost"
                 size="xs"
                 color="neutral"
-                class="pencil-btn absolute top-0 right-10 translate-x-[100%] translate-y-[-50%]"
+                class="pencil-btn absolute top-0 right-0 translate-x-[100%] translate-y-[-50%]"
                 @click.stop="note.isOpen = !note.isOpen"
               />
             </template>
@@ -434,7 +462,7 @@ const pencilLogger = (el: any, note: any) => {
 </template>
 
 <style scoped>
-/* 1. THE LAYER: Full screen glass, passes clicks through */
+/* KEEP: Essential for letting the user grab text handles behind the UI */
 .notes-layer {
   position: absolute;
   inset: 0;
@@ -442,71 +470,51 @@ const pencilLogger = (el: any, note: any) => {
   z-index: 1000;
 }
 
-/* 2. THE ITEM: The individual anchor */
 .note-item {
   position: absolute;
-  /* We remove pointer-events: none here because the child handles it */
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-/* 3. THE TRIGGER: This "punches the hole" in the glass */
-.pointer-events-auto {
+  /* Allow the pencil/bubble to be clicked */
   pointer-events: auto;
+  /* Important: don't let the container itself be selectable */
+  user-select: none;
 }
 
-/* 4. THE HIGHLIGHT BOX */
+/* Specific fix for highlights to let 'flips' work */
+.note-item.is-highlight {
+  pointer-events: none !important;
+}
+
+.note-item.is-highlight .pencil-btn,
+.note-item.is-highlight .popover-content {
+  pointer-events: auto !important;
+}
+
 .highlight-box {
-  width: 100%; /* Spans the width defined in :style above */
+  width: 100%;
   background-color: rgba(96, 165, 250, 0.3);
   border-bottom: 2px solid rgb(59, 130, 246);
-  cursor: pointer;
-}
-.highlight-box:hover {
-  background-color: rgba(96, 165, 250, 0.5);
-}
-
-/* 5. THE PENCIL: Visibility logic */
-.pencil-btn {
-  z-index: 50;
-  transition: opacity 0.3s ease;
-}
-
-/* PC: Show only on hover */
-@media (min-width: 1024px) {
-  .pencil-btn { opacity: 0; }
-  .group:hover .pencil-btn { opacity: 1; }
-}
-
-/* Mobile or Open: Always show */
-.is-open .pencil-btn,
-.is-mobile .pencil-btn {
-  opacity: 1 !important;
-}
-
-/* 6. SCRIPTURE */
-.scripture-content {
-  cursor: crosshair;
-  user-select: text;
-  -webkit-user-select: text;
-  /* This prevents the long-press 'Magnifying Glass' from
-     getting stuck in a loop with your double-tap logic */
-  -webkit-touch-callout: default;
+  /* Since it's pointer-events: none, cursor won't show, which is fine! */
 }
 /*
 Source:
-https://gemini.google.com/share/19f7ba5a37b5
+https://gemini.google.com/share/3eb27e378047
 */
-
-.note-item.is-highlight {
-  /* Crucial: Let the finger 'pass through' to the text handles */
-  pointer-events: none !important;
-  /* Ensure the container doesn't have a background blocking the view */
-  background: transparent !important;
+.scripture-content {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  /* Ensure the browser knows this is the touch target */
+  touch-action: auto !important;
 }
 
-/* Re-enable touch for the pencil only */
-.note-item.is-highlight .pencil-btn {
+/* Updating: https://gemini.google.com/share/da17a66620e0 */
+
+/* Ensure the button is reachable */
+.pencil-btn {
   pointer-events: auto !important;
+  z-index: 2100; /* Higher than the glass */
+}
+
+/* Ensure the highlight box doesn't block the handles while selection is active */
+.highlight-box {
+  pointer-events: none !important;
 }
 </style>
