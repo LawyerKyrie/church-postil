@@ -6,11 +6,18 @@ import { useDraggable, useWindowSize } from '@vueuse/core'
 const props = defineProps({
   xInit: { type: Number, default: 0 },
   yInit: { type: Number, default: 0 },
-  mobile: Boolean
+  mobile: Boolean // true if not windows machine, screen width < 540
 })
 
 const el = useTemplateRef<HTMLElement>('el')
-const { width, height } = useWindowSize()
+// 1. Get inner width (default behavior)
+const { width } = useWindowSize()
+
+// 2. Manually track outer height
+const outerHeight = ref(window?.outerHeight || 0)
+
+const isMobile = 'ontouchstart' in window
+const height = ref(isMobile ? outerHeight : window.innerHeight)
 
 // 1. Setup draggable without strict initialValue reliance
 const { x, y, style } = useDraggable(el, {

@@ -1,7 +1,7 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useWindowScroll } from '@vueuse/core'
+import { useWindowScroll, useWindowSize } from '@vueuse/core'
 
 /*
 const allNotes = useLocalStorage<any[]>('global-church-notes', [])
@@ -49,6 +49,11 @@ const downloadNotes = () => {
 
 /* Above is only the gmail send code */
 
+// Set the 'type' to 'outer' to use window.outerHeight
+const { height } = useWindowSize({ type: 'outer' })
+
+const isMobile = ref(false)
+
 const pos = computed(() => {
   // Desktop Default (Bottom Right)
   let x = window.innerWidth - 25 // 80px = button width + margin
@@ -56,23 +61,20 @@ const pos = computed(() => {
 
   if (isMobile.value) {
     // On Mobile, use visualViewport if available for better accuracy
-    const viewportHeight = window.visualViewport
-      ? window.visualViewport.height
-      : window.innerHeight
+
     const viewportWidth = window.visualViewport
       ? window.visualViewport.width
       : window.innerWidth
     // Align to bottom-right with a 20px padding
     // We use 50 as an estimate for the button size
-    x = viewportWidth - 25
-    y = viewportHeight - 35
-  }
 
+    x = viewportWidth - 25
+    y = height.value - 35 // only this on mobile
+  }
   return { x, y }
 })
 
 const showBottomMenu = ref(false)
-const isMobile = ref(false)
 
 // 1. Monitor scroll with idle detection
 const { y, isScrolling } = useWindowScroll({ idle: 200 })
@@ -83,7 +85,7 @@ watch(isScrolling, (scrolling) => {
   if (!scrolling) {
     // Perform mobile check only when needed (saves resources)
     const isWindows = navigator.userAgent.includes('Windows')
-    isMobile.value = !isWindows && window.innerWidth < 540
+    isMobile.value = (!isWindows && window.innerWidth < 540) // || 'ontouchstart' in window
 
     // Show menu only if we are past 200px
     showBottomMenu.value = y.value > 200
@@ -287,7 +289,7 @@ const noteGroups = computed(() => [
       icon: 'i-heroicons-pencil-square',
       // What happens when you click the note in the palette:
       onSelect: () => {
-        router.push(note.path)
+        goToNote(note) // router.push(note.path) // `${note.path}#note-${note.id}`
       }
     }))
   },
@@ -368,19 +370,12 @@ const noteGroups = computed(() => [
   )
 ])
 
-// Add these to your command palette's :groups or items array
-/*
-const handlePrint = () => {
-  // Add a class to the body to help the CSS find its target
-  document.body.classList.add('is-printing')
-
-  // Remove it after the print dialog closes
-  setTimeout(() => {
-    window.print()
-    document.body.classList.remove('is-printing')
-  }, 100)
+// https://gemini.google.com/share/9167ca0a6ca8
+const goToNote = (note) => {
+  // Ensure the ID is attached so the destination page knows where to look
+  const pathWithHash = `${note.path}#note-${note.id}`
+  router.push(pathWithHash)
 }
-*/
 </script>
 
 <template>

@@ -160,6 +160,43 @@ const handleContextMenu = (e: Event) => {
     e.preventDefault()
   }
 }
+
+/* Handle scroll to note linke */
+// source: https://gemini.google.com/share/f80fafd3413d
+// const { allNotes } = useNotes()
+
+// Watch for when the component is ready
+onMounted(() => {
+  // This handles the "Arrival" via a link
+  if (route.hash) {
+    scrollToNoteFromHash()
+  }
+})
+
+// This handles the "Jumping" if you are already on the page
+watch(() => route.hash, () => {
+  scrollToNoteFromHash()
+}) // https://gemini.google.com/share/c9a8b8ceb3f8
+
+const { allNotes } = useNotes()
+
+const scrollToNoteFromHash = () => {
+  const noteId = route.hash.replace('#note-', '')
+  const targetNote = allNotes.value.find(n => String(n.id) === noteId)
+
+  if (targetNote) {
+    const notePos = targetNote.top
+
+    // Your discovered "Sweet Spot" formula
+    const responsiveOffset = window.innerWidth * 0.7
+    const finalTarget = notePos + responsiveOffset
+
+    window.scrollTo({
+      top: finalTarget,
+      behavior: 'smooth'
+    })
+  }
+}
 </script>
 
 <template>

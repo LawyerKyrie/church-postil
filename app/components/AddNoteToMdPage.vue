@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-// source: https://gemini.google.com/share/270f7e60a511
+// source: https://gemini.google.com/share/16153a33b6fe
 const props = defineProps<{
   target: HTMLElement | null
   title: string
@@ -25,24 +25,6 @@ const pageNotes = computed({
 })
 
 onMounted(() => {
-  // Inside onMounted
-  document.addEventListener('selectionchange', () => {
-    if (!isMobile) return
-
-    const selection = window.getSelection() as any
-    const text = selection?.toString().trim() || ''
-
-    // If there is text, the "flips" are active. Show the buttons!
-    if (text.length > 0) {
-      const range = selection?.getRangeAt(0)
-      tempMobileRect.value = range?.getBoundingClientRect()
-      tempMobileText.value = text
-      isSelecting.value = true
-    } else {
-      // If text is cleared, hide the buttons (but only if we aren't clicking 'Confirm')
-      // We can add a small guard here if needed.
-    }
-  })
   // Optional: Update button position as user drags handles
   if ('ontouchstart' in window) {
     document.addEventListener('selectionchange', () => {
@@ -157,16 +139,19 @@ const handleTextInteraction = (event: Event) => {
       const text = selection?.toString().trim() || ''
 
       if (isMobile) {
-        /* --- MOBILE: THE WAITING ROOM --- */
-        // Store the RAW screen position for the buttons
-        tempMobileRect.value = rect
-        tempMobileText.value = text
+        // Wait a tiny heartbeat for the browser to finish the selection
+        setTimeout(() => {
+          /* --- MOBILE: THE WAITING ROOM --- */
+          // Store the RAW screen position for the buttons
+          tempMobileRect.value = rect
+          tempMobileText.value = text
 
-        // Turn on the "Confirm | Cancel" buttons
-        isSelecting.value = true
+          // Turn on the "Confirm | Cancel" buttons
+          isSelecting.value = true
 
-        // STOP! Do not save. Do not clear selection.
-        // This keeps the blue handles alive.
+          // STOP! Do not save. Do not clear selection.
+          // This keeps the blue handles alive.
+        }, 50) // 50ms is usually enough to catch the 'Long Press' result
         return
       } else {
         // PC: Standard Drag-and-Release highlighting
@@ -188,8 +173,8 @@ const createNoteOnDblClick = (rect) => {
 
   const targetRect = props.target.getBoundingClientRect()
   // Calculate position relative to the container, NOT the screen
-  const top = rect.clientY + targetRect.top
-  const left = rect.clientX + targetRect.left
+  const top = rect.clientY - targetRect.top
+  const left = rect.clientX - targetRect.left
 
   // 3. We push to the GLOBAL list, but include the metadata (path and title)
   const newNote = {
@@ -208,7 +193,7 @@ const createNoteOnDblClick = (rect) => {
   setTimeout(() => {
     const note = allNotes.value.find(n => n.id === newNote.id)
     if (note) note.isOpen = true
-  }, 50)
+  }, 10)
   // console.log(`[Creation] New Note ID: ${newNote.id} at ${top}, ${left}`)
 }
 
@@ -237,12 +222,13 @@ const saveHighlightedText = (rect, text) => {
 
   // 3. Push to the global list (since pageNotes is a computed setter)
   allNotes.value.push(newNote)
-
+  /*
   console.log('--- HIGHLIGHT DATA CHECK (bottom of saveHighlightedText after allNotes.value.push(newNote)) ---')
   console.log('ID: ', newNote.id)
   console.log('isHighlight: ', newNote.isHighlight) // Should be true
   console.log('Initial Position: ', { top: newNote.top, left: newNote.left })
   console.log('newNote.width: ', newNote.width)
+  */
 }
 
 /* DRAGGING THE NOTE BOBBLES (ON PC) */
@@ -322,24 +308,23 @@ const pencilLogger = (el: any, note: any) => {
 */
 
 const confirmHighlight = () => {
+  // 1. Capture coordinates immediately while the selection is still active
   const selection = window.getSelection()
-  const text = selection?.toString().trim() || ''
+  if (!selection || selection.rangeCount === 0) return
 
-  if (selection !== null && text.length > 0) {
-    const range = selection.getRangeAt(0)
-    const rect = range.getBoundingClientRect()
+  const range = selection.getRangeAt(0)
+  const rect = range.getBoundingClientRect()
+  const text = selection.toString().trim()
 
-    // NOW we create the pencil and the highlight box
-    saveHighlightedText(rect, text)
-
-    // Clear the handles only after the pencil is saved
-    selection.removeAllRanges()
-    lastActionTime.value = Date.now()
-    console.log('confirmHighlight have saved highlighted text, removed all ranges, and set last action time ot Date.now()')
-  }
-
+  // 2. Clear the UI first
   isSelecting.value = false
-  reset()
+
+  // 3. Tiny delay before saving to let the browser "deselect" cleanly
+  setTimeout(() => {
+    saveHighlightedText(rect, text)
+    selection.removeAllRanges()
+    reset()
+  }, 10)
 }
 
 const cancelSelection = (event?: Event) => {
@@ -359,6 +344,67 @@ const cancelSelection = (event?: Event) => {
   lastActionTime.value = Date.now()
   reset()
 }
+
+// https://gemini.google.com/share/d98cb44c52da
+const shareNote = (note) => {
+  let textToShare = note.text
+
+  // const extractApostrophes = (text) => {
+  // Check if the text contains apostrophes
+  if (textToShare.includes('"')) {
+    const parts = textToShare.split('"')
+    // If there are at least two apostrophes, parts[1] will be the text between them
+    if (parts.length >= 3) {
+      textToShare = parts[1]
+    }
+  }
+  // }
+
+  // 1. Try to get text between apostrophes
+  // 2. Fallback to the full note.text
+  // 3. Last resort: try to "hit test" the coordinates
+  // textToShare = textToShare || note.text || getNearestText(note)
+
+  // 1. Get the base URL (e.g., https://example.com/page)
+  // We use window.location.origin + note.path to ensure it's absolute
+  const baseUrl = window.location.origin + note.path
+  // 2. Encode the text for the Scroll-to-Text fragment
+  const encodedText = encodeURIComponent(textToShare.trim())
+  // 3. Construct the final "Magic Link"
+  const shareUrl = `${baseUrl}#:~:text=${encodedText}`
+  // Share logic...
+  // 4. Use the Web Share API (Mobile friendly) or Copy to Clipboard
+  if (navigator.share) {
+    navigator.share({
+      title: 'Check out this highlight',
+      url: shareUrl
+    }).catch(console.error)
+  } else {
+    // Fallback for PC: Copy to clipboard
+    navigator.clipboard.writeText(shareUrl)
+    alert('Link copied to clipboard!')
+  }
+}
+
+/*
+const getNearestText = (note: any) => {
+  // Use client-relative coordinates
+  const x = note.left
+  const y = note.top - window.scrollY
+
+  // 1. Official Standard (Firefox & modern spec)
+  if ('caretPositionFromPoint' in document) {
+    const pos = (document as any).caretPositionFromPoint(x, y)
+    if (pos && pos.offsetNode) {
+      return pos.offsetNode.textContent
+    }
+  }
+  // 2. The most compatible "Modern" fallback
+  // This gets the actual element at those coordinates
+  const element = document.elementFromPoint(x, y)
+  return element?.textContent || null
+}
+*/
 </script>
 
 <template>
@@ -375,6 +421,7 @@ const cancelSelection = (event?: Event) => {
           left: (tempMobileRect.left + (tempMobileRect.width / 2) - 25) + 'px'
         }"
       >
+        <!--  left: (tempMobileRect.left + (tempMobileRect.width / 2) - 25) + 'px' -->
         <UButtonGroup
           orientation="horizontal"
           class="shadow-2xl border border-primary-500 rounded-lg bg-white"
@@ -382,7 +429,7 @@ const cancelSelection = (event?: Event) => {
           <UButton
             icon="i-heroicons-check"
             title="Confirm, cancel or extend the selected/ highlighted selection!"
-            label="Highlight"
+            label="Highlight This"
             size="sm"
             color="primary"
             @pointerdown.stop="confirmHighlight"
@@ -473,6 +520,15 @@ const cancelSelection = (event?: Event) => {
                 size="xs"
                 label="Delete"
                 @click="deleteNote(note.id)"
+              />
+
+              <UButton
+                icon="i-heroicons-share"
+                color="neutral"
+                variant="ghost"
+                size="xs"
+                label="Share"
+                @click="shareNote(note)"
               />
 
               <UButton
