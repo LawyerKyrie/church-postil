@@ -25,6 +25,24 @@ const pageNotes = computed({
 })
 
 onMounted(() => {
+  // Inside onMounted
+  document.addEventListener('selectionchange', () => {
+    if (!isMobile) return
+
+    const selection = window.getSelection() as any
+    const text = selection?.toString().trim() || ''
+
+    // If there is text, the "flips" are active. Show the buttons!
+    if (text.length > 0) {
+      const range = selection?.getRangeAt(0)
+      tempMobileRect.value = range?.getBoundingClientRect()
+      tempMobileText.value = text
+      isSelecting.value = true
+    } else {
+      // If text is cleared, hide the buttons (but only if we aren't clicking 'Confirm')
+      // We can add a small guard here if needed.
+    }
+  })
   // Optional: Update button position as user drags handles
   if ('ontouchstart' in window) {
     document.addEventListener('selectionchange', () => {
@@ -132,7 +150,6 @@ const handleTextInteraction = (event: Event) => {
   // --- PATH B: HIGHLIGHTING (SINGLE DRAG/HOLD) ---
   // This runs if Path A didn't "return" (i.e., it wasn't a double-tap)
   if (text.length > 0 && props.target) {
-    console.log('text.length > 0')
     if (!selection) return
 
     const range = selection?.getRangeAt(0)
@@ -142,12 +159,7 @@ const handleTextInteraction = (event: Event) => {
       // 1. Capture the text
       const text = selection?.toString().trim() || ''
 
-      // console.log('isMobile? ', isMobile)
-
       if (isMobile) {
-        console.log('Is mobile? YES')
-        // Wait a tiny heartbeat for the browser to finish the selection
-        // setTimeout(() => {
         /* --- MOBILE: THE WAITING ROOM --- */
         // Store the RAW screen position for the buttons
         tempMobileRect.value = rect
@@ -158,7 +170,6 @@ const handleTextInteraction = (event: Event) => {
 
         // STOP! Do not save. Do not clear selection.
         // This keeps the blue handles alive.
-        // }, 10) // 50ms is usually enough to catch the 'Long Press' result
         return
       } else {
         // PC: Standard Drag-and-Release highlighting
@@ -173,7 +184,8 @@ const handleTextInteraction = (event: Event) => {
 
   // --- PATH C: HIGHLIGHTING ANCHOR / HEADER ---
   if (target.tagName === 'A') {
-    console.log('anchor element - do something')
+    console.log('anchor element - get the text from the anchor element and save it as highligh')
+    alert('Kyrie! Get the text from the anchor element children and save it as highlighted text.')
   }
 }
 
@@ -322,23 +334,24 @@ const pencilLogger = (el: any, note: any) => {
 */
 
 const confirmHighlight = () => {
-  // 1. Capture coordinates immediately while the selection is still active
   const selection = window.getSelection()
-  if (!selection || selection.rangeCount === 0) return
+  const text = selection?.toString().trim() || ''
 
-  const range = selection.getRangeAt(0)
-  const rect = range.getBoundingClientRect()
-  const text = selection.toString().trim()
+  if (selection !== null && text.length > 0) {
+    const range = selection.getRangeAt(0)
+    const rect = range.getBoundingClientRect()
 
-  // 2. Clear the UI first
+    // NOW we create the pencil and the highlight box
+    saveHighlightedText(rect, text)
+
+    // Clear the handles only after the pencil is saved
+    selection.removeAllRanges()
+    lastActionTime.value = Date.now()
+    console.log('confirmHighlight have saved highlighted text, removed all ranges, and set last action time ot Date.now()')
+  }
+
   isSelecting.value = false
-
-  // 3. Tiny delay before saving to let the browser "deselect" cleanly
-  // setTimeout(() => {
-  saveHighlightedText(rect, text)
-  selection.removeAllRanges()
   reset()
-  // }, 10)
 }
 
 const cancelSelection = (event?: Event) => {
