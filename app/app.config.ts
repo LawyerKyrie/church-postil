@@ -23,7 +23,25 @@ export default defineAppConfig({
         root: 'border-t border-default',
         left: 'text-sm text-muted'
       }
+    },
+
+    buttonGroup: {
+      base: 'relative',
+      variants: {
+        size: {
+          xs: '',
+          sm: '',
+          md: '',
+          lg: '',
+          xl: ''
+        },
+        orientation: {
+          horizontal: 'inline-flex -space-x-px',
+          vertical: 'flex flex-col -space-y-px'
+        }
+      }
     }
+
   },
   seo: {
     siteName: 'Church Postil'

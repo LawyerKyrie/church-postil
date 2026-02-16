@@ -21,6 +21,14 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true
   },
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'en', // Set your default language here
+        dir: 'ltr'
+      }
+    }
+  },
 
   css: ['~/assets/css/main.css'],
 

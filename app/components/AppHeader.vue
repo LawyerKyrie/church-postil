@@ -60,8 +60,11 @@ onUnmounted(() => {
 const { width } = useWindowSize()
 const toast = useToast()
 const notMobile = ref(false)
-notMobile.value = width.value > 385
+// notMobile.value = width.value > 385
 // not watching (width.value) or updating when width changes
+onMounted(() => {
+  notMobile.value = width.value > 385
+})
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const { $updateThePageOnLanguageChange } = useNuxtApp() as any
@@ -78,7 +81,6 @@ const toggleLang = () => {
 </script>
 
 <template>
-  <!-- mode= "modal" | "slideover" | "drawer" -->
   <UHeader
     v-model:open="isDrawerOpen"
     :ui="{ center: 'flex-1' }"
@@ -135,15 +137,17 @@ const toggleLang = () => {
       />
 
       <template v-if="notMobile">
-        <UButton
-          title="Toggle Language"
-          :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
-          square
-          color="neutral"
-          variant="ghost"
-          aria-label="Toggle Language"
-          @click="toggleLang"
-        />
+        <ClientOnly>
+          <UButton
+            title="Toggle Language"
+            :icon="isLang ? 'i-fluent-local-language-24-filled' : 'i-ix-language-filled'"
+            square
+            color="neutral"
+            variant="ghost"
+            aria-label="Toggle Language"
+            @click="toggleLang"
+          />
+        </ClientOnly>
       </template>
     </template>
 

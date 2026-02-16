@@ -98,7 +98,7 @@ const fetchUrl = computed(() => `/api/${lang}`)
 const { data: sermons } = await useFetch<RowCells[]>(
   fetchUrl.value, // `/api/${locale.value}
   {
-    key: `api-select-menu-${path}-${Math.random()}`,
+    key: `api-select-menu-${path}}`, // ${Math.random()
     transform: (
       data
     ) => {

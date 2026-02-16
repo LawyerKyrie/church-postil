@@ -70,6 +70,7 @@ const handleTextInteraction = (event: Event) => {
   // console.log(`[Interaction] Type: ${event.type}, Target:`, event.target)
   /* -- GUARDING RULES -- */
   const target = event.target as HTMLElement
+  console.log('target = ', event.target)
   // If we are touching the bubble or the popover content...
   // Update this to match your harmonized template
   if (target.closest('.note-item') || target.closest('.p-4')) {
@@ -104,6 +105,8 @@ const handleTextInteraction = (event: Event) => {
   const selection = window.getSelection()
   const text = selection?.toString().trim() || ''
 
+  console.log('log before path a and b')
+
   // --- PATH A: DOUBLE-CLICK / DOUBLE-TAP ---
   // We use our new "Solid" composable logic here
   if (checkDoubleTap(event as UIEvent)) {
@@ -129,6 +132,7 @@ const handleTextInteraction = (event: Event) => {
   // --- PATH B: HIGHLIGHTING (SINGLE DRAG/HOLD) ---
   // This runs if Path A didn't "return" (i.e., it wasn't a double-tap)
   if (text.length > 0 && props.target) {
+    console.log('text.length > 0')
     if (!selection) return
 
     const range = selection?.getRangeAt(0)
@@ -138,30 +142,38 @@ const handleTextInteraction = (event: Event) => {
       // 1. Capture the text
       const text = selection?.toString().trim() || ''
 
+      // console.log('isMobile? ', isMobile)
+
       if (isMobile) {
+        console.log('Is mobile? YES')
         // Wait a tiny heartbeat for the browser to finish the selection
-        setTimeout(() => {
-          /* --- MOBILE: THE WAITING ROOM --- */
-          // Store the RAW screen position for the buttons
-          tempMobileRect.value = rect
-          tempMobileText.value = text
+        // setTimeout(() => {
+        /* --- MOBILE: THE WAITING ROOM --- */
+        // Store the RAW screen position for the buttons
+        tempMobileRect.value = rect
+        tempMobileText.value = text
 
-          // Turn on the "Confirm | Cancel" buttons
-          isSelecting.value = true
+        // Turn on the "Confirm | Cancel" buttons
+        isSelecting.value = true
 
-          // STOP! Do not save. Do not clear selection.
-          // This keeps the blue handles alive.
-        }, 50) // 50ms is usually enough to catch the 'Long Press' result
+        // STOP! Do not save. Do not clear selection.
+        // This keeps the blue handles alive.
+        // }, 10) // 50ms is usually enough to catch the 'Long Press' result
         return
       } else {
         // PC: Standard Drag-and-Release highlighting
-        // console.log('Log from creating highlight on pc')
+        console.log('Log from creating highlight on pc')
         saveHighlightedText(rect, text)
         selection?.removeAllRanges()
         lastActionTime.value = now // <--- THIS LOCKS THE BUBBLE PATH
         reset()
       }
     }
+  }
+
+  // --- PATH C: HIGHLIGHTING ANCHOR / HEADER ---
+  if (target.tagName === 'A') {
+    console.log('anchor element - do something')
   }
 }
 
@@ -206,12 +218,14 @@ const saveHighlightedText = (rect, text) => {
   // LOCK OUT all background logic immediately
   lastActionTime.value = Date.now()
 
+  console.log('text = ', text)
+
   const targetRect = props?.target?.getBoundingClientRect() as any
   const newNote = {
     id: Date.now(),
     path: route.path,
     title: props.title,
-    text: `"${text}"`,
+    text: `«${text}»`,
     top: (rect.top - targetRect.top), // Align to top of text
     left: (rect.left - targetRect.left), // Align to start of text
     width: rect.width, // NEW: Store width
@@ -320,11 +334,11 @@ const confirmHighlight = () => {
   isSelecting.value = false
 
   // 3. Tiny delay before saving to let the browser "deselect" cleanly
-  setTimeout(() => {
-    saveHighlightedText(rect, text)
-    selection.removeAllRanges()
-    reset()
-  }, 10)
+  // setTimeout(() => {
+  saveHighlightedText(rect, text)
+  selection.removeAllRanges()
+  reset()
+  // }, 10)
 }
 
 const cancelSelection = (event?: Event) => {
@@ -350,13 +364,19 @@ const shareNote = (note) => {
   let textToShare = note.text
 
   // const extractApostrophes = (text) => {
-  // Check if the text contains apostrophes
+  // Check if the text contains guillemets apostrophes
+  /*
   if (textToShare.includes('"')) {
     const parts = textToShare.split('"')
     // If there are at least two apostrophes, parts[1] will be the text between them
     if (parts.length >= 3) {
       textToShare = parts[1]
     }
+  }
+  */
+  const match = textToShare.match(/«(.*?)»/)
+  if (match) {
+    textToShare = match[1]
   }
   // }
 
@@ -422,10 +442,12 @@ const getNearestText = (note: any) => {
         }"
       >
         <!--  left: (tempMobileRect.left + (tempMobileRect.width / 2) - 25) + 'px' -->
-        <UButtonGroup
-          orientation="horizontal"
+        <div
           class="shadow-2xl border border-primary-500 rounded-lg bg-white"
         >
+          <!--
+          <UButtonGroup orientation="horizontal"
+          -->
           <UButton
             icon="i-heroicons-check"
             title="Confirm, cancel or extend the selected/ highlighted selection!"
@@ -440,7 +462,7 @@ const getNearestText = (note: any) => {
             size="sm"
             @pointerdown.stop="cancelSelection"
           />
-        </UButtonGroup>
+        </div>
       </div>
     </Transition>
 

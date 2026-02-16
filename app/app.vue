@@ -34,11 +34,18 @@ useHead({
     dir: uiLocale.value.dir
   }
 })
+
+// app.vue
+onMounted(() => {
+  if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual'
+  }
+})
 </script>
 
 <template>
   <UApp>
-    <PrintNotesLayer />
+    <!-- <PrintNotesLayer /> -->
 
     <NuxtLoadingIndicator />
 

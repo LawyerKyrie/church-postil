@@ -10,7 +10,8 @@ const { toc } = useAppConfig()
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
 definePageMeta({
-  layout: 'docs'
+  layout: 'docs',
+  scrollToTop: false
 })
 // const { data: page } = await useAsyncData(path, () => queryCollection('docs').path(path).first())
 
@@ -168,9 +169,15 @@ const handleContextMenu = (e: Event) => {
 // Watch for when the component is ready
 onMounted(() => {
   // This handles the "Arrival" via a link
+  // await nextTick()
   if (route.hash) {
     scrollToNoteFromHash()
   }
+  /*
+  if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'auto'
+  }
+  */
 })
 
 // This handles the "Jumping" if you are already on the page

@@ -47,7 +47,7 @@ const isPostilDefined = props.postil !== undefined
 
 const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
-    key: `api-table-${path}-${Math.random()}`,
+    key: `api-table-${path}`, // ${Math.random()}
     // Simplify transform: only handle the array filtering
     transform: (data) => {
       // DEFENSIVE: If data is missing or not an array, return empty list
@@ -143,7 +143,7 @@ const columns: TableColumn<RowItems>[] = [
   {
     accessorKey: 'label',
     header: ({ column }) => getTableHeader(column, 'Label'),
-    cell: ({ row }) => row.original.label
+    cell: ({ row }) => `${row.getValue('label')}`
   },
   {
     accessorKey: 'bible',
@@ -154,7 +154,7 @@ const columns: TableColumn<RowItems>[] = [
   {
     accessorKey: 'value',
     header: ({ column }) => getTableHeader(column, 'Value'),
-    cell: ({ row }) => row.original.value
+    cell: ({ row }) => `${row.getValue('value')}`
   },
   {
     id: 'menu',
@@ -195,31 +195,33 @@ const table = useTemplateRef('table') // Select Column View Dropdown Menu
 const { width } = useWindowSize()
 const columnVisibility = ref({})
 
-watch(width, (newVal) => { // set columnVisibility on screen width
-  columnVisibility.value = {
-    ...columnVisibility.value,
-    id: false,
-    postil: false, // updating value below
-    tags: false, // updating value below
-    label: true,
-    bible: true,
-    value: false,
-    menu: true
-  }
+onMounted(() => {
+  watch(width, (newVal) => { // set columnVisibility on screen width
+    columnVisibility.value = {
+      ...columnVisibility.value,
+      id: false,
+      postil: false, // updating value below
+      tags: false, // updating value below
+      label: true,
+      bible: true,
+      value: false,
+      menu: true
+    }
 
-  if (newVal > 540) {
-    columnVisibility.value = {
-      ...columnVisibility.value,
-      postil: true,
-      tags: true
+    if (newVal > 540) {
+      columnVisibility.value = {
+        ...columnVisibility.value,
+        postil: true,
+        tags: true
+      }
+    } else if (newVal > 440 && newVal < 540) {
+      columnVisibility.value = {
+        ...columnVisibility.value,
+        tags: true
+      }
     }
-  } else if (newVal > 440 && newVal < 540) {
-    columnVisibility.value = {
-      ...columnVisibility.value,
-      tags: true
-    }
-  }
-}, { immediate: true })
+  }, { immediate: true })
+})
 
 /* Sorting */
 const UButton = resolveComponent('UButton')
@@ -249,7 +251,6 @@ const sorting = ref([
 
 const toast = useToast()
 const { copy } = useClipboard()
-const currentOrigin = ref('')
 
 function getRowItems(row: Row<RowItems>) {
   return [
@@ -311,7 +312,10 @@ function getRowItems(row: Row<RowItems>) {
   ]
 }
 
+const currentOrigin = ref('')
+
 onMounted(() => {
+  currentOrigin.value = window.location.origin
   if (typeof window !== 'undefined') {
     currentOrigin.value = window.location.origin
   }
@@ -446,7 +450,11 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
         </UDropdownMenu>
       </div>
     </div>
-    <div class="church-postil-table">
+    <div
+      class="church-postil-table"
+    >
+      <!--  class="church.postil-table" data-allow-mismatch -->
+      <!-- The presentation of rowItems as data and rows is possibly creating hydration node mismatch warning in browser. Suppressing this warning with this the data-allow-mismatch property --->
       <!-- PENDING TABLE DIV -->
       <div
         v-if="status === 'pending'"
@@ -475,7 +483,6 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
           }"
         />
       </div>
-
       <UTable
         v-else-if="rowItems && rowItems.length > 0"
         ref="table"
@@ -484,7 +491,6 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
         v-model:global-filter="globalFilter"
         v-model:expanded="expanded"
         :data="rowItems || []"
-        :rows="rowItems || []"
         :columns="columns"
         class="flex-1 whitespace-normal"
         :ui="{
@@ -493,6 +499,7 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
         }"
         @select="(_, row) => onSelect(row)"
       >
+        <!-- Removed :data="rowItems || []" :rows="rowItems || []" -->
         <template #expanded="{ row }">
           <div
             :ref="scrollUpExpandRow"
@@ -503,7 +510,7 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
                 {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}
               </h4>
               <div class="text-sm text-gray-600 dark:text-gray-400">
-                <p class="pb-1">
+                <div class="pb-1">
                   <UPopover arrow>
                     <UButton
                       :label="row.original.bible"
@@ -549,7 +556,7 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
                   <span v-else>
                     &nbsp;{{ getTags(row.original.tags, true) }}
                   </span>
-                </p>
+                </div>
                 <p v-if="row.original.description">
                   &emsp;{{ row.original.description }}
                 </p>
@@ -573,20 +580,22 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
       </UTable>
       <!-- NO ROWS FOUND -->
       <div v-else-if="isEmpty">
-        {{ rowItems }}
-        <UEmpty
-          icon="i-lucide-table"
-          title="No Rows Found"
-          description="Hmm, There is an error loading table rows."
-          :actions="[
-            {
-              icon: 'i-lucide-refresh-cw',
-              label: 'Refresh',
-              color: 'neutral',
-              variant: 'subtle'
-            }
-          ]"
-        />
+        <ClientOnly>
+          {{ rowItems }}
+          <UEmpty
+            icon="i-lucide-table"
+            title="No Rows Found"
+            description="Hmm, There is an error loading table rows."
+            :actions="[
+              {
+                icon: 'i-lucide-refresh-cw',
+                label: 'Refresh',
+                color: 'neutral',
+                variant: 'subtle'
+              }
+            ]"
+          />
+        </ClientOnly>
       </div>
     </div>
   </div>
