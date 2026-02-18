@@ -87,8 +87,9 @@ const tempMobileText = ref<any>(null)
 const handleTextInteraction = (event: Event) => {
   // console.log(`[Interaction] Type: ${event.type}, Target:`, event.target)
   /* -- GUARDING RULES -- */
-  const target = event.target as HTMLElement
-  console.log('target = ', event.target)
+  const target = event.target as any
+  console.log('target = ', target)
+  console.log('instance of header el.? ', target instanceof HTMLHeadingElement)
   // If we are touching the bubble or the popover content...
   // Update this to match your harmonized template
   if (target.closest('.note-item') || target.closest('.p-4')) {
@@ -121,14 +122,15 @@ const handleTextInteraction = (event: Event) => {
   /*   --------------------------     */
 
   const selection = window.getSelection()
+  // const header = selection?.tro
   const text = selection?.toString().trim() || ''
-
-  console.log('log before path a and b')
 
   // --- PATH A: DOUBLE-CLICK / DOUBLE-TAP ---
   // We use our new "Solid" composable logic here
   if (checkDoubleTap(event as UIEvent)) {
-    if (text.length === 0) {
+    if (text.length === 0
+      && target.tagName !== 'A'
+      && !(target instanceof HTMLHeadingElement)) {
       // LOCK THE DOOR IMMEDIATELY
       lastActionTime.value = Date.now()
       // LOG IT so we can see if it still tries to run twice
@@ -139,8 +141,25 @@ const handleTextInteraction = (event: Event) => {
       // CLEAR SELECTION so the PC doesn't get confused
       window.getSelection()?.removeAllRanges()
       return // EXIT IMMEDIATELY
+    } else if (target.tagName === 'A'
+      || target instanceof HTMLHeadingElement) {
+      const tags = ['A', 'H2', 'H3', 'H4', 'H5', 'H6']
+      let anchor, header
+      if (tags.includes(target.tagName)) {
+        anchor = '#' + target.id
+        header = target.children[0].innerText
+        console.log('Anchor or Header Element Dbl.clicked!')
+      }
+      console.log('Double tap - text:', header)
+      console.log('Double tap - anchor: ', anchor)
+
+      lastActionTime.value = Date.now()
+      const pos = (event instanceof TouchEvent) ? event.changedTouches[0] : (event as MouseEvent)
+      createHeaderBobble(pos, header)
+      window.getSelection()?.removeAllRanges()
+      return // EXIT IMMEDIATELY
     } else {
-      // console.log('Double tap detected, but text was found:', text)
+      console.log('Double tap detected, but text was found:', text)
       // It selected a word on dblclick? Ignore it as requested.
       selection?.removeAllRanges()
       return
@@ -184,8 +203,7 @@ const handleTextInteraction = (event: Event) => {
 
   // --- PATH C: HIGHLIGHTING ANCHOR / HEADER ---
   if (target.tagName === 'A') {
-    console.log('anchor element - get the text from the anchor element and save it as highligh')
-    alert('Kyrie! Get the text from the anchor element children and save it as highlighted text.')
+    // alert('Kyrie! Get the text from the anchor element children and save it as highlighted text.')
   }
 }
 
@@ -218,6 +236,33 @@ const createNoteOnDblClick = (rect) => {
     const note = allNotes.value.find(n => n.id === newNote.id)
     if (note) note.isOpen = true
   }, 10)
+  // console.log(`[Creation] New Note ID: ${newNote.id} at ${top}, ${left}`)
+}
+
+const createHeaderBobble = (rect, text) => {
+  if (!props.target) return
+
+  // LOCK OUT all background logic immediately
+  lastActionTime.value = Date.now()
+
+  const targetRect = props.target.getBoundingClientRect()
+  // Calculate position relative to the container, NOT the screen
+  const top = rect.clientY - targetRect.top
+  const left = rect.clientX - targetRect.left
+
+  // 3. We push to the GLOBAL list, but include the metadata (path and title)
+  const newNote = {
+    id: Date.now(),
+    path: route.path, // Crucial for the overview page
+    title: props.title, // pageTitle: document.title, // Useful for the select menu label
+    text: text,
+    top: top,
+    left: left,
+    isOpen: false, // 1. START CLOSED
+    isHighlight: false // This is a bubble, not a highlight
+  }
+
+  allNotes.value.push(newNote)
   // console.log(`[Creation] New Note ID: ${newNote.id} at ${top}, ${left}`)
 }
 
@@ -310,7 +355,6 @@ const startDragging = (ev: PointerEvent, note: any) => {
 defineExpose({
   handleTextInteraction
 })
-
 // Without defineExpose, the function stays "private" inside the child component, and the parent won't be able to "reach in" and trigger it.
 
 /*
@@ -438,6 +482,27 @@ const getNearestText = (note: any) => {
   return element?.textContent || null
 }
 */
+const toast = useToast()
+
+const copyToClipboard = () => {
+  const selection = window.getSelection()
+  const text = selection?.toString().trim() || ''
+  navigator.clipboard.writeText(text)
+  toast.add({ title: 'Copy Text!', description: 'Clipboard has captured the text!' })
+  // console.log('This text copied to clipboard: ', text)
+  // alert(`This text is copied to clipboard: ${text}`)
+  selection?.removeAllRanges()
+}
+
+const setCopyMenuPosition = (left) => {
+  let position
+  const middle = (window.innerWidth / 2) - 10
+  const right = window.innerWidth - left
+  if (left < middle) {
+    position = left
+  } else position = window.innerWidth - right - 140
+  return position
+}
 </script>
 
 <template>
@@ -451,28 +516,39 @@ const getNearestText = (note: any) => {
         class="fixed z-[3000] pointer-events-auto"
         :style="{
           top: (tempMobileRect.top - 35) + 'px',
-          left: (tempMobileRect.left + (tempMobileRect.width / 2) - 25) + 'px'
+          left: (setCopyMenuPosition(tempMobileRect.left)) + 'px'
         }"
       >
         <!--  left: (tempMobileRect.left + (tempMobileRect.width / 2) - 25) + 'px' -->
         <div
-          class="shadow-2xl border border-primary-500 rounded-lg bg-white"
+          class="rounded-lg"
         >
           <!--
           <UButtonGroup orientation="horizontal"
           -->
           <UButton
             icon="i-heroicons-check"
-            title="Confirm, cancel or extend the selected/ highlighted selection!"
-            label="Highlight This"
-            size="sm"
+            title="Highlight the selected text!"
+            label="Highlight"
+            size="xs"
             color="primary"
             @pointerdown.stop="confirmHighlight"
           />
+
+          <UButton
+            icon="i-lucide-clipboard-copy"
+            title="Copy the selected text!"
+            label="Copy"
+            size="xs"
+            color="primary"
+            @pointerdown.stop="copyToClipboard"
+          />
+
           <UButton
             icon="i-heroicons-x-mark"
+            title="Cancel the selected text!"
             color="neutral"
-            size="sm"
+            size="xs"
             @pointerdown.stop="cancelSelection"
           />
         </div>

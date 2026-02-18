@@ -50,29 +50,40 @@ const downloadNotes = () => {
 /* Above is only the gmail send code */
 
 // Set the 'type' to 'outer' to use window.outerHeight
-const { height } = useWindowSize({ type: 'outer' })
+// const { height } = useWindowSize({ type: 'outer' })
 
-const isMobile = ref(false)
+const isMobile = ref('ontouchstart' in window)
+
+const viewportWidth = useViewportWidth()
+const viewportHeight = useViewportHeight()
 
 const pos = computed(() => {
   // Desktop Default (Bottom Right)
   let x = window.innerWidth - 25 // 80px = button width + margin
-  let y = window.innerHeight - 35 // 80px = button height + margin
+  let y = window.innerHeight - 35 // 80px = button height + margin // I think the button will be in the bottom in both cases using innerHeight and outerHeight
 
-  if (isMobile.value) {
+  if ('ontouchstart' in window) {
     // On Mobile, use visualViewport if available for better accuracy
-
     const viewportWidth = window.visualViewport
       ? window.visualViewport.width
       : window.innerWidth
     // Align to bottom-right with a 20px padding
     // We use 50 as an estimate for the button size
 
+    const viewportHeight = window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight
+    // Align to bottom-right with a 20px padding
+    // We use 50 as an estimate for the button size
+
     x = viewportWidth - 25
-    y = height.value - 35 // only this on mobile
+    y = viewportHeight - 35 // only this on mobile
   }
   return { x, y }
 })
+
+viewportWidth.value = pos.value.x
+viewportHeight.value = pos.value.y
 
 const showBottomMenu = ref(false)
 
@@ -84,26 +95,40 @@ watch(isScrolling, (scrolling) => {
   // We only care when scrolling STOPS
   if (!scrolling) {
     // Perform mobile check only when needed (saves resources)
+    // Wait with detect navigator to we are sure it exist (on scroll)
     const isWindows = navigator.userAgent.includes('Windows')
     isMobile.value = (!isWindows && window.innerWidth < 540) // || 'ontouchstart' in window
 
+    // y.value = window.innerHeight
     // Show menu only if we are past 200px
     showBottomMenu.value = y.value > 200
-  } else if (notClosed.value !== true) {
+  } else if (cpOpen.value !== true) {
     // Hide menu immediately when scrolling starts
     showBottomMenu.value = false
     // Re-setting the state of all the menu buttons
     inActive.value = true
-    notClosed.value = false
+    cpOpen.value = false
   }
 })
 
-const notClosed = ref(false)
+const cpOpen = ref(false)
+
+const { height } = useWindowSize()
+
+watch(height, (/* oldVal, newVal */) => {
+  // console.log('Height is changed from ', oldVal, ' to ', newVal)
+  viewportWidth.value = window.visualViewport
+    ? window.visualViewport.width - 25
+    : window.innerWidth - 25
+  viewportHeight.value = window.visualViewport
+    ? window.visualViewport.height - 35
+    : window.innerHeight - 35
+})
 
 /* On click outside movable menu the button stays inActive = false */
-watch(notClosed, () => {
+watch(cpOpen, () => {
   // This code making the uSwitch button active when it's closing with click outside
-  if (notClosed.value !== true)
+  if (cpOpen.value !== true)
     inActive.value = true
 })
 
@@ -112,7 +137,7 @@ const inActive = ref(true)
 const toast = useToast()
 
 const scrollToTop = () => {
-  notClosed.value = !notClosed.value
+  cpOpen.value = !cpOpen.value
   inActive.value = true
   toast.add({ title: 'Scrolling to Top!', description: '- and closing bottom menu' })
   window.scrollTo({
@@ -122,7 +147,7 @@ const scrollToTop = () => {
 }
 
 defineShortcuts({
-  o: () => notClosed.value = !notClosed.value
+  o: () => cpOpen.value = !cpOpen.value
 })
 
 /* ------------- TOGGLE LANGUAGE BUTTON ------------- */
@@ -131,11 +156,11 @@ const {
   $updateThePageOnLanguageChange,
   $keyboardClickK,
   $keyboardClickM,
-  $created, // for notes
   $localeDate, // for notes
   $openNotesInNewTab,
   $openStyledNotes,
   $exportNotesAsFile
+  // $created
 } = useNuxtApp() as any
 
 const { locale } = useI18n()
@@ -165,7 +190,7 @@ const handlePressStart = (/* event: MouseEvent | TouchEvent */) => {
   // Start a timer for the hold action
   pressTimer = setTimeout(() => {
     isHold.value = true
-    if (notClosed.value === true) inActive.value = true
+    if (cpOpen.value === true) inActive.value = true
     else inActive.value = false
   }, holdTime)
 }
@@ -196,22 +221,17 @@ const searchTermRef = ref('')
 /* -- HANDLING THE BLUR ON INPUT ON STARTUP AND ON TYPING  -- */
 const handleInputRef = (el: any) => {
   if (!el) return
-
   // 1. Get the DOM node.
   // If it's a component, grab $el.
   let domNode = el.$el ?? el
-
   // 2. If it's a #text node (nodeType 3), look for the nearest element sibling
   if (domNode.nodeType === 3 && domNode.nextElementSibling) {
     domNode = domNode.nextElementSibling
   }
-
   // 3. Now ensure we have a real element to query
   if (domNode instanceof HTMLElement || domNode instanceof Element) {
     const input = domNode.children[0]!.children[0] as HTMLInputElement // domNode.querySelector('input')
-
     let timer
-
     function startTimer() {
       // 1. Capture the ID
       timer = setTimeout(() => {
@@ -221,10 +241,8 @@ const handleInputRef = (el: any) => {
 
     if (input) {
       // Your logic here (e.g., input.focus())
-
       // Option A: Blur it immediately
       const rawComp = toRaw(input)
-
       const inputValue = rawComp.value as any
       if (inputValue.trim().length === 0)
         input.blur() // not keyboard typing
@@ -266,14 +284,11 @@ const backupJson = () => {
 /* -- ADDING NEW COMMAND PALETTE GROUP FOR NOTES -- */
 
 // 1. Hook into the same global storage key you used in the slug page
-
 // const allNotes = useLocalStorage<any[]>('global-church-notes', [])
 const router = useRouter()
-
 const showDescriptions = ref(false)
 
 // 2. Format the notes for the Command Palette
-
 const noteGroups = computed(() => [
   // GROUP 1: Your Existing Notes
   {
@@ -282,7 +297,7 @@ const noteGroups = computed(() => [
     items: allNotes.value.map(note => ({
       id: note.id,
       // Show a snippet of the text + the page title
-      label: `${$created(note.id) + ' ..' + note.text + ' ' + note.title}` || 'No note here!', //  + note.text
+      label: `${note.text + ' ' + note.title}` || 'No note here!', //  + note.text
       description: note.path,
       suffix: note.path || note.title,
       title: `..${note.path} \n${note.title} \n${note.text} \n${$localeDate(note.id)}`,
@@ -375,6 +390,7 @@ const goToNote = (note) => {
   // Ensure the ID is attached so the destination page knows where to look
   const pathWithHash = `${note.path}#note-${note.id}`
   router.push(pathWithHash)
+  cpOpen.value = false
 }
 </script>
 
@@ -388,14 +404,14 @@ const goToNote = (note) => {
       <!-- This div move the draggable menu upwards -->
       <!-- <div class="fixed bottom-0 right-0 w-[90px] h-[200px] z-50 touch-none"> -->
       <WrapAndDragEl
-        :x-init="pos.x"
-        :y-init="pos.y"
+        :x-width="viewportWidth"
+        :y-height="viewportHeight"
         :mobile="isMobile"
         @touchstart.stop
         @touchmove.stop
       >
         <UPopover
-          v-model:open="notClosed"
+          v-model:open="cpOpen"
           arrow
           :content="{ side: 'top', align: 'start' }"
           class=""
@@ -561,7 +577,7 @@ const goToNote = (note) => {
                       variant="ghost"
                       label="Close"
                       size="xs"
-                      @click="notClosed = false"
+                      @click="cpOpen = false"
                     />
                   </div>
                 </template>

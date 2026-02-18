@@ -64,7 +64,6 @@ export default defineNuxtPlugin(() => {
     provide: {
       collapsibleToc: collapsibleToc,
       tocHashArr(lastHash) {
-        console.log('Checking if this is started')
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const hashArr = [] as any
         hashArr.push(lastHash)

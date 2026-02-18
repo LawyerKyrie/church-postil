@@ -330,12 +330,10 @@ const expanded = computed({
   get: () => _expanded.value,
   set: (newVal) => {
     const keys = Object.keys(newVal)
-
     // If user is trying to open a second row
     if (keys.length > 1) {
       // Find the key that exists in newVal but NOT in our current _expanded state
       const latestKey = keys.find(key => !_expanded.value[key as keyof typeof _expanded.value])
-
       // If we found a new key, make that the ONLY expanded row
       // Otherwise, if they clicked the same row to close it, latestKey will be undefined
       _expanded.value = latestKey ? { [latestKey]: true } : {}
@@ -346,20 +344,51 @@ const expanded = computed({
   }
 })
 
-// The magic "Select" function
-function onSelect(row: Row<RowItems>) {
+// The magic "Select" function - expanding the row
+const onSelect = async (row) => {
   // If the row is already open, close it. If not, open only this one.
   expanded.value = expanded.value[row.id] ? {} : { [row.id]: true }
+
+  // 1. Logic to expand row
+  await nextTick()
+
+  const element = expandRefs.value[row.id]
+
+  if (element) {
+    // Log the height at the moment of the scroll call
+    // console.log(`[Scroll Debug] Row ID: ${row.id}`)
+    // console.log(`Height at start: ${element.offsetHeight}px`)
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start' // 'nearest'
+    })
+    // Check again after a short delay (simulating API return/render)
+    setTimeout(() => {
+      // console.log(`Height after 500ms: ${element.offsetHeight}px`)
+    }, 500)
+  }
 }
+/*
 const scrollUpExpandRow = (el: any) => { // if it's to close to bottom
-  // setTimeout(() => {
-  const container = el
+  let distanceToBottom = 0
   if (container) {
     const rect = container.getBoundingClientRect()
-    const distanceToBottom = window.innerHeight - rect.bottom
+    const height = window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight
+    distanceToBottom = height - rect.bottom
+    console.log('testing this is inside scrollupExpandRow')
+    console.log('height is: ', height)
+    console.log('rect.bottom = ', rect.bottom)
+    console.log('rect = ', rect)
+
+    console.log('distance to bottom = ', distanceToBottom)
+    console.log('screen height = ', height)
+    console.log('el = ', el)
 
     // If the bottom of the content is off-screen or too close (less than 50px)
     if (distanceToBottom < 5) {
+      console.log('now it should scroll up')
       window.scrollBy({
         top: 240,
         behavior: 'smooth'
@@ -367,6 +396,33 @@ const scrollUpExpandRow = (el: any) => { // if it's to close to bottom
     }
   }
 }
+*/
+
+const expandRefs = ref({})
+
+// Callback to store the reference
+const scrollUpExpandRow = (el, id) => {
+  if (el) expandRefs.value[id] = el
+}
+
+/*
+// Your expansion trigger function
+const onSelect = async (row) => {
+  // 1. Logic to expand the row (e.g., updating 'expand' model)
+
+  // 2. Wait for Vue to render the new DOM elements
+  await nextTick()
+
+  // 3. Access the specific element and scroll
+  const element = expandRefs.value[row.id]
+  if (element) {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest'
+    })
+  }
+}
+*/
 
 // For the expanded rows
 function getTags(inputString, getRest = false) {
@@ -502,7 +558,7 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
         <!-- Removed :data="rowItems || []" :rows="rowItems || []" -->
         <template #expanded="{ row }">
           <div
-            :ref="scrollUpExpandRow"
+            :ref="el => scrollUpExpandRow(el, row.id)"
             class="expand-container -ml-4 -mr-4 pl-4 pt-2 pb-1 pr-2 bg-gray-50/50 dark:bg-white/5"
           >
             <div class="expand-content pl-4 border-l-4 border-primary-500 rounded-sm">
