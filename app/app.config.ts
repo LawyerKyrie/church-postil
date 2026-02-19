@@ -4,7 +4,14 @@ export default defineAppConfig({
       slots: {
         input: '[&>input]:[inputmode:none]'
         // input: '[&>input]:focus:ring-0 [&>input]:focus:outline-none h-12'
-      }
+      },
+      // wrapper should NOT have a fixed height here
+      // wrapper: 'flex flex-col min-h-0',
+      // viewport handles the "growing" until it hits the max-h of the parent
+      viewport: 'overflow-y-auto',
+      // footer stays at the end of the flex column
+      footer: 'sticky bottom-0 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900'
+      // https://gemini.google.com/share/664d10243a00
     },
     contentToc: {
       slots: {

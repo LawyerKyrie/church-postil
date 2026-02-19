@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-// source: https://gemini.google.com/share/51429bdc37e2
+// source: https://gemini.google.com/share/5719bd6e91d8
 const props = defineProps<{
   target: HTMLElement | null
   title: string
@@ -130,22 +130,46 @@ const handleTextInteraction = (event: Event) => {
 
   // --- PATH A: DOUBLE-CLICK / DOUBLE-TAP ---
   // We use our new "Solid" composable logic here
-  if (checkDoubleTap(event as UIEvent)) {
+  if (checkDoubleTap(event as UIEvent)) { /* ------ EMPTY SPACE BOBBLE ----- */
     if (text.length === 0
       && target.tagName !== 'A'
       && !(target instanceof HTMLHeadingElement)) {
-      handleLineClick(event)
       // LOCK THE DOOR IMMEDIATELY
       lastActionTime.value = Date.now()
-      // LOG IT so we can see if it still tries to run twice
-      // console.log('Creating bubble, locking action time at:', lastActionTime.value)
-      const pos = (event instanceof TouchEvent) ? event.changedTouches[0] : (event as MouseEvent)
-      createNoteOnDblClick(pos)
+
+      let nearbyText = ''
+
+      const pos = (event instanceof TouchEvent) ? event.changedTouches[0] : (event as MouseEvent) as any
+
+      if (target && target.tagName === 'P') {
+        const rect = target.getBoundingClientRect()
+        const clickY = pos.clientY
+        const centerY = rect.top + (rect.height / 2)
+
+        // Split text into sentences (assuming they end with a dot)
+        // We filter(Boolean) to remove empty strings from the array
+        const sentences = target.innerText.split('.').map(s => s.trim()).filter(Boolean)
+
+        if (sentences.length > 0) {
+          if (clickY < centerY) {
+            // 1. Clicked in the TOP HALF: Grab the FIRST sentence
+            nearbyText = sentences[0]
+          } else {
+            // 2. Clicked in the BOTTOM HALF: Grab the LAST sentence
+            nearbyText = sentences[sentences.length - 1]
+          }
+        }
+      }
+
+      // Format with your « » strategy
+      const preFilledText = nearbyText ? `Ref: «${nearbyText}.» \n` : ''
+
+      createNoteOnDblClick(pos, preFilledText)
 
       // CLEAR SELECTION so the PC doesn't get confused
       window.getSelection()?.removeAllRanges()
       return // EXIT IMMEDIATELY
-    } else if (target.tagName === 'A' /* INSERT TEXT FROM HEADER INTO BOBBLE */
+    } else if (target.tagName === 'A' /* ----- HEADER TEXT BOBBLE ------ */
       || target instanceof HTMLHeadingElement) {
       const tags = ['A', 'H2', 'H3', 'H4', 'H5', 'H6']
       // let anchor
@@ -217,7 +241,7 @@ const handleTextInteraction = (event: Event) => {
   }
 }
 
-const createNoteOnDblClick = (rect) => {
+const createNoteOnDblClick = (rect, text) => {
   if (!props.target) return
 
   // LOCK OUT all background logic immediately
@@ -233,7 +257,7 @@ const createNoteOnDblClick = (rect) => {
     id: Date.now(),
     path: route.path, // Crucial for the overview page
     title: props.title, // pageTitle: document.title, // Useful for the select menu label
-    text: '',
+    text: text,
     top: top,
     left: left,
     isOpen: false, // 1. START CLOSED
@@ -426,37 +450,18 @@ const cancelSelection = (event?: Event) => {
 
 // https://gemini.google.com/share/d98cb44c52da
 const shareNote = (note) => {
-  let quote = false
   let textToShare = note.text
 
-  // const extractApostrophes = (text) => {
-  // Check if the text contains guillemets apostrophes
-  /*
-  if (textToShare.includes('"')) {
-    const parts = textToShare.split('"')
-    // If there are at least two apostrophes, parts[1] will be the text between them
-    if (parts.length >= 3) {
-      textToShare = parts[1]
-    }
-  }
-  */
   const match = textToShare.match(/«(.*?)»/)
   if (match) {
-    quote = true
     textToShare = match[1]
-  } else quote = false
-  // }
-
-  console.log('textToShare: ', textToShare)
-
-  if (quote === false) getNearestText(note)
-
+  }
   // 1. Try to get text between apostrophes
   // 2. Fallback to the full note.text
   // 3. Last resort: try to "hit test" the coordinates
   // textToShare = textToShare || note.text || getNearestText(note)
 
-  // 1. Get the base URL (e.g., https://example.com/page)
+  // 1. Get the base URL (e.g., https://church-postil.vercel.app/en/advent#note-1234567)
   // We use window.location.origin + note.path to ensure it's absolute
   const baseUrl = window.location.origin + note.path
   // 2. Encode the text for the Scroll-to-Text fragment
@@ -479,25 +484,6 @@ const shareNote = (note) => {
   }
 }
 
-const getNearestText = (note) => {
-  // Use client-relative coordinates
-  const x = note.left
-  const y = note.top - window.scrollY
-
-  // 1. Official Standard (Firefox & modern spec)
-  if ('caretPositionFromPoint' in document) {
-    const pos = (document as any).caretPositionFromPoint(x, y)
-    if (pos && pos.offsetNode) {
-      return pos.offsetNode.textContent
-    }
-  }
-  // 2. The most compatible "Modern" fallback
-  // This gets the actual element at those coordinates
-  const element = document.elementFromPoint(x, y)
-  console.log('element?.textContent = ', element?.textContent)
-  return element?.textContent || null
-}
-
 const toast = useToast()
 
 const copyToClipboard = () => {
@@ -518,49 +504,6 @@ const setCopyMenuPosition = (left) => {
     position = left
   } else position = window.innerWidth - right - 140
   return position
-}
-
-const handleLineClick = (event) => {
-  let range
-  let node, offset
-  const target = event.target
-
-  // 1. Get the position using the modern standard (or fallback for older browsers)
-  if (target.caretPositionFromPoint) {
-    // Standard Modern Approach (Chrome 128+, Firefox)
-    const pos = target.caretPositionFromPoint(event.clientX, event.clientY) as any
-    node = pos.offsetNode
-    offset = pos.offset
-  } else if (target.caretRangeFromPoint) {
-    // Legacy WebKit fallback
-    range = target.caretRangeFromPoint(event.clientX, event.clientY)
-    node = range.startContainer
-    offset = range.startOffset
-  }
-
-  if (node && node.nodeType === Node.TEXT_NODE) {
-    const selection = window.getSelection() as any
-    range = target.createRange()
-    range.setStart(node, offset)
-    range.setEnd(node, offset)
-
-    selection.removeAllRanges()
-    selection.addRange(range)
-
-    // 2. Expand to the visual "Line Boundary"
-    // This uses a non-standard but widely supported method to
-    // find exactly what the user sees on one horizontal line.
-    selection.modify('move', 'backward', 'lineboundary')
-    selection.modify('extend', 'forward', 'lineboundary')
-
-    const textOnLine = selection.toString()
-
-    // Clean up selection so user doesn't see a highlight
-    selection.removeAllRanges()
-
-    console.log('Text on this line:', textOnLine.trim())
-    return textOnLine.trim()
-  }
 }
 </script>
 
@@ -656,7 +599,7 @@ const handleLineClick = (event) => {
                 variant="ghost"
                 size="xs"
                 color="neutral"
-                class="pencil-btn absolute top-0 right-0 translate-x-[100%] translate-y-[-50%]"
+                class="pencil-btn absolute -top-1 right-3 translate-x-[100%] translate-y-[-50%]"
                 @click.stop="note.isOpen = !note.isOpen"
               />
             </template>

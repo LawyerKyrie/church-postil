@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useWindowScroll, useWindowSize } from '@vueuse/core'
+import type { DropdownMenuItem } from '@nuxt/ui'
 
 /*
 const allNotes = useLocalStorage<any[]>('global-church-notes', [])
@@ -328,62 +329,6 @@ const noteGroups = computed(() => [
               label: showDescriptions.value ? 'Hide Path to Note' : 'Show Path to Note',
               icon: 'i-heroicons-eye',
               onSelect: () => { showDescriptions.value = !showDescriptions.value }
-            },
-            {
-              label: 'Copy/Past/Print/Download Notes',
-              title: 'Copy to Clipboard and paste it to Gmail etc.',
-              icon: 'i-lucide-share',
-              children: [
-                {
-                  id: 'into-clipboard',
-                  label: 'Copy to Clipboard',
-                  title: 'Copy Notes to Clipboard and manually past them anywhere',
-                  icon: 'i-lucide-copy',
-                  onSelect: () => handleCopyAndGmail(false)
-                },
-                {
-                  id: 'into-clipboard',
-                  label: 'Copy/Paste to Gmail',
-                  title: 'Copy Notes to Clipboard and open Gmail - Past it manually into Gmail',
-                  icon: 'i-lucide-clipboard-copy',
-                  onSelect: () => handleCopyAndGmail(true)
-                },
-                {
-                  id: 'gmail-notes',
-                  label: 'Export to Gmail (PC)',
-                  title: 'Export Notes automatically to Gmail - ONLY ON PC!',
-                  icon: 'i-simple-icons-gmail',
-                  onSelect: () => handleCopyToGmaiAsDraft()
-                },
-                {
-                  id: 'md-notes',
-                  label: 'Open Md Notes',
-                  title: 'Open notes in md format!',
-                  icon: 'i-lucide-notepad-text',
-                  onSelect: () => mdNotes()
-                },
-                {
-                  id: 'styled-notes',
-                  label: 'Print Notes',
-                  title: 'Print Styled notes!',
-                  icon: 'i-heroicons-printer',
-                  onSelect: () => styledNotes()
-                },
-                {
-                  id: 'download-notes',
-                  label: 'Download Notes',
-                  title: 'Download Md notes!',
-                  icon: 'i-lucide-hard-drive-download',
-                  onSelect: () => downloadNotes()
-                },
-                {
-                  id: 'backup-notes',
-                  label: 'Backup JSON',
-                  title: 'Backup JSON data!',
-                  icon: 'i-mdi-code-json',
-                  onSelect: () => backupJson()
-                }
-              ]
             }
           ]
         }
@@ -399,6 +344,72 @@ const goToNote = (note) => {
   router.push(pathWithHash)
   cpOpen.value = false
 }
+
+/* ------------------- NOTE ACTIONS MENU ---------------------- */
+const noteActions = ref<DropdownMenuItem[][]>([
+  [
+    {
+      id: 'into-clipboard',
+      label: 'Copy to Clipboard',
+      title: 'Copy Notes to Clipboard and manually past them anywhere',
+      icon: 'i-lucide-copy',
+      onSelect: () => handleCopyAndGmail(false)
+    },
+    {
+      id: 'into-clipboard',
+      label: 'Copy/Paste to Gmail',
+      title: 'Copy Notes to Clipboard and open Gmail - Past it manually into Gmail',
+      icon: 'i-lucide-clipboard-copy',
+      onSelect: () => handleCopyAndGmail(true)
+    },
+    {
+      id: 'gmail-notes',
+      label: 'Export to Gmail (PC)',
+      title: 'Export Notes automatically to Gmail - ONLY ON PC!',
+      icon: 'i-simple-icons-gmail',
+      onSelect: () => handleCopyToGmaiAsDraft()
+    },
+    {
+      id: 'md-notes',
+      label: 'Open Md Notes',
+      title: 'Open notes in md format!',
+      icon: 'i-lucide-notepad-text',
+      onSelect: () => mdNotes()
+    },
+    {
+      id: 'styled-notes',
+      label: 'Print Notes',
+      title: 'Print Styled notes!',
+      icon: 'i-heroicons-printer',
+      onSelect: () => styledNotes()
+    }
+  ],
+
+  [
+    {
+      id: 'download-notes',
+      label: 'Download Notes',
+      title: 'Download Md notes!',
+      icon: 'i-lucide-hard-drive-download',
+      onSelect: () => downloadNotes()
+    },
+    {
+      id: 'backup-notes',
+      label: 'Backup JSON',
+      title: 'Backup JSON data!',
+      icon: 'i-mdi-code-json',
+      onSelect: () => backupJson()
+    }
+  ],
+  [
+    {
+      id: 'toggle-desc',
+      label: showDescriptions.value ? 'Hide Path to Note' : 'Show Path to Note',
+      icon: 'i-heroicons-eye',
+      onSelect: () => { showDescriptions.value = !showDescriptions.value }
+    }
+  ]
+])
 </script>
 
 <template>
@@ -463,6 +474,10 @@ const goToNote = (note) => {
               </div>
               <UDrawer
                 handle-only
+                :ui="{
+                  container: 'p-0',
+                  body: 'p-0'
+                }"
               >
                 <UButton
                   color="secondary"
@@ -472,12 +487,13 @@ const goToNote = (note) => {
                 />
                 <template #body>
                   <div
-                    class="overflow-x-auto overflow-y-auto u-command-palette-parent"
+                    class="max-h-[80vh] flex flex-col u-command-palette-parent overflow-hidden"
                     :class="{ 'hide-note-details': !showDescriptions }"
                   >
                     <!--
                       Source code:
                       https://ui.nuxt.com/docs/components/command-palette#with-children-in-items
+                      class="groups text-muted"   min-h-0 flex flex-col
                     -->
                     <UCommandPalette
                       :ref="handleInputRef"
@@ -541,51 +557,70 @@ const goToNote = (note) => {
                           </div>
                         </div>
                       </template>
+                      <template #footer>
+                        <!--
+                        https://gemini.google.com/share/5719bd6e91d8
+                        https://gemini.google.com/share/5df860e7dd9a
+                        -->
+                        <div class="sticky bottom-0 flex items-center justify-between gap-2 w-full">
+                          <UDropdownMenu :items="noteActions">
+                            <UButton
+                              icon="heroicons-pencil-square"
+                              label="Note Actions"
+                              size="xs"
+                              variant="ghost"
+                              color="primary"
+                            />
+                          </UDropdownMenu>
+
+                          <USeparator
+                            orientation="vertical"
+                            class="h-4"
+                          />
+
+                          <UButton
+                            color="warning"
+                            icon="i-lucide-square-menu"
+                            variant="ghost"
+                            label="Search"
+                            size="xs"
+                            trailing-icon="i-lucide-arrow-up"
+                            @click="$keyboardClickK"
+                          />
+
+                          <USeparator
+                            orientation="vertical"
+                            class="h-4"
+                          />
+
+                          <UButton
+                            color="secondary"
+                            icon="i-lucide-menu"
+                            variant="ghost"
+                            label="Menu"
+                            size="xs"
+                            trailing-icon="i-lucide-arrow-up"
+                            @click="$keyboardClickM"
+                          />
+
+                          <USeparator
+                            orientation="vertical"
+                            class="h-4"
+                          />
+
+                          <UButton
+                            color="neutral"
+                            icon="i-heroicons-x-mark"
+                            variant="ghost"
+                            label=""
+                            size="xs"
+                            class="text-dimmed"
+                            trailing-icon="i-lucide-arrow-down"
+                            @click="cpOpen = false"
+                          />
+                        </div>
+                      </template>
                     </UCommandPalette>
-                  </div>
-                </template>
-                <template #footer>
-                  <div class="flex items-center justify-between gap-2 w-full">
-                    <UButton
-                      color="neutral"
-                      icon="i-lucide-square-menu"
-                      variant="ghost"
-                      label="Search"
-                      size="xs"
-                      class="text-dimmed"
-                      trailing-icon="i-lucide-arrow-up"
-                      @click="$keyboardClickK"
-                    />
-
-                    <USeparator
-                      orientation="vertical"
-                      class="h-4"
-                    />
-
-                    <UButton
-                      color="neutral"
-                      icon="i-lucide-menu"
-                      variant="ghost"
-                      label="Menu"
-                      size="xs"
-                      class="text-dimmed"
-                      trailing-icon="i-lucide-arrow-up"
-                      @click="$keyboardClickM"
-                    />
-
-                    <USeparator
-                      orientation="vertical"
-                      class="h-4"
-                    />
-
-                    <UButton
-                      color="warning"
-                      icon="i-heroicons-x-mark"
-                      variant="ghost"
-                      label="Close"
-                      size="xs"
-                      @click="cpOpen = false"
-                    />
                   </div>
                 </template>
               </UDrawer>
