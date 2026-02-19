@@ -250,7 +250,6 @@ const handleInputRef = (el: any) => {
         searchTermRef.value = inputValue
         startTimer()
       }
-
       watch(inputValue, () => {
         function resetTimer() {
           // 2. Clear the existing timer
@@ -281,6 +280,14 @@ const backupJson = () => {
   link.click()
 }
 
+const quotesApostrophes = (text) => {
+  const match = text.match(/«(.*?)»/)
+  if (match) {
+    return text = match[1]
+  } else return text
+}
+// quotes apostrophes
+
 /* -- ADDING NEW COMMAND PALETTE GROUP FOR NOTES -- */
 
 // 1. Hook into the same global storage key you used in the slug page
@@ -297,8 +304,8 @@ const noteGroups = computed(() => [
     items: allNotes.value.map(note => ({
       id: note.id,
       // Show a snippet of the text + the page title
-      label: `${note.text + ' ' + note.title}` || 'No note here!', //  + note.text
-      description: note.path,
+      label: `${quotesApostrophes(note.text) + ' | ' + note.title}` || 'No note here!', //  + note.text
+      description: note.path || '',
       suffix: note.path || note.title,
       title: `..${note.path} \n${note.title} \n${note.text} \n${$localeDate(note.id)}`,
       icon: 'i-heroicons-pencil-square',

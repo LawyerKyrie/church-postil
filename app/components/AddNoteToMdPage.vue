@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-// source: https://gemini.google.com/share/16153a33b6fe
+// source: https://gemini.google.com/share/51429bdc37e2
 const props = defineProps<{
   target: HTMLElement | null
   title: string
@@ -46,6 +46,10 @@ onMounted(() => {
   // Optional: Update button position as user drags handles
   if ('ontouchstart' in window) {
     document.addEventListener('selectionchange', () => {
+      console.log('lastActionTime.value = ', lastActionTime.value)
+      if (Date.now() - lastActionTime.value < 300) {
+        return
+      }
       if (isSelecting.value) {
         const sel = window.getSelection()
         if (sel && sel.rangeCount > 0) {
@@ -88,8 +92,6 @@ const handleTextInteraction = (event: Event) => {
   // console.log(`[Interaction] Type: ${event.type}, Target:`, event.target)
   /* -- GUARDING RULES -- */
   const target = event.target as any
-  console.log('target = ', target)
-  console.log('instance of header el.? ', target instanceof HTMLHeadingElement)
   // If we are touching the bubble or the popover content...
   // Update this to match your harmonized template
   if (target.closest('.note-item') || target.closest('.p-4')) {
@@ -97,6 +99,7 @@ const handleTextInteraction = (event: Event) => {
     event.stopPropagation()
     return
   }
+  // console.log('target = ', target)
 
   // 2. GHOST TYPE SHIELD (Mouse following Touch)
   if (event.type === 'mouseup' && lastInteractionType === 'touchend') {
@@ -131,6 +134,7 @@ const handleTextInteraction = (event: Event) => {
     if (text.length === 0
       && target.tagName !== 'A'
       && !(target instanceof HTMLHeadingElement)) {
+      handleLineClick(event)
       // LOCK THE DOOR IMMEDIATELY
       lastActionTime.value = Date.now()
       // LOG IT so we can see if it still tries to run twice
@@ -141,22 +145,28 @@ const handleTextInteraction = (event: Event) => {
       // CLEAR SELECTION so the PC doesn't get confused
       window.getSelection()?.removeAllRanges()
       return // EXIT IMMEDIATELY
-    } else if (target.tagName === 'A'
+    } else if (target.tagName === 'A' /* INSERT TEXT FROM HEADER INTO BOBBLE */
       || target instanceof HTMLHeadingElement) {
       const tags = ['A', 'H2', 'H3', 'H4', 'H5', 'H6']
-      let anchor, header
+      // let anchor
+      let header
       if (tags.includes(target.tagName)) {
-        anchor = '#' + target.id
+        // anchor = '#' + target.id
         header = target.children[0].innerText
-        console.log('Anchor or Header Element Dbl.clicked!')
       }
-      console.log('Double tap - text:', header)
-      console.log('Double tap - anchor: ', anchor)
-
       lastActionTime.value = Date.now()
       const pos = (event instanceof TouchEvent) ? event.changedTouches[0] : (event as MouseEvent)
+      // https://gemini.google.com/share/51429bdc37e2
+      // 1. Create the note
       createHeaderBobble(pos, header)
+      // 2. Kill the selection immediately
       window.getSelection()?.removeAllRanges()
+      // 3. FORCE the UI to stay closed
+      isSelecting.value = false
+      tempMobileRect.value = null
+      // 4. Stop the event from "bubbling" up to the selection observer
+      if (event.cancelable) event.preventDefault()
+      event.stopPropagation()
       return // EXIT IMMEDIATELY
     } else {
       console.log('Double tap detected, but text was found:', text)
@@ -255,7 +265,7 @@ const createHeaderBobble = (rect, text) => {
     id: Date.now(),
     path: route.path, // Crucial for the overview page
     title: props.title, // pageTitle: document.title, // Useful for the select menu label
-    text: text,
+    text: `«${text}»`,
     top: top,
     left: left,
     isOpen: false, // 1. START CLOSED
@@ -274,8 +284,6 @@ const deleteNote = (id: number) => {
 const saveHighlightedText = (rect, text) => {
   // LOCK OUT all background logic immediately
   lastActionTime.value = Date.now()
-
-  console.log('text = ', text)
 
   const targetRect = props?.target?.getBoundingClientRect() as any
   const newNote = {
@@ -418,6 +426,7 @@ const cancelSelection = (event?: Event) => {
 
 // https://gemini.google.com/share/d98cb44c52da
 const shareNote = (note) => {
+  let quote = false
   let textToShare = note.text
 
   // const extractApostrophes = (text) => {
@@ -433,9 +442,14 @@ const shareNote = (note) => {
   */
   const match = textToShare.match(/«(.*?)»/)
   if (match) {
+    quote = true
     textToShare = match[1]
-  }
+  } else quote = false
   // }
+
+  console.log('textToShare: ', textToShare)
+
+  if (quote === false) getNearestText(note)
 
   // 1. Try to get text between apostrophes
   // 2. Fallback to the full note.text
@@ -447,6 +461,8 @@ const shareNote = (note) => {
   const baseUrl = window.location.origin + note.path
   // 2. Encode the text for the Scroll-to-Text fragment
   const encodedText = encodeURIComponent(textToShare.trim())
+
+  console.log('encodeText = ', encodedText)
   // 3. Construct the final "Magic Link"
   const shareUrl = `${baseUrl}#:~:text=${encodedText}`
   // Share logic...
@@ -463,8 +479,7 @@ const shareNote = (note) => {
   }
 }
 
-/*
-const getNearestText = (note: any) => {
+const getNearestText = (note) => {
   // Use client-relative coordinates
   const x = note.left
   const y = note.top - window.scrollY
@@ -479,9 +494,10 @@ const getNearestText = (note: any) => {
   // 2. The most compatible "Modern" fallback
   // This gets the actual element at those coordinates
   const element = document.elementFromPoint(x, y)
+  console.log('element?.textContent = ', element?.textContent)
   return element?.textContent || null
 }
-*/
+
 const toast = useToast()
 
 const copyToClipboard = () => {
@@ -502,6 +518,49 @@ const setCopyMenuPosition = (left) => {
     position = left
   } else position = window.innerWidth - right - 140
   return position
+}
+
+const handleLineClick = (event) => {
+  let range
+  let node, offset
+  const target = event.target
+
+  // 1. Get the position using the modern standard (or fallback for older browsers)
+  if (target.caretPositionFromPoint) {
+    // Standard Modern Approach (Chrome 128+, Firefox)
+    const pos = target.caretPositionFromPoint(event.clientX, event.clientY) as any
+    node = pos.offsetNode
+    offset = pos.offset
+  } else if (target.caretRangeFromPoint) {
+    // Legacy WebKit fallback
+    range = target.caretRangeFromPoint(event.clientX, event.clientY)
+    node = range.startContainer
+    offset = range.startOffset
+  }
+
+  if (node && node.nodeType === Node.TEXT_NODE) {
+    const selection = window.getSelection() as any
+    range = target.createRange()
+    range.setStart(node, offset)
+    range.setEnd(node, offset)
+
+    selection.removeAllRanges()
+    selection.addRange(range)
+
+    // 2. Expand to the visual "Line Boundary"
+    // This uses a non-standard but widely supported method to
+    // find exactly what the user sees on one horizontal line.
+    selection.modify('move', 'backward', 'lineboundary')
+    selection.modify('extend', 'forward', 'lineboundary')
+
+    const textOnLine = selection.toString()
+
+    // Clean up selection so user doesn't see a highlight
+    selection.removeAllRanges()
+
+    console.log('Text on this line:', textOnLine.trim())
+    return textOnLine.trim()
+  }
 }
 </script>
 
@@ -641,6 +700,7 @@ const setCopyMenuPosition = (left) => {
                 label="Share"
                 @click="shareNote(note)"
               />
+              <!-- @click="shareNote(note)"  -->
 
               <UButton
                 icon="i-heroicons-check"
