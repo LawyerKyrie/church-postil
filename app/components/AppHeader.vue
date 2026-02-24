@@ -13,7 +13,7 @@ const handleClose = (isOpen: boolean) => {
 }
 
 defineShortcuts({
-  m: () => isDrawerOpen.value = !isDrawerOpen.value
+  meta_m: () => isDrawerOpen.value = !isDrawerOpen.value
 })
 
 const handleGlobalCommandPaletteFocus = (event: FocusEvent) => {

@@ -23,9 +23,9 @@ const syncAndClamp = () => {
   const element = el.value
   if (!element) return
 
-  const btnWidth = element.clientWidth || 25
-  const btnHeight = element.clientHeight || 35
-  const margin = 16
+  const btnWidth = element.clientWidth || 36
+  const btnHeight = element.clientHeight || 36
+  const margin = 6
 
   const safeBottom = typeof window !== 'undefined'
     ? parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom') || '0')

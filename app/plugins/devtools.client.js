@@ -26,6 +26,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         const down = new KeyboardEvent('keydown', {
           key: 'm',
           code: 'KeyM',
+          ctrlKey: true,
           bubbles: true,
           cancelable: true
         })

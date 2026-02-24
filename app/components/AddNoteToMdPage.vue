@@ -46,7 +46,6 @@ onMounted(() => {
   // Optional: Update button position as user drags handles
   if ('ontouchstart' in window) {
     document.addEventListener('selectionchange', () => {
-      console.log('lastActionTime.value = ', lastActionTime.value)
       if (Date.now() - lastActionTime.value < 300) {
         return
       }
@@ -91,7 +90,7 @@ const tempMobileText = ref<any>(null)
 const handleTextInteraction = (event: Event) => {
   // console.log(`[Interaction] Type: ${event.type}, Target:`, event.target)
   /* -- GUARDING RULES -- */
-  const target = event.target as any
+  let target = event.target as any
   // If we are touching the bubble or the popover content...
   // Update this to match your harmonized template
   if (target.closest('.note-item') || target.closest('.p-4')) {
@@ -130,7 +129,24 @@ const handleTextInteraction = (event: Event) => {
 
   // --- PATH A: DOUBLE-CLICK / DOUBLE-TAP ---
   // We use our new "Solid" composable logic here
-  if (checkDoubleTap(event as UIEvent)) { /* ------ EMPTY SPACE BOBBLE ----- */
+  if (checkDoubleTap(event as any /* UIEvent */)) { /* ------ EMPTY SPACE BOBBLE ----- */
+    // 1. If we missed the <P>, try to find one nearby (5px above or below)
+    if (target && target.tagName !== 'P') {
+      const touch = (event as TouchEvent).changedTouches[0] as any
+      const pointsToTry = [
+        { x: touch.clientX, y: touch.clientY - 5 }, // Check slightly above
+        { x: touch.clientX, y: touch.clientY + 5 } // Check slightly below
+      ]
+
+      for (const point of pointsToTry) {
+        const elementAtPoint = document.elementFromPoint(point.x, point.y)
+        if (elementAtPoint && elementAtPoint.tagName === 'P') {
+          target = elementAtPoint as HTMLElement
+          break
+        }
+      }
+    }
+
     if (text.length === 0
       && target.tagName !== 'A'
       && !(target instanceof HTMLHeadingElement)) {
@@ -148,15 +164,18 @@ const handleTextInteraction = (event: Event) => {
 
         // Split text into sentences (assuming they end with a dot)
         // We filter(Boolean) to remove empty strings from the array
-        const sentences = target.innerText.split('.').map(s => s.trim()).filter(Boolean)
+        const rawSentences = target.innerText
+          .split(/(?<=[.!?|:|;])\s+/) // Splits AFTER the punctuation if followed by a space
+          .map(s => s.trim())
+          .filter(s => s.length > 1) // Ignore single characters like quotes or dots
 
-        if (sentences.length > 0) {
+        if (rawSentences.length > 0) {
           if (clickY < centerY) {
-            // 1. Clicked in the TOP HALF: Grab the FIRST sentence
-            nearbyText = sentences[0]
+            // Clicked TOP: Grab first sentence
+            nearbyText = rawSentences[0]
           } else {
-            // 2. Clicked in the BOTTOM HALF: Grab the LAST sentence
-            nearbyText = sentences[sentences.length - 1]
+            // Clicked BOTTOM: Grab last sentence
+            nearbyText = rawSentences[rawSentences.length - 1]
           }
         }
       }
@@ -171,13 +190,13 @@ const handleTextInteraction = (event: Event) => {
       return // EXIT IMMEDIATELY
     } else if (target.tagName === 'A' /* ----- HEADER TEXT BOBBLE ------ */
       || target instanceof HTMLHeadingElement) {
-      const tags = ['A', 'H2', 'H3', 'H4', 'H5', 'H6']
+      // const tags = ['A', 'H2', 'H3', 'H4', 'H5', 'H6']
       // let anchor
-      let header
-      if (tags.includes(target.tagName)) {
-        // anchor = '#' + target.id
-        header = target.children[0].innerText
-      }
+      // let header
+      // if (tags.includes(target.tagName)) {
+      // anchor = '#' + target.id
+      const header = target.children[0].innerText
+      // }
       lastActionTime.value = Date.now()
       const pos = (event instanceof TouchEvent) ? event.changedTouches[0] : (event as MouseEvent)
       // https://gemini.google.com/share/51429bdc37e2
@@ -193,7 +212,8 @@ const handleTextInteraction = (event: Event) => {
       event.stopPropagation()
       return // EXIT IMMEDIATELY
     } else {
-      console.log('Double tap detected, but text was found:', text)
+      console.log('Double tap detected, text not = 0 but: ', text)
+      console.log('target= ', target)
       // It selected a word on dblclick? Ignore it as requested.
       selection?.removeAllRanges()
       return
@@ -226,7 +246,6 @@ const handleTextInteraction = (event: Event) => {
         return
       } else {
         // PC: Standard Drag-and-Release highlighting
-        console.log('Log from creating highlight on pc')
         saveHighlightedText(rect, text)
         selection?.removeAllRanges()
         lastActionTime.value = now // <--- THIS LOCKS THE BUBBLE PATH
@@ -256,6 +275,7 @@ const createNoteOnDblClick = (rect, text) => {
   const newNote = {
     id: Date.now(),
     path: route.path, // Crucial for the overview page
+    // share: shareUrl(route.path, text),
     title: props.title, // pageTitle: document.title, // Useful for the select menu label
     text: text,
     top: top,
@@ -288,6 +308,7 @@ const createHeaderBobble = (rect, text) => {
   const newNote = {
     id: Date.now(),
     path: route.path, // Crucial for the overview page
+    // share: shareUrl(route.path, text),
     title: props.title, // pageTitle: document.title, // Useful for the select menu label
     text: `«${text}»`,
     top: top,
@@ -313,6 +334,7 @@ const saveHighlightedText = (rect, text) => {
   const newNote = {
     id: Date.now(),
     path: route.path,
+    // share: shareUrl(route.path, text),
     title: props.title,
     text: `«${text}»`,
     top: (rect.top - targetRect.top), // Align to top of text
@@ -448,9 +470,8 @@ const cancelSelection = (event?: Event) => {
   reset()
 }
 
-// https://gemini.google.com/share/d98cb44c52da
-const shareNote = (note) => {
-  let textToShare = note.text
+const shareUrl = (path, text) => {
+  let textToShare = text
 
   const match = textToShare.match(/«(.*?)»/)
   if (match) {
@@ -463,23 +484,28 @@ const shareNote = (note) => {
 
   // 1. Get the base URL (e.g., https://church-postil.vercel.app/en/advent#note-1234567)
   // We use window.location.origin + note.path to ensure it's absolute
-  const baseUrl = window.location.origin + note.path
+
+  const baseUrl = window.location.origin + path
   // 2. Encode the text for the Scroll-to-Text fragment
   const encodedText = encodeURIComponent(textToShare.trim())
-
-  console.log('encodeText = ', encodedText)
   // 3. Construct the final "Magic Link"
   const shareUrl = `${baseUrl}#:~:text=${encodedText}`
+  return shareUrl
+}
+
+// https://gemini.google.com/share/d98cb44c52da
+const shareNote = (note) => {
+  const url = shareUrl(note.path, note.text)
   // Share logic...
   // 4. Use the Web Share API (Mobile friendly) or Copy to Clipboard
   if (navigator.share) {
     navigator.share({
       title: 'Check out this highlight',
-      url: shareUrl
+      url: url // shareUrl
     }).catch(console.error)
   } else {
     // Fallback for PC: Copy to clipboard
-    navigator.clipboard.writeText(shareUrl)
+    navigator.clipboard.writeText(url)
     alert('Link copied to clipboard!')
   }
 }

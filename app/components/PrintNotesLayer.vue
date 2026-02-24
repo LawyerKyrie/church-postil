@@ -3,6 +3,7 @@
 <script setup lang="ts">
 // Use your shared composable
 const { allNotes } = useNotes()
+const toast = useToast()
 // const { $created, $localeDate } = useNuxtApp() as any
 
 // Group notes by Path + Title
@@ -35,6 +36,9 @@ const formatTimestamp = (id: number | string) => {
     minute: '2-digit'
   })
 }
+toast.add({ title: 'Print Notes!', description: 'Click the Print button to print notes!' })
+alert('Click on the Print Button to Print the page!')
+console.log('Print this page!')
 </script>
 
 <template>

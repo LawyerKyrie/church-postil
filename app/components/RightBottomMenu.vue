@@ -50,35 +50,31 @@ const downloadNotes = () => {
 
 /* Above is only the gmail send code */
 
-// Set the 'type' to 'outer' to use window.outerHeight
-// const { height } = useWindowSize({ type: 'outer' })
-
-const isMobile = ref('ontouchstart' in window)
+const isMobile = ref(navigator.maxTouchPoints === 1)
 
 const viewportWidth = useViewportWidth()
 const viewportHeight = useViewportHeight()
 
 const pos = computed(() => {
   // Desktop Default (Bottom Right)
-  let x = window.innerWidth - 25 // 80px = button width + margin
-  let y = window.innerHeight - 35 // 80px = button height + margin // I think the button will be in the bottom in both cases using innerHeight and outerHeight
+  const btnSize = 36 // We use 36 as an estimate for the button size
+  const margin = 0 // Align to bottom-right with a 6px padding
+  const btnSum = btnSize + margin
+  let x = window.innerWidth - btnSum
+  let y = window.innerHeight - btnSum
 
-  if ('ontouchstart' in window) {
+  if (isMobile.value) { // 'ontouchstart' in window
     // On Mobile, use visualViewport if available for better accuracy
     const viewportWidth = window.visualViewport
       ? window.visualViewport.width
       : window.innerWidth
-    // Align to bottom-right with a 20px padding
-    // We use 50 as an estimate for the button size
 
     const viewportHeight = window.visualViewport
       ? window.visualViewport.height
       : window.innerHeight
-    // Align to bottom-right with a 20px padding
-    // We use 50 as an estimate for the button size
 
-    x = viewportWidth - 25
-    y = viewportHeight - 35 // only this on mobile
+    x = viewportWidth - btnSum
+    y = viewportHeight - btnSum
   }
   return { x, y }
 })
@@ -86,10 +82,10 @@ const pos = computed(() => {
 viewportWidth.value = pos.value.x
 viewportHeight.value = pos.value.y
 
-const showBottomMenu = ref(false)
+const showMovableToggle = ref(true)
 
 // 1. Monitor scroll with idle detection
-const { y, isScrolling } = useWindowScroll({ idle: 200 })
+const { isScrolling } = useWindowScroll({ idle: 200 })
 
 // 2. Single watcher to handle showing/hiding AND mobile detection
 watch(isScrolling, (scrolling) => {
@@ -97,48 +93,42 @@ watch(isScrolling, (scrolling) => {
   if (!scrolling) {
     // Perform mobile check only when needed (saves resources)
     // Wait with detect navigator to we are sure it exist (on scroll)
-    const isWindows = navigator.userAgent.includes('Windows')
-    isMobile.value = (!isWindows && window.innerWidth < 540) // || 'ontouchstart' in window
+    isMobile.value = (navigator.maxTouchPoints === 1)
 
-    // y.value = window.innerHeight
     // Show menu only if we are past 200px
-    showBottomMenu.value = y.value > 200
-  } else if (cpOpen.value !== true) {
+    showMovableToggle.value = true // y.value > 200
+  } else {
     // Hide menu immediately when scrolling starts
-    showBottomMenu.value = false
+    showMovableToggle.value = false
     // Re-setting the state of all the menu buttons
     inActive.value = true
-    cpOpen.value = false
+    movableMenuOpen.value = false
   }
 })
 
-const cpOpen = ref(false)
+const movableMenuOpen = ref(false)
 
 const { height } = useWindowSize()
 
 watch(height, (/* oldVal, newVal */) => {
   // console.log('Height is changed from ', oldVal, ' to ', newVal)
   viewportWidth.value = window.visualViewport
-    ? window.visualViewport.width - 25
-    : window.innerWidth - 25
+    ? window.visualViewport.width - 36
+    : window.innerWidth - 36
   viewportHeight.value = window.visualViewport
-    ? window.visualViewport.height - 35
-    : window.innerHeight - 35
-})
-
-/* On click outside movable menu the button stays inActive = false */
-watch(cpOpen, () => {
-  // This code making the uSwitch button active when it's closing with click outside
-  if (cpOpen.value !== true)
-    inActive.value = true
+    ? window.visualViewport.height - 36
+    : window.innerHeight - 36
 })
 
 /* Creating popup menu and insert it on the right side */
 const inActive = ref(true)
+
+/* On click outside movable menu the button stays inActive = false */
+
 const toast = useToast()
 
 const scrollToTop = () => {
-  cpOpen.value = !cpOpen.value
+  movableMenuOpen.value = !movableMenuOpen.value
   inActive.value = true
   toast.add({ title: 'Scrolling to Top!', description: '- and closing bottom menu' })
   window.scrollTo({
@@ -147,8 +137,18 @@ const scrollToTop = () => {
   })
 }
 
+const cpOpen = ref(false)
+
 defineShortcuts({
-  o: () => cpOpen.value = !cpOpen.value
+  o: () => {
+    movableMenuOpen.value = !movableMenuOpen.value
+    inActive.value = !inActive.value
+    if (!movableMenuOpen.value) cpOpen.value = false
+  },
+  m: () => {
+    movableMenuOpen.value = cpOpen.value ? false : true
+    cpOpen.value = !cpOpen.value
+  }
 })
 
 /* ------------- TOGGLE LANGUAGE BUTTON ------------- */
@@ -181,42 +181,49 @@ const isHold = ref(false)
 let pressTimer: NodeJS.Timeout | null = null
 const holdTime = 350 // milliseconds for a "hold"
 
-const handlePressStart = (/* event: MouseEvent | TouchEvent */) => {
-  console.log('handlePressStart')
+const startHoldTimer = () => { // event: MouseEvent | TouchEvent
+  isHold.value = false
   // Clear any existing timer to prevent issues
-  // buttonRef.value = event.target as HTMLElement
   if (pressTimer) {
     clearTimeout(pressTimer)
   }
   // Start a timer for the hold action
   pressTimer = setTimeout(() => {
     isHold.value = true
-    if (cpOpen.value === true) inActive.value = true
-    else inActive.value = false
   }, holdTime)
 }
-const handlePressEnd = (/* event: MouseEvent | TouchEvent */) => {
-  console.log('handlePressEnd')
+
+const endHoldTimer = () => {
   if (pressTimer) {
+    // doIfHoldCondition(event, condition)
     clearTimeout(pressTimer)
-    // If the timer was cleared before the threshold, it was a click/tap
-    if (isHold.value !== true)
-      isHold.value = false
   }
 }
-const handleClickEvent = (event, condition) => { // condition = isHold value
-  console.log('handleClickEvent')
-  if (condition) {
-    // Stop the event from bubbling up to the parent div's handler
-    event.stopPropagation()
-    isHold.value = false // Resetting button after hold/ move etc.
+
+const handleMovableState = (/* ev */) => {
+  // setTimeout(() => {
+  movableMenuOpen.value = inActive.value ? false : true
+
+  if (!isMobile.value && isHold.value) {
+    movableMenuOpen.value = false
+    inActive.value = true
   }
+  // event.stopPropagation()
+  // }, 0)
 }
+
+// Fixing that click outside movable button(s) the menu close, but the inActive staying FALSE
+watch(movableMenuOpen, () => {
+  if (movableMenuOpen.value === false && inActive.value === false) {
+    inActive.value = true
+  }
+})
+
 // I could done the same with a mousedown handle and vueUse onLongPress(buttonRef, () => {
 
 /* END PREVENT THE MENU FROM POPPING UP WHEN DRAGGED */
 
-// const selectMenuOpen = ref(false)
+// const selectmovableMenuOpen = ref(false)
 const searchTermRef = ref('')
 
 /* -- HANDLING THE BLUR ON INPUT ON STARTUP AND ON TYPING  -- */
@@ -342,7 +349,7 @@ const goToNote = (note) => {
   // Ensure the ID is attached so the destination page knows where to look
   const pathWithHash = `${note.path}#note-${note.id}`
   router.push(pathWithHash)
-  cpOpen.value = false
+  movableMenuOpen.value = false
 }
 
 /* ------------------- NOTE ACTIONS MENU ---------------------- */
@@ -415,7 +422,7 @@ const noteActions = ref<DropdownMenuItem[][]>([
 <template>
   <ClientOnly>
     <div
-      v-if="showBottomMenu"
+      v-if="showMovableToggle"
       class="fixed -bottom-10 right-2"
     >
       <!-- Extra div with the class-content prevents that content scroll on mobile when trying to drag the menu -->
@@ -428,26 +435,34 @@ const noteActions = ref<DropdownMenuItem[][]>([
         @touchstart.stop
         @touchmove.stop
       >
+        <!-- https://ui.nuxt.com/docs/components/popover#with-anchor-slot -->
         <UPopover
-          v-model:open="cpOpen"
+          v-model:open="movableMenuOpen"
           arrow
           :content="{ side: 'top', align: 'start' }"
           class=""
+          :ui="{ content: 'w-(--reka-popper-anchor-width)' }"
         >
-          <div class="rotate-90">
-            <USwitch
-              v-model="inActive"
-              :title="inActive === true ? 'Open Menu' : 'Close Menu'"
-              color="secondary"
-              unchecked-icon="i-lucide-x"
-              checked-icon="i-lucide-arrow-left"
-              @pointerdown="handlePressStart"
-              @touchstart="handlePressStart"
-              @pointerup="handlePressEnd"
-              @touchend="handlePressEnd"
-              @click="handleClickEvent($event, isHold)"
-            />
-          </div>
+          <template #anchor>
+            <div
+              class="rotate-90"
+            >
+              <!-- :ref="(el) => logFunction(movableMenuOpen)" -->
+              <USwitch
+                v-model="inActive"
+                :title="inActive === true ? 'Open Menu' : 'Close Menu'"
+                color="secondary"
+                unchecked-icon="i-lucide-x"
+                checked-icon="i-lucide-arrow-left"
+                @pointerdown="startHoldTimer"
+                @touchstart="startHoldTimer"
+                @pointerup="endHoldTimer"
+                @touchend="endHoldTimer"
+                @change="(ev) => handleMovableState()"
+              />
+              <!-- // @change="(ev) => handleMovableState()" -->
+            </div>
+          </template>
           <template #content>
             <div>
               <!-- BUTTON MENU WITH TWO MENU BUTTONS -->
@@ -473,6 +488,7 @@ const noteActions = ref<DropdownMenuItem[][]>([
                 />
               </div>
               <UDrawer
+                v-model:open="cpOpen"
                 handle-only
                 :ui="{
                   container: 'p-0',
@@ -501,10 +517,12 @@ const noteActions = ref<DropdownMenuItem[][]>([
                       placeholder="Note Filter..."
                       class="groups text-muted"
                       :autofocus="false"
+                      :close="{ color: 'neutral', variant: 'ghost' }"
                       :ui="{
                         input: '[&>input]:[inputmode:none]',
                         root: 'u-command-palette'
                       }"
+                      @update:open="cpOpen = false"
                     >
                       <div
                         v-if="showDescriptions"
@@ -584,7 +602,6 @@ const noteActions = ref<DropdownMenuItem[][]>([
                             variant="ghost"
                             label="Search"
                             size="xs"
-                            trailing-icon="i-lucide-arrow-up"
                             @click="$keyboardClickK"
                           />
 
@@ -599,7 +616,6 @@ const noteActions = ref<DropdownMenuItem[][]>([
                             variant="ghost"
                             label="Menu"
                             size="xs"
-                            trailing-icon="i-lucide-arrow-up"
                             @click="$keyboardClickM"
                           />
 
@@ -615,7 +631,6 @@ const noteActions = ref<DropdownMenuItem[][]>([
                             label=""
                             size="xs"
                             class="text-dimmed"
-                            trailing-icon="i-lucide-arrow-down"
                             @click="cpOpen = false"
                           />
                         </div>
@@ -627,6 +642,7 @@ const noteActions = ref<DropdownMenuItem[][]>([
             </div>
           </template>
         </UPopover>
+        <!---->
       </WrapAndDragEl>
       <!-- </div> -->
     </div>

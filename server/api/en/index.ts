@@ -53,7 +53,7 @@ export default defineEventHandler(() => {
     { id: 3231, postil: 'Winter', tags: 'Epistle', label: 'Sun.bef.Lent', bible: '1 Cor 13: 1-13', value: '/en/lent#sunday-before-lent-1-cor-13-1-13' },
     { id: 3232, postil: 'Winter', tags: 'Gospel', label: 'Shrove Sun.', bible: 'Luk 18: 31-43', value: '/en/lent#quinquagesima-sunday-luk-18-31-43' },
 
-    { id: 3311, postil: 'Winter', tags: 'Epistle', label: '1.Sun. Lent', bible: '2 Cor 5: 1-10', value: '/en/lent#_1sunday-in-lent-2-cor-6-1-10' },
+    { id: 3311, postil: 'Winter', tags: 'Epistle', label: '1.Sun. Lent', bible: '2 Cor 6: 1-10', value: '/en/lent#_1sunday-in-lent-2-cor-6-1-10' },
     { id: 3312, postil: 'Winter', tags: 'Gospel', label: '1.Sun. Lent', bible: 'Matt 4: 1-11', value: '/en/lent#_1sunday-in-lent-matt-4-1-11' },
     { id: 3321, postil: 'Winter', tags: 'Epistle', label: '2.Sun. Lent', bible: '1 Thess 4: 1-7', value: '/en/lent#_2sunday-in-lent-1-thess-4-1-7' },
     { id: 3322, postil: 'Winter', tags: 'Gospel', label: '2.Sun. Lent', bible: 'Matt 15: 21-28', value: '/en/lent#_2sunday-in-lent-matt-15-21-28' },

@@ -69,7 +69,7 @@ export default defineNuxtPlugin(() => {
   const openNotesInNewTab = (groupedNotes: any) => {
     // 1. Build the Markdown String
     let markdown = `# Scripture Study Journal\n\n`
-    markdown += `*Generated on: ${new Date().toLocaleDateString()}*\n\n---\n\n`
+    markdown += `> Generated on: ${new Date().toLocaleDateString()}*\n\n---\n\n`
 
     groupedNotes.forEach((group: any) => {
       markdown += `## ${group.path}\n`
@@ -77,13 +77,13 @@ export default defineNuxtPlugin(() => {
 
       group.items.forEach((item: any) => {
         // Markdown bullet points
-        markdown += `* ${item.text}\n`
+        markdown += `- ${item.text}\n`
       })
       markdown += `\n---\n\n`
     })
 
     // 2. Create a Blob (Binary Large Object) of the text
-    const blob = new Blob([markdown], { type: 'text/markdown' })
+    const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' })
 
     // 3. Create a temporary URL for that blob
     const url = URL.createObjectURL(blob)
@@ -103,18 +103,44 @@ export default defineNuxtPlugin(() => {
     `).join('<hr>')
 
     const html = `
-      <html>
+      <!DOCTYPE html>
         <head>
           <title>Scripture Notes</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta charset="UTF-8">
           <style>
-            body { font-family: sans-serif; line-height: 1.6; padding: 40px; max-width: 800px; margin: auto; }
+             /* This only affects the browser view */
+            body { font-family: sans-serif; line-height: 1.6; padding: 40px; max-width: 768px; margin: auto; }
             h2 { color: #2c3e50; border-bottom: 1px solid #eee; }
-            @media print { button { display: none; } }
+            @media screen and (max-width: 768px) {
+              body {
+                zoom: 1.5; /* Simple but non-standard */
+                /* OR use transform for better compatibility */
+                transform: scale(1);
+                transform-origin: top left;
+                width: 63%; /* Offset the scale to prevent horizontal scroll (1/1.2) */
+              }
+            }
+            @media print {
+              button { display: none; }
+              body {
+                zoom: 1 !important;
+                transform: none !important;
+                width: 100% !important;
+              }
+              /* Hide the print button itself on the paper */
+            }
           </style>
+          <script>
+            setTimeout(() => {
+              alert('Click on Print button to print this page!')
+            }, 500)
+            console.log('Styled print page for notes!')
+          </script>
         </head>
         <body>
           <h1>Study Journal</h1>
-          <button onclick="window.print()">Print This Page</button>
+          <button class="print-button" onclick="window.print()">Print This Page</button>
           ${content}
         </body>
       </html>
@@ -142,7 +168,7 @@ export default defineNuxtPlugin(() => {
     groupedNotes.forEach((group: any) => {
       markdown += `## ${group.path} - ${group.title}\n`
       group.items.forEach((item: any) => {
-        if (item.text.trim()) markdown += `* ${item.text}\n`
+        if (item.text.trim()) markdown += `- ${item.text}\n`
       })
       markdown += `\n`
     })
