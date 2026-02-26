@@ -12,7 +12,7 @@ export default defineNuxtPlugin(() => {
         let newPath = `../${newLocale}/${restPath}`
         // correction for removing ex. advent/index.md to ex. ../advent-postil
         if (newPath.startsWith('../en') && newPath.endsWith('-postil')) {
-          newPath = newPath.slice(0, -7)
+          newPath = newPath.slice(0, -7) // prepare for redirect from da to en postil (without the "-postil" ending)
         }
         // console.log('1.log newPath ', newPath)
 
@@ -25,7 +25,7 @@ export default defineNuxtPlugin(() => {
         if (endsWith(newPath, endings)) {
           console.log('2.log newPath', newPath)
           if (newPath.startsWith('../da'))
-            router.push(`${newPath}-postil`)
+            router.push(`${newPath}-postil`) // redirecting to an da postil
           else router.push(`${newPath}`)
         } else if (!endings.some(folder => newPath.includes(folder))) { // if path not ends with postil folder
           // This if is necessary when en and then click on danish pages in the header menu

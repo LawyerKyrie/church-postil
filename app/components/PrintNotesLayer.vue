@@ -38,7 +38,7 @@ const formatTimestamp = (id: number | string) => {
 }
 toast.add({ title: 'Print Notes!', description: 'Click the Print button to print notes!' })
 alert('Click on the Print Button to Print the page!')
-console.log('Print this page!')
+console.log('Styled Printable Notes opened in new tab!')
 </script>
 
 <template>

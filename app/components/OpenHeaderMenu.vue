@@ -159,8 +159,7 @@ const footerMenuAccordionTabs = ref<TabsItem[]>([
     label: 'About',
     icon: 'i-lucide-file-question-mark',
     content: `
-      - Church Postil is in public domain. 
-      - "Ctrl k" activate the Search Menu.
+      - Double click or highlight text to add notes. Share them or view them trough the movable pop up menu in the bottom right corner.
     `
   }
 ])

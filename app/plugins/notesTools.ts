@@ -66,10 +66,10 @@ export default defineNuxtPlugin(() => {
     return { copyNotesToClipboard }
   }
 
-  const openNotesInNewTab = (groupedNotes: any) => {
+  const openPrintableMdNotes = (groupedNotes: any) => {
     // 1. Build the Markdown String
     let markdown = `# Scripture Study Journal\n\n`
-    markdown += `> Generated on: ${new Date().toLocaleDateString()}*\n\n---\n\n`
+    markdown += `> Generated on: ${new Date().toLocaleDateString()}\n\n---\n\n`
 
     groupedNotes.forEach((group: any) => {
       markdown += `## ${group.path}\n`
@@ -189,7 +189,7 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       useClipboardExport: useClipboardExport,
-      openNotesInNewTab: openNotesInNewTab,
+      openPrintableMdNotes: openPrintableMdNotes,
       openStyledNotes: openStyledNotes,
       downloadFile: downloadFile,
       exportNotesAsFile: exportNotesAsFile

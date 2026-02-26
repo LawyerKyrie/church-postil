@@ -77,19 +77,19 @@ onUnmounted(() => {
 // --- Setup/State ---
 const { checkDoubleTap, reset } = useDoubleTap() // Initialize once
 const isSelecting = ref(false)
-const isMobile = 'ontouchstart' in window
+const isMobile = navigator.maxTouchPoints === 1 // 'ontouchstart' in window
 
 let lastInteractionType = ''
-// let lastActionTime = 0
 // const timeStamp = useTimeStamp()
 const lastActionTime = useLastActionTime() as any// For the "Double-fire" shield
 
 const tempMobileRect = ref<any>(null)
 const tempMobileText = ref<any>(null)
+const placeholderText = usePlaceholderText()
 
 const handleTextInteraction = (event: Event) => {
   // console.log(`[Interaction] Type: ${event.type}, Target:`, event.target)
-  /* -- GUARDING RULES -- */
+  /* -------------------------- GUARDING RULES ------------------------------ */
   let target = event.target as any
   // If we are touching the bubble or the popover content...
   // Update this to match your harmonized template
@@ -127,15 +127,23 @@ const handleTextInteraction = (event: Event) => {
   // const header = selection?.tro
   const text = selection?.toString().trim() || ''
 
-  // --- PATH A: DOUBLE-CLICK / DOUBLE-TAP ---
+  // ------------------- PATH A: DOUBLE-CLICK / DOUBLE-TAP --------------------
   // We use our new "Solid" composable logic here
   if (checkDoubleTap(event as any /* UIEvent */)) { /* ------ EMPTY SPACE BOBBLE ----- */
     // 1. If we missed the <P>, try to find one nearby (5px above or below)
     if (target && target.tagName !== 'P') {
-      const touch = (event as TouchEvent).changedTouches[0] as any
+      // const touch = (event as TouchEvent).changedTouches[0] as any
+      const getCoords = (event: any) => {
+        if (event.changedTouches) {
+          return event.changedTouches[0] // Mobile/Touch
+        }
+        return event // PC/Mouse
+      }
+      const touch = getCoords(event)
       const pointsToTry = [
-        { x: touch.clientX, y: touch.clientY - 5 }, // Check slightly above
-        { x: touch.clientX, y: touch.clientY + 5 } // Check slightly below
+        { x: touch.clientX, y: touch.clientY + 10 }, // Necessary between the paragraphs
+        { x: touch.clientX, y: touch.clientY - 10 }, // Checking above after checking below
+        { x: touch.clientX, y: touch.clientY + 20 } // Mostly needed below the header
       ]
 
       for (const point of pointsToTry) {
@@ -147,8 +155,7 @@ const handleTextInteraction = (event: Event) => {
       }
     }
 
-    if (text.length === 0
-      && target.tagName !== 'A'
+    if (/* text.length === 0 */ target.tagName !== 'A'
       && !(target instanceof HTMLHeadingElement)) {
       // LOCK THE DOOR IMMEDIATELY
       lastActionTime.value = Date.now()
@@ -158,10 +165,6 @@ const handleTextInteraction = (event: Event) => {
       const pos = (event instanceof TouchEvent) ? event.changedTouches[0] : (event as MouseEvent) as any
 
       if (target && target.tagName === 'P') {
-        const rect = target.getBoundingClientRect()
-        const clickY = pos.clientY
-        const centerY = rect.top + (rect.height / 2)
-
         // Split text into sentences (assuming they end with a dot)
         // We filter(Boolean) to remove empty strings from the array
         const rawSentences = target.innerText
@@ -169,7 +172,16 @@ const handleTextInteraction = (event: Event) => {
           .map(s => s.trim())
           .filter(s => s.length > 1) // Ignore single characters like quotes or dots
 
+        const rect = target.getBoundingClientRect()
+        const clickY = pos.clientY
+        // const centerY = rect.top + (rect.height / 2)
+
+        const lineHeight = Math.trunc(rect.height / (rawSentences.length - 1))
+        const relativeHeight = Math.abs(clickY - rect.top)
+        const lineNumber = Math.round(relativeHeight / lineHeight)
         if (rawSentences.length > 0) {
+          nearbyText = rawSentences[lineNumber]
+          /*
           if (clickY < centerY) {
             // Clicked TOP: Grab first sentence
             nearbyText = rawSentences[0]
@@ -177,6 +189,9 @@ const handleTextInteraction = (event: Event) => {
             // Clicked BOTTOM: Grab last sentence
             nearbyText = rawSentences[rawSentences.length - 1]
           }
+          */
+        } else {
+          nearbyText = 'Change this text with a 100% identical quotation from the text! If not, the sharing function will not work. NB! Keep the French Apostrophes around the Quotation!'
         }
       }
 
@@ -188,7 +203,7 @@ const handleTextInteraction = (event: Event) => {
       // CLEAR SELECTION so the PC doesn't get confused
       window.getSelection()?.removeAllRanges()
       return // EXIT IMMEDIATELY
-    } else if (target.tagName === 'A' /* ----- HEADER TEXT BOBBLE ------ */
+    } else if (target.tagName === 'A' /* ------- HEADER TEXT BOBBLE -------- */
       || target instanceof HTMLHeadingElement) {
       // const tags = ['A', 'H2', 'H3', 'H4', 'H5', 'H6']
       // let anchor
@@ -220,7 +235,7 @@ const handleTextInteraction = (event: Event) => {
     }
   }
 
-  // --- PATH B: HIGHLIGHTING (SINGLE DRAG/HOLD) ---
+  // -------------------- PATH B: HIGHLIGHTING (SINGLE DRAG/HOLD) ---------------
   // This runs if Path A didn't "return" (i.e., it wasn't a double-tap)
   if (text.length > 0 && props.target) {
     if (!selection) return
@@ -347,13 +362,6 @@ const saveHighlightedText = (rect, text) => {
 
   // 3. Push to the global list (since pageNotes is a computed setter)
   allNotes.value.push(newNote)
-  /*
-  console.log('--- HIGHLIGHT DATA CHECK (bottom of saveHighlightedText after allNotes.value.push(newNote)) ---')
-  console.log('ID: ', newNote.id)
-  console.log('isHighlight: ', newNote.isHighlight) // Should be true
-  console.log('Initial Position: ', { top: newNote.top, left: newNote.left })
-  console.log('newNote.width: ', newNote.width)
-  */
 }
 
 /* DRAGGING THE NOTE BOBBLES (ON PC) */
@@ -516,9 +524,7 @@ const copyToClipboard = () => {
   const selection = window.getSelection()
   const text = selection?.toString().trim() || ''
   navigator.clipboard.writeText(text)
-  toast.add({ title: 'Copy Text!', description: 'Clipboard has captured the text!' })
-  // console.log('This text copied to clipboard: ', text)
-  // alert(`This text is copied to clipboard: ${text}`)
+  toast.add({ title: 'Copied Text!', description: 'Clipboard has captured the text!' })
   selection?.removeAllRanges()
 }
 
@@ -646,7 +652,7 @@ const setCopyMenuPosition = (left) => {
               autofocus
               color="primary"
               variant="outline"
-              placeholder="Start typing your thoughts here..."
+              :placeholder="placeholderText"
               :rows="4"
               class="text-sm"
             />

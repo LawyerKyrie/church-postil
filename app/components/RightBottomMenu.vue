@@ -4,6 +4,8 @@ import { useI18n } from 'vue-i18n'
 import { useWindowScroll, useWindowSize } from '@vueuse/core'
 import type { DropdownMenuItem } from '@nuxt/ui'
 
+const toast = useToast()
+
 /*
 const allNotes = useLocalStorage<any[]>('global-church-notes', [])
 const { copyRichNotesToGmail } = useExport()
@@ -35,7 +37,10 @@ const handleCopyAndGmail = (toGmail) => {
 
 const mdNotes = () => {
   const cleanNotes = groupedNotes.value.filter(g => g.items.some(i => i.text.length > 0))
-  $openNotesInNewTab(cleanNotes)
+  toast.add({ title: 'Print Notes:', description: 'Print from browsers menu or Right Click' })
+  setTimeout(() => {
+    $openPrintableMdNotes(cleanNotes)
+  }, 3000)
 }
 const styledNotes = () => {
   // Filter before passing to the function
@@ -125,8 +130,6 @@ const inActive = ref(true)
 
 /* On click outside movable menu the button stays inActive = false */
 
-const toast = useToast()
-
 const scrollToTop = () => {
   movableMenuOpen.value = !movableMenuOpen.value
   inActive.value = true
@@ -158,7 +161,7 @@ const {
   $keyboardClickK,
   $keyboardClickM,
   $localeDate, // for notes
-  $openNotesInNewTab,
+  $openPrintableMdNotes,
   $openStyledNotes,
   $exportNotesAsFile
   // $created
