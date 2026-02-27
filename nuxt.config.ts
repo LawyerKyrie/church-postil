@@ -64,7 +64,10 @@ export default defineNuxtConfig({
   */
   routeRules: {
     '/': { prerender: true }, // Good for SEO/Speed on the home page
-    '/api/**': { cors: true } // Optional: helps if you ever fetch from other domains
+    '/api/**': {
+      cache: { maxAge: 3600 }, // 12 hours = 43200
+      cors: true
+    } // Optional: helps if you ever fetch from other domains
   },
   sourcemap: {
     server: false,
@@ -91,6 +94,11 @@ export default defineNuxtConfig({
       concurrency: 1,
       interval: 100
       // failOnError: false
+    },
+    storage: {
+      cache: {
+        driver: 'memory'
+      }
     }
   },
   vite: {
@@ -157,4 +165,23 @@ export default defineNuxtConfig({
   mcp: {
     name: 'Church Postil'
   }
+  /* // install @vite-pwa/nuxt
+  pwa: {
+    workbox: {
+      runtimeCaching: [
+        {
+          urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'api-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 // 1 day
+            }
+          }
+        }
+      ]
+    }
+  }
+  */
 })

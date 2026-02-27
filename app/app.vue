@@ -30,8 +30,8 @@ useHead({
     { rel: 'icon', href: '/favicon.ico' }
   ],
   htmlAttrs: {
-    lang: uiLocale.value.code,
-    dir: uiLocale.value.dir
+    lang: uiLocale.value.code || 'en',
+    dir: uiLocale.value.dir || 'ltr'
   }
 })
 

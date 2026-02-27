@@ -205,6 +205,11 @@ const scrollToNoteFromHash = () => {
     })
   }
 }
+
+/* GET THE PAGE ID FROM THE PAGE PATH AND SAVE IT */
+const pageId = usePageId()
+const { getIdByPath } = usePageNavigator()
+pageId.value = getIdByPath(route.fullPath) as string
 </script>
 
 <template>

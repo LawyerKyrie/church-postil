@@ -19,5 +19,6 @@ export const useLastActionTime = () => useState<number>('lastActionTime', () => 
 export const useViewportWidth = () => useState<number>('viewportWidth', () => 0)
 export const useViewportHeight = () => useState<number>('viewportHeight', () => 0)
 export const usePlaceholderText = () => useState<string>('placeholderText', () => 'Ref: «This Note App was not able to automatically grab a quotation from the text. Try to double click again or copy/paste a quotation! NB! Keep the French Apostrophes around the quotation. If Not this Note App will not be able to create a sharable link to this quotation!»')
+export const usePageId = () => useState<string>('pageId', () => '')
 
 // export const useCloseElement = () => useState<HTMLButtonElement>('closeElement', () => null)

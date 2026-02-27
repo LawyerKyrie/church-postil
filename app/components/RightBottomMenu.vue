@@ -1,6 +1,7 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import * as locales from '@nuxt/ui/locale'
 import { useWindowScroll, useWindowSize } from '@vueuse/core'
 import type { DropdownMenuItem } from '@nuxt/ui'
 
@@ -157,7 +158,7 @@ defineShortcuts({
 /* ------------- TOGGLE LANGUAGE BUTTON ------------- */
 
 const {
-  $updateThePageOnLanguageChange,
+  $toggleLanguageOnMainPages,
   $keyboardClickK,
   $keyboardClickM,
   $localeDate, // for notes
@@ -168,14 +169,23 @@ const {
 } = useNuxtApp() as any
 
 const { locale } = useI18n()
+const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
+const { getPagePath } = usePageNavigator()
 
 const isLang = ref(false)
+const pageId = usePageId()
+
 const toggleLang = () => {
   isLang.value = isLang.value === true ? false : true
   locale.value = locale.value === 'en' ? 'da' : 'en'
 
-  toast.add({ title: `${locale.value} Language Selected!` })
-  $updateThePageOnLanguageChange(locale.value)
+  if (pageId.value !== null) {
+    const oppositePath = getPagePath(pageId.value, locale.value)
+    router.push(`${oppositePath}`)
+  } else if (pageId.value === null) {
+    $toggleLanguageOnMainPages(locale.value)
+  }
+  toast.add({ title: `${uiLocale.value.name} Translated Page`, description: '' })
 }
 
 /* START PREVENT THE MENU FROM POPPING UP WHEN DRAGGED */

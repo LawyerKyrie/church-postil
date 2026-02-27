@@ -8,18 +8,24 @@ import { findPageChildren } from '@nuxt/content/utils'
 const { path } = useRoute()
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const { $updateThePageOnLanguageChange } = useNuxtApp() as any
-
-const openMenu = useOpenMenu()
+const { $toggleLanguageOnMainPages } = useNuxtApp() as any
+const pageId = usePageId()
+const { getPagePath } = usePageNavigator()
 const { locale } = useI18n()
 const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
-
 const oldLocale = locale.value // updating it on close click
+const router = useRouter()
+const openMenu = useOpenMenu()
 
 watch(openMenu, (/* newValue, oldValue */) => {
   if (openMenu.value === false) {
     if (oldLocale !== locale.value) {
-      $updateThePageOnLanguageChange(locale.value)
+      if (pageId.value !== null) {
+        const oppositePath = getPagePath(pageId.value, locale.value)
+        router.push(`${oppositePath}`)
+      } else if (pageId.value === null) {
+        $toggleLanguageOnMainPages(locale.value)
+      }
       showToast(`${uiLocale.value.name} selected`, `Updating the page language!`)
     }
   }

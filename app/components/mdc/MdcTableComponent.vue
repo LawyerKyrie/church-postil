@@ -4,7 +4,8 @@ import { h, resolveComponent } from 'vue'
 import { upperFirst } from 'scule'
 import type { TableColumn } from '@nuxt/ui'
 import type { Column, Row, SortingFn } from '@tanstack/vue-table'
-import { useClipboard, useWindowSize } from '@vueuse/core'
+import { useClipboard, useWindowSize /* , useLocalStorage */ } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
 const { path } = useRoute()
 // Construct the full URL using our helper
@@ -43,11 +44,14 @@ const fetchUrl = computed(() => {
 })
 
 // 1. Calculate your argument OUTSIDE the fetch
+// const isPostilDefined = props.postil !== undefined
+
+// 1. Calculate your argument OUTSIDE the fetch
 const isPostilDefined = props.postil !== undefined
 
 const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
-    key: `api-table-${path}`, // ${Math.random()}
+    key: `api-table-${path}`,
     // Simplify transform: only handle the array filtering
     transform: (data) => {
       // DEFENSIVE: If data is missing or not an array, return empty list
@@ -251,6 +255,16 @@ const sorting = ref([
 
 const toast = useToast()
 const { copy } = useClipboard()
+const { locale } = useI18n()
+const { getPagePath } = usePageNavigator()
+
+const getPathFromId = (pageId) => {
+  const targetPath = getPagePath(pageId, locale.value)
+
+  // Navigate to the other language version
+  // navigateTo(targetPath)
+  return targetPath
+}
 
 function getRowItems(row: Row<RowItems>) {
   return [
@@ -258,7 +272,7 @@ function getRowItems(row: Row<RowItems>) {
       label: 'Open Sermon',
       icon: 'i-lucide-link',
       onSelect() {
-        navigateTo(`${row.original.value}`, {
+        navigateTo(`${getPathFromId(row.original.id)}`, {
           external: false /* ,
           open: {
             target: '_blank'
@@ -288,7 +302,7 @@ function getRowItems(row: Row<RowItems>) {
       label: 'Share Link',
       icon: 'i-lucide-copy',
       onSelect() {
-        copy(currentOrigin.value + row.original.value)
+        copy(currentOrigin.value + getPathFromId(row.original.id))
 
         toast.add({
           title: 'Link Copied!',
@@ -348,7 +362,6 @@ const expanded = computed({
 const onSelect = async (row) => {
   // If the row is already open, close it. If not, open only this one.
   expanded.value = expanded.value[row.id] ? {} : { [row.id]: true }
-
   // 1. Logic to expand row
   await nextTick()
 
@@ -462,6 +475,9 @@ async function catchBible(targetId: string) {
 
 // We calculate if we are truly empty only after the fetch is finished
 const isEmpty = computed(() => status.value === 'success' && (!rowItems.value || rowItems.value.length === 0))
+
+/* SAVE THE NEW JSON FILE WITH PATHS TO DA & EN PAGES. tHEN FIND IT TROUGH THE ID */
+// Didn't work - trying caching trough nuxt config
 </script>
 
 <template>
@@ -622,7 +638,7 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
                 <p class="flex justify-end">
                   <UButton
                     label="Read Sermon"
-                    :to="row.original.value"
+                    :to="getPathFromId(row.original.id)"
                     title="Open Luther's Sermon"
                     size="xs"
                     variant="outline"

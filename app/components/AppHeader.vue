@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import * as locales from '@nuxt/ui/locale'
 
 const { header } = useAppConfig()
 const isDrawerOpen = ref(false)
@@ -67,16 +68,26 @@ onMounted(() => {
 })
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const { $updateThePageOnLanguageChange } = useNuxtApp() as any
+const { $toggleLanguageOnMainPages } = useNuxtApp() as any
 const { locale } = useI18n()
+const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
+const { getPagePath } = usePageNavigator()
 
 const isLang = ref(false)
+const pageId = usePageId()
+const router = useRouter()
+
 const toggleLang = () => {
   isLang.value = isLang.value === true ? false : true
   locale.value = locale.value === 'en' ? 'da' : 'en'
 
-  toast.add({ title: `${locale.value} Language Selected!` })
-  $updateThePageOnLanguageChange(locale.value)
+  if (pageId.value !== null) {
+    const oppositePath = getPagePath(pageId.value, locale.value)
+    router.push(`${oppositePath}`)
+  } else if (pageId.value === null) {
+    $toggleLanguageOnMainPages(locale.value)
+  }
+  toast.add({ title: `${uiLocale.value.name} Translated Page`, description: '' })
 }
 </script>
 
