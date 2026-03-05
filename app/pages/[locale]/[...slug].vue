@@ -182,6 +182,7 @@ onMounted(() => {
   // This handles the "Arrival" via a link
   // await nextTick()
   // const urlHash = useUrlHash()
+  console.log('fullPath? ', route.fullPath)
   const isMobile = ref(navigator.maxTouchPoints === 1 || navigator.maxTouchPoints === 1)
   // 1. Get the RAW URL from the performance entries (Nuxt can't hide this)
   const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
@@ -201,8 +202,9 @@ onMounted(() => {
     const textFragment = fullUrl.split('#')[1] // Gets :~:text=...
 
     // 2. Put it back into the address bar so it stays there
-    window.history.replaceState(null, '', window.location.pathname + '#' + textFragment)
-
+    if (import.meta.client) {
+      window.history?.replaceState(null, '', window.location.pathname + '#' + textFragment)
+    }
     // 3. Your "Nudge" to ensure the browser highlights
     setTimeout(() => {
       window.scrollBy(0, 1)
@@ -241,7 +243,7 @@ watch(() => route.hash, () => {
 const { allNotes } = useNotes()
 
 const scrollToNoteFromHash = () => {
-  const noteId = route.hash.replace('#note-', '')
+  const noteId = route.hash?.replace('#note-', '')
   const targetNote = allNotes.value.find(n => String(n.id) === noteId)
 
   if (targetNote) {

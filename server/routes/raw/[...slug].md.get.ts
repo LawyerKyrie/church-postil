@@ -11,7 +11,7 @@ export default eventHandler(async (event) => {
   }
 
   const { locale } = useI18n()
-  const path = withLeadingSlash(slug.replace('.md', ''))
+  const path = withLeadingSlash(slug?.replace('.md', ''))
 
   const page = await queryCollection(event, 'docs' as keyof Collections).path(`/${locale.value}/${path}`).first()
   if (!page) {

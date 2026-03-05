@@ -22,18 +22,16 @@ export const useOppositeLanguage = () => {
   }
 
   const getIdByPath = (fullPath: string): string | null => {
-    // 1. Remove query params (anything after ?) but keep the hash
-    // Example: /en/advent#epistle01?id=5 -> /en/advent#epistle01
-    const cleanTarget = fullPath.split('?')[0]?.toLowerCase().replace(/\/$/, '')
+    // 1. Early exit if no path is provided
+    if (!fullPath) return null
 
+    // 2. Look for an exact match in the pageMap
     const entry = Object.entries(pageMap).find(([_, paths]) => {
-      // Clean the map paths similarly to ensure a match
-      const cleanDa = paths.da.toLowerCase().replace(/\/$/, '')
-      const cleanEn = paths.en.toLowerCase().replace(/\/$/, '')
-
-      return cleanDa === cleanTarget || cleanEn === cleanTarget
+      // Check if fullPath matches either the Danish or English version exactly
+      return paths.da === fullPath || paths.en === fullPath
     })
 
+    // 3. Return the key (ID) if found, otherwise null
     return entry ? entry[0] : null
   }
 

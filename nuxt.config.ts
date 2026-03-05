@@ -108,7 +108,7 @@ export default defineNuxtConfig({
     },
     storage: {
       cache: {
-        // driver: 'memory'
+        driver: 'memory' // Or 'fs' if you want it to persist across restarts
       }
     }
   },
