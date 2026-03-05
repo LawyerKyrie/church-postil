@@ -71,23 +71,42 @@ onMounted(() => {
 const { $toggleLanguageOnMainPages } = useNuxtApp() as any
 const { locale } = useI18n()
 const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
-const { getPagePath } = usePageNavigator()
+const { getPagePath } = useOppositeLanguage()
 
 const isLang = ref(false)
 const pageId = usePageId()
 const router = useRouter()
+const urlHash = useUrlHash()
 
 const toggleLang = () => {
   isLang.value = isLang.value === true ? false : true
   locale.value = locale.value === 'en' ? 'da' : 'en'
 
-  if (pageId.value !== null) {
-    const oppositePath = getPagePath(pageId.value, locale.value)
-    router.push(`${oppositePath}`)
-  } else if (pageId.value === null) {
+  toast.add({ title: `${uiLocale.value.name} Translated Page`, description: '' })
+  if (pageId !== null && pageId.value.length === 4) {
+    // Grab your data from JSON
+    const targetPath = getPagePath(pageId.value, locale.value)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [path, hash] = targetPath.split('#') as any
+    const isHash = hash !== undefined
+
+    if (isHash) {
+      console.log('here is maybe something wrong')
+      urlHash.value = hash
+      navigateTo({
+        path: path,
+        hash: `#${hash || undefined}`, // `#${hash}`
+        // This is your "message" to the router
+        state: { skipHistoryScroll: true }
+      })
+    } else {
+      console.log('isHash = false')
+      router.push(path)
+    }
+  } else { // no pageId
+    console.log('AppHeader toggle Language on main pages')
     $toggleLanguageOnMainPages(locale.value)
   }
-  toast.add({ title: `${uiLocale.value.name} Translated Page`, description: '' })
 }
 </script>
 

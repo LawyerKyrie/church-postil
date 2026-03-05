@@ -10,6 +10,7 @@ const route = useRoute()
 
 // 1. Change to a SINGLE global storage key so all pages share one list
 const { allNotes } = useNotes()
+const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints === 1
 
 // Remove the old const allNotes = useLocalStorage(...)
 
@@ -44,7 +45,8 @@ onMounted(() => {
     }
   })
   // Optional: Update button position as user drags handles
-  if ('ontouchstart' in window) {
+  if (isMobile) {
+    console.log(' Updating button position as user drags handles')
     document.addEventListener('selectionchange', () => {
       if (Date.now() - lastActionTime.value < 300) {
         return
@@ -58,6 +60,7 @@ onMounted(() => {
     })
   }
   window.oncontextmenu = function (event) {
+    console.log('oncontextmenu')
     if (event.target.closest('.your-scripture-class')) {
       event.preventDefault()
       event.stopPropagation()
@@ -77,7 +80,6 @@ onUnmounted(() => {
 // --- Setup/State ---
 const { checkDoubleTap, reset } = useDoubleTap() // Initialize once
 const isSelecting = ref(false)
-const isMobile = navigator.maxTouchPoints === 1 // 'ontouchstart' in window
 
 let lastInteractionType = ''
 // const timeStamp = useTimeStamp()
@@ -117,6 +119,7 @@ const handleTextInteraction = (event: Event) => {
 
   // 1. GHOST SHIELD: Ignore the "Ghost" MouseEvent after a TouchEvent
   if (event.type === 'mouseup' && lastInteractionType === 'touchend') {
+    console.log('GHOST SHIELD: Ignore the "Ghost" MouseEvent after a TouchEvent')
     lastInteractionType = ''
     return
   }
@@ -238,6 +241,7 @@ const handleTextInteraction = (event: Event) => {
   // -------------------- PATH B: HIGHLIGHTING (SINGLE DRAG/HOLD) ---------------
   // This runs if Path A didn't "return" (i.e., it wasn't a double-tap)
   if (text.length > 0 && props.target) {
+    console.log('text.length > 0 && props.target')
     if (!selection) return
 
     const range = selection?.getRangeAt(0)
@@ -506,6 +510,10 @@ const shareNote = (note) => {
   const url = shareUrl(note.path, note.text)
   // Share logic...
   // 4. Use the Web Share API (Mobile friendly) or Copy to Clipboard
+  setTimeout(() => {
+    alert('running shareNote. navigator.share= ' + navigator.share)
+  }, 500)
+
   if (navigator.share) {
     navigator.share({
       title: 'Check out this highlight',

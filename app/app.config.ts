@@ -88,7 +88,7 @@ export default defineAppConfig({
     }]
   },
   toc: {
-    title: 'Table of Content ',
+    title: '', // 'Table of Content '
     bottom: {
       title: 'Community',
       edit: 'https://github.com/LawyerKyrie/church-postil/edit/main/content',

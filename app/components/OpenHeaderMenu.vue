@@ -9,24 +9,17 @@ const { path } = useRoute()
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const { $toggleLanguageOnMainPages } = useNuxtApp() as any
-const pageId = usePageId()
-const { getPagePath } = usePageNavigator()
+const { getPagePath } = useOppositeLanguage()
 const { locale } = useI18n()
 const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
 const oldLocale = locale.value // updating it on close click
-const router = useRouter()
 const openMenu = useOpenMenu()
 
 watch(openMenu, (/* newValue, oldValue */) => {
   if (openMenu.value === false) {
     if (oldLocale !== locale.value) {
-      if (pageId.value !== null) {
-        const oppositePath = getPagePath(pageId.value, locale.value)
-        router.push(`${oppositePath}`)
-      } else if (pageId.value === null) {
-        $toggleLanguageOnMainPages(locale.value)
-      }
-      showToast(`${uiLocale.value.name} selected`, `Updating the page language!`)
+      toast.add({ title: `${uiLocale.value.name} Translated Page`, description: '' })
+      $toggleLanguageOnMainPages(locale.value)
     }
   }
   // console.log(`Global variable "openMenu" was changed from "${oldValue}" to "${newValue}"`)
@@ -59,7 +52,7 @@ watch(activeTab, (newTabValue: string, oldTabValue) => {
   // Optional: check if the new value is different from the old one before running the function
   if (newTabValue !== oldTabValue) {
     locale.value = newTabValue
-    showToast(`Close the Menu`, `- and open it again - if you need the SELECT MENU in Updated Language`)
+    showToast(`Close the Menu`, `- to Update the Language on Select Menu`)
   }
 })
 
@@ -90,11 +83,14 @@ type RowCells = {
   tags: string
   label: string
   bible: string
-  value: string
+  // value: string
   type: never
   icon: string // creates one tab on sermons
   description: string
 }
+
+const router = useRouter()
+const urlHash = useUrlHash()
 
 const lang = path.startsWith('/da') ? 'da' : 'en'
 // 1. Construct the URL as a plain string first
@@ -116,15 +112,30 @@ const { data: sermons } = await useFetch<RowCells[]>(
           tooltip: `${sermon.label} - ${sermon.bible === undefined ? '' : sermon.bible}`,
           onSelect: () => {
             showToast(`${sermon.label} selected`, `Sermon opens in a new window`)
-            navigateTo(`${sermon.value}`, {
+
+            const targetPath = getPagePath(sermon.id, locale.value)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const [path, hash] = targetPath.split('#') as any
+            console.log('hash? ', hash)
+            const isHash = hash !== undefined
+
+            if (isHash) {
+              urlHash.value = hash
+              navigateTo({
+                path: path,
+                hash: `#${hash || undefined}`, // `#${hash}`
+                // This is your "message" to the router
+                state: { skipHistoryScroll: true }
+              })
+            } else router.push(path)
+            /*
+            navigateTo(`${getPagePath(sermon.id, locale.value)}`, {
               external: false
-              /*
               open: {
                 target: '_blank',
                 windowFeatures: { width: 800, height: 600 }
               }
-              */
-            })
+            }) */
           }
         }))
     },

@@ -38,7 +38,7 @@ useHead({
 // app.vue
 onMounted(() => {
   if ('scrollRestoration' in window.history) {
-    window.history.scrollRestoration = 'manual'
+    // window.history.scrollRestoration = 'manual'
   }
 })
 </script>

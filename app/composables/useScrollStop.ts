@@ -8,6 +8,7 @@ export function useScrollStop() {
   const TIMEOUT_DURATION = 300 // milliseconds
 
   const handleScroll = () => {
+    console.log('handleScroll method running')
     isScrolling.value = true
     showButton.value = false // Hide button immediately when scrolling starts
 

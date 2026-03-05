@@ -7,6 +7,7 @@ import type { Column, Row, SortingFn } from '@tanstack/vue-table'
 import { useClipboard, useWindowSize /* , useLocalStorage */ } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 
+const { locale } = useI18n()
 const { path } = useRoute()
 // Construct the full URL using our helper
 
@@ -20,7 +21,7 @@ type RowItems = {
   tags: string
   label: string
   bible: string
-  value: string
+  // value: string
   type: never
   description: string
 }
@@ -51,7 +52,7 @@ const isPostilDefined = props.postil !== undefined
 
 const { data: rowItems, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
-    key: `api-table-${path}`,
+    key: `api-table-${locale.value}`,
     // Simplify transform: only handle the array filtering
     transform: (data) => {
       // DEFENSIVE: If data is missing or not an array, return empty list
@@ -154,12 +155,12 @@ const columns: TableColumn<RowItems>[] = [
     sortingFn: tanstackBibleSort,
     header: ({ column }) => getTableHeader(column, 'Bible'),
     cell: ({ row }) => `${row.getValue('bible')}`
-  },
+  }, /*
   {
     accessorKey: 'value',
     header: ({ column }) => getTableHeader(column, 'Value'),
     cell: ({ row }) => `${row.getValue('value')}`
-  },
+  }, */
   {
     id: 'menu',
     cell: ({ row }) => {
@@ -208,7 +209,7 @@ onMounted(() => {
       tags: false, // updating value below
       label: true,
       bible: true,
-      value: false,
+      // value: false,
       menu: true
     }
 
@@ -255,8 +256,7 @@ const sorting = ref([
 
 const toast = useToast()
 const { copy } = useClipboard()
-const { locale } = useI18n()
-const { getPagePath } = usePageNavigator()
+const { getPagePath } = useOppositeLanguage()
 
 const getPathFromId = (pageId) => {
   const targetPath = getPagePath(pageId, locale.value)
@@ -368,17 +368,11 @@ const onSelect = async (row) => {
   const element = expandRefs.value[row.id]
 
   if (element) {
-    // Log the height at the moment of the scroll call
-    // console.log(`[Scroll Debug] Row ID: ${row.id}`)
-    // console.log(`Height at start: ${element.offsetHeight}px`)
     element.scrollIntoView({
       behavior: 'smooth',
       block: 'start' // 'nearest'
     })
-    // Check again after a short delay (simulating API return/render)
-    setTimeout(() => {
-      // console.log(`Height after 500ms: ${element.offsetHeight}px`)
-    }, 500)
+    // console.log('scrolling row element into view (to the top of the screen)')
   }
 }
 /*

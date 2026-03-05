@@ -56,7 +56,7 @@ const downloadNotes = () => {
 
 /* Above is only the gmail send code */
 
-const isMobile = ref(navigator.maxTouchPoints === 1)
+const isMobile = ref(navigator.maxTouchPoints === 1 || navigator.maxTouchPoints === 1)
 
 const viewportWidth = useViewportWidth()
 const viewportHeight = useViewportHeight()
@@ -116,14 +116,22 @@ const movableMenuOpen = ref(false)
 
 const { height } = useWindowSize()
 
-watch(height, (/* oldVal, newVal */) => {
-  // console.log('Height is changed from ', oldVal, ' to ', newVal)
+watch(height, (/* newVal, oldVal */) => {
   viewportWidth.value = window.visualViewport
     ? window.visualViewport.width - 36
     : window.innerWidth - 36
   viewportHeight.value = window.visualViewport
     ? window.visualViewport.height - 36
     : window.innerHeight - 36
+
+  /*
+  if (newVal > oldVal) {
+    alert('viewport changed1')
+    console.log('Height changed from ', oldVal, ' to ', newVal)
+  }
+  // The movable menu will follow the scroll (when url field is open) until the url field is gone
+  // https://share.google/aimode/UCrm8q2yXk3WR74tf
+  */
 })
 
 /* Creating popup menu and insert it on the right side */
@@ -170,23 +178,47 @@ const {
 
 const { locale } = useI18n()
 const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
-const { getPagePath } = usePageNavigator()
+const { getPagePath } = useOppositeLanguage()
 
 const isLang = ref(false)
-const pageId = usePageId()
+const pageId = usePageId() as any
+const urlHash = useUrlHash()
 
 const toggleLang = () => {
   isLang.value = isLang.value === true ? false : true
   locale.value = locale.value === 'en' ? 'da' : 'en'
 
-  if (pageId.value !== null) {
-    const oppositePath = getPagePath(pageId.value, locale.value)
-    router.push(`${oppositePath}`)
-  } else if (pageId.value === null) {
+  if (pageId !== null && pageId.value.length === 4) {
+    // Grab your data from JSON
+    const targetPath = getPagePath(pageId.value, locale.value)
+
+    const [path, hash] = targetPath.split('#') as any
+    const isHash = hash !== undefined
+
+    if (isHash) {
+      urlHash.value = hash
+      navigateTo({
+        path: path,
+        hash: `#${hash || undefined}`, // `#${hash}`
+        // This is your "message" to the router
+        state: { skipHistoryScroll: true }
+      })
+    } else { // no hash
+      if (isMobile.value)
+        navigateTo(`${path}`, {
+          external: true
+        })
+      else {
+        router.push(`${path}`)
+      }
+    }
+  } else { // not pageId
     $toggleLanguageOnMainPages(locale.value)
   }
   toast.add({ title: `${uiLocale.value.name} Translated Page`, description: '' })
 }
+
+// https://share.google/aimode/SQerCGjVs75LHYtJV
 
 /* START PREVENT THE MENU FROM POPPING UP WHEN DRAGGED */
 

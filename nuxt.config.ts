@@ -32,6 +32,13 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth'
+      // hashMode: false
+    }
+  },
+
   content: {
     database: {
       type: 'sqlite',
@@ -74,6 +81,10 @@ export default defineNuxtConfig({
     client: false
   },
 
+  devServer: {
+    host: '0.0.0.0'
+  },
+
   experimental: {
     asyncContext: true
   },
@@ -97,7 +108,7 @@ export default defineNuxtConfig({
     },
     storage: {
       cache: {
-        driver: 'memory'
+        // driver: 'memory'
       }
     }
   },
@@ -165,7 +176,9 @@ export default defineNuxtConfig({
   mcp: {
     name: 'Church Postil'
   }
-  /* // install @vite-pwa/nuxt
+})
+
+/* // install @vite-pwa/nuxt
   pwa: {
     workbox: {
       runtimeCaching: [
@@ -183,5 +196,4 @@ export default defineNuxtConfig({
       ]
     }
   }
-  */
-})
+*/

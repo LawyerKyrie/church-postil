@@ -40,6 +40,7 @@ const syncAndClamp = () => {
   // This fixes the "stuck in the middle" issue.
   x.value = Math.min(Math.max(margin, props.xWidth), maxX)
   y.value = Math.min(Math.max(margin, props.yHeight), maxY)
+  // console.log('syncAndClamp - y: ', y.value)
 }
 
 // 2. Watch for orientation changes to re-clamp

@@ -94,6 +94,7 @@ const links = computed(() => {
 const tocMenuRef = ref<HTMLElement | null>(null) // found after 1.click
 
 // Saving nav menu reference when toc is opened first time
+
 clickOnContentToc.count = 0
 function clickOnContentToc(event) {
   clickOnContentToc.count++
@@ -146,6 +147,15 @@ const hashArrayRef = ref([])
 // Watch for changes in the URL hash (e.g., #second-sunday... etc.)
 watch(() => route.hash, (newHash /* , oldHash */) => {
   if (newHash) {
+    // console.log('newHasth: ', newHash)
+    // console.log('fullPath: ', route.fullPath)
+    const pattern = /-\d+-\d+$/
+    if (pattern.test(newHash) && newHash.length > 25) {
+      // the hash is probably h2 or ## Sermon Header Title Ending with Bible verse
+      const headerId = getIdByPath(route.fullPath)
+      if (headerId?.length === 4)
+        pageId.value = headerId
+    }
     // tocHashArr is required to open the collapsed toc menu where it was last open
     hashArrayRef.value = $tocHashArr(newHash)
   }
@@ -171,19 +181,61 @@ const handleContextMenu = (e: Event) => {
 onMounted(() => {
   // This handles the "Arrival" via a link
   // await nextTick()
-  if (route.hash) {
+  // const urlHash = useUrlHash()
+  const isMobile = ref(navigator.maxTouchPoints === 1 || navigator.maxTouchPoints === 1)
+  // 1. Get the RAW URL from the performance entries (Nuxt can't hide this)
+  const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+  const fullUrl = navEntry?.name || ''
+
+  if (route.hash.startsWith('#note-')) { // NOTE HASH
+    console.log('hash startsWith "note-')
     scrollToNoteFromHash()
+  } else if (route.hash.length > 5 // NORMAL HASH
+    && !(route.hash.startsWith('#note-') || fullUrl.includes('#:~:text='))) {
+    setTimeout(() => {
+      const routerHash = route.hash.slice(1)
+      document.getElementById(routerHash)?.scrollIntoView({ behavior: 'smooth' })
+      // urlHash.value = ''
+    }, 50)
+  } else if (fullUrl.includes('#:~:text=')) {
+    const textFragment = fullUrl.split('#')[1] // Gets :~:text=...
+
+    // 2. Put it back into the address bar so it stays there
+    window.history.replaceState(null, '', window.location.pathname + '#' + textFragment)
+
+    // 3. Your "Nudge" to ensure the browser highlights
+    setTimeout(() => {
+      window.scrollBy(0, 1)
+      window.scrollBy(0, -1)
+    }, 500)
+  } else if (route.hash.length === 0 // NO HASH
+    && isMobile.value === false
+    && !fullUrl.includes('#:~:text=')) {
+    // Before this code the page opened in the bottom view
+    console.log('hash.length = 0, isMobile = false & fullUrl not startsWith #:~:text=')
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth' // or 'instant'
+    })
+  } else { // THIS SHOULD NEVER HAPPEN
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'auto'
+    }
   }
-  /*
-  if ('scrollRestoration' in window.history) {
-    window.history.scrollRestoration = 'auto'
-  }
-  */
 })
+
+/*
+if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'auto'
+    }
+*/
 
 // This handles the "Jumping" if you are already on the page
 watch(() => route.hash, () => {
-  scrollToNoteFromHash()
+  if (route.hash.startsWith('#note-'))
+    scrollToNoteFromHash()
+  else console.log('string not starts width #note-')
 }) // https://gemini.google.com/share/c9a8b8ceb3f8
 
 const { allNotes } = useNotes()
@@ -200,7 +252,7 @@ const scrollToNoteFromHash = () => {
     const finalTarget = notePos + responsiveOffset
 
     window.scrollTo({
-      top: finalTarget,
+      top: finalTarget - 70,
       behavior: 'smooth'
     })
   }
@@ -208,8 +260,13 @@ const scrollToNoteFromHash = () => {
 
 /* GET THE PAGE ID FROM THE PAGE PATH AND SAVE IT */
 const pageId = usePageId()
-const { getIdByPath } = usePageNavigator()
+const { getIdByPath } = useOppositeLanguage()
 pageId.value = getIdByPath(route.fullPath) as string
+
+// Toc menu icon or x (close)
+const tocIcon = (open) => {
+  return open ? '✖' : '☰'
+}
 </script>
 
 <template>
@@ -272,7 +329,7 @@ pageId.value = getIdByPath(route.fullPath) as string
       -->
       <UContentToc
         v-model:open="isTocOpen"
-        :title="`${toc?.title} -  ${page?.title}`"
+        :title="`${tocIcon(isTocOpen)} ${toc?.title} ${page?.title}`"
         :links="page.body?.toc?.links"
         :ui="{
           title: 'text-info',

@@ -1,10 +1,9 @@
 import pageMapData from '../assets/json//file-list.json'
 
-export const usePageNavigator = () => {
+export const useOppositeLanguage = () => {
   // This is your lookup table - pageMapData
   // const pageMap: Record<string, { da: string; en: string }> = { 1011: { /* See json file */
   const pageMap = pageMapData
-
   /**
    * Returns the path for the selected language
    * @param id - The page ID (e.g., "1011")
