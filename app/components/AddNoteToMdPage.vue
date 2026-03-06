@@ -46,7 +46,6 @@ onMounted(() => {
   })
   // Optional: Update button position as user drags handles
   if (isMobile) {
-    console.log(' Updating button position as user drags handles')
     document.addEventListener('selectionchange', () => {
       if (Date.now() - lastActionTime.value < 300) {
         return
@@ -230,8 +229,9 @@ const handleTextInteraction = (event: Event) => {
       event.stopPropagation()
       return // EXIT IMMEDIATELY
     } else {
-      console.log('Double tap detected, text not = 0 but: ', text)
-      console.log('target= ', target)
+      console.log('Double tap detected but not handled by the code:\n'
+        + 'text not = 0, but ' + text
+        + '\ntarget= ' + target)
       // It selected a word on dblclick? Ignore it as requested.
       selection?.removeAllRanges()
       return
@@ -241,7 +241,6 @@ const handleTextInteraction = (event: Event) => {
   // -------------------- PATH B: HIGHLIGHTING (SINGLE DRAG/HOLD) ---------------
   // This runs if Path A didn't "return" (i.e., it wasn't a double-tap)
   if (text.length > 0 && props.target) {
-    console.log('text.length > 0 && props.target')
     if (!selection) return
 
     const range = selection?.getRangeAt(0)
@@ -510,19 +509,16 @@ const shareNote = (note) => {
   const url = shareUrl(note.path, note.text)
   // Share logic...
   // 4. Use the Web Share API (Mobile friendly) or Copy to Clipboard
-  setTimeout(() => {
-    alert('running shareNote. navigator.share= ' + navigator.share)
-  }, 500)
 
-  if (navigator.share) {
+  if (navigator.share !== undefined) {
     navigator.share({
       title: 'Check out this highlight',
       url: url // shareUrl
     }).catch(console.error)
-  } else {
+  } else if (navigator.share === undefined) {
     // Fallback for PC: Copy to clipboard
     navigator.clipboard.writeText(url)
-    alert('Link copied to clipboard!')
+    toast.add({ title: 'Link copied to clipboard!', description: 'Share Menu not accessible on mobile in dev mode' })
   }
 }
 

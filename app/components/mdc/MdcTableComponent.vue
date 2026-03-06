@@ -44,31 +44,31 @@ const fetchUrl = computed(() => {
   return useApiUrl(`api/${targetPath}`)
 })
 
-// 1. Calculate your argument OUTSIDE the fetch
-// const isPostilDefined = props.postil !== undefined
-
-// 1. Calculate your argument OUTSIDE the fetch
-const isPostilDefined = props.postil !== undefined
-
-const { data: rowItems, status, error } = await useFetch<RowItems[]>(
+// 1. Fetch the raw data (Keep the cache clean)
+const { data: rawRows, status, error } = await useFetch<RowItems[]>(
   fetchUrl.value, {
-    key: `api-table-${locale.value}`,
-    // Simplify transform: only handle the array filtering
+    key: `api-table-${locale.value}`, // Cache key stays the same
     transform: (data) => {
-      // DEFENSIVE: If data is missing or not an array, return empty list
-      if (!Array.isArray(data)) return []
-
-      return data
-        .filter((row) => {
-          return isPostilDefined
-            ? row.postil === props.postil
-            : row.postil !== undefined
-        })
+      // Only do structural defensive checks here, NOT business logic filtering
+      return Array.isArray(data) ? data : []
     },
     server: true,
     lazy: false
   }
 )
+
+// 2. Apply filtering reactively in a computed property
+const rowItems = computed(() => {
+  if (!rawRows.value) return []
+
+  const isPostilDefined = props.postil !== undefined
+
+  return rawRows.value.filter((row) => {
+    return isPostilDefined
+      ? row.postil === props.postil
+      : row.postil !== undefined
+  })
+})
 
 /* Adding custom sort function for bible column */
 // https://gemini.google.com/share/e49b936b49a0
@@ -191,8 +191,36 @@ const columns: TableColumn<RowItems>[] = [
   }
 ]
 
-/* // global filter input field for searching */
-const globalFilter = ref('') // Start with this filter
+/*
+  // global filter input field for searching
+  // When caching the pages all postils are loaded on each "postil"-page
+  // Fixing it with this method
+  // source: https://gemini.google.com/share/f50524e9bb70
+*/
+const postilMapping = [
+  { slug: 'advent', danish: 'Advent' },
+  { slug: 'christmas', danish: 'Jul' },
+  { slug: 'lent', danish: 'Faste' },
+  { slug: 'easter', danish: 'Påske' },
+  { slug: 'trinity1', danish: 'Trefoldighed I' },
+  { slug: 'trinity2', danish: 'Trefoldighed II' }
+]
+
+// 1. Define the logic in a clear, reusable function
+const getInitialFilter = () => {
+  const currentSlug = path.slice(4) as string // route.params.slug
+
+  // Find the object where the slug matches the start of the filename
+  const match = postilMapping.find(item => currentSlug.startsWith(item.slug))
+
+  // Return the Danish name if found, otherwise an empty string
+  // if (match !== undefined)
+  return match ? match.danish : ''
+}
+
+// 2. Initialize the ref as a string, not an object
+// This matches the 'string' type the component is looking for
+const globalFilter = ref<string>(getInitialFilter())
 
 /*   VISIBILITY  */
 const table = useTemplateRef('table') // Select Column View Dropdown Menu

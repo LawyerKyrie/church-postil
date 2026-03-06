@@ -182,7 +182,6 @@ onMounted(() => {
   // This handles the "Arrival" via a link
   // await nextTick()
   // const urlHash = useUrlHash()
-  console.log('fullPath? ', route.fullPath)
   const isMobile = ref(navigator.maxTouchPoints === 1 || navigator.maxTouchPoints === 1)
   // 1. Get the RAW URL from the performance entries (Nuxt can't hide this)
   const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
