@@ -71,6 +71,19 @@ export default defineNuxtConfig({
   */
   routeRules: {
     '/': { prerender: true }, // Good for SEO/Speed on the home page
+    '/da/intro': { prerender: true },
+    '/da/advent-postil': { prerender: true },
+    '/da/christmas-postil': { prerender: true },
+    '/da/lent-postil': { prerender: true },
+    '/da/easter-postil': { prerender: true },
+    '/da/trinity1-postil': { prerender: true },
+    '/da/trinity2-postil': { prerender: true },
+    '/en/advent': { prerender: true },
+    '/en/christmas': { prerender: true },
+    '/en/lent': { prerender: true },
+    '/en/easter': { prerender: true },
+    '/en/trinity1': { prerender: true },
+    '/en/trinity2': { prerender: true },
     '/api/**': {
       cache: { maxAge: 3600 }, // 12 hours = 43200
       cors: true
