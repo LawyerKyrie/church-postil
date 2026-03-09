@@ -188,16 +188,18 @@ onMounted(() => {
   const fullUrl = navEntry?.name || ''
 
   if (route.hash.startsWith('#note-')) { // NOTE HASH
-    console.log('hash startsWith "note-')
+    console.log('if1, hash startsWith "note-')
     scrollToNoteFromHash()
   } else if (route.hash.length > 5 // NORMAL HASH
     && !(route.hash.startsWith('#note-') || fullUrl.includes('#:~:text='))) {
     setTimeout(() => {
+      console.log('if2 hash is normal')
       const routerHash = route.hash.slice(1)
       document.getElementById(routerHash)?.scrollIntoView({ behavior: 'smooth' })
       // urlHash.value = ''
     }, 50)
   } else if (fullUrl.includes('#:~:text=')) {
+    console.log('if3 text search hash')
     const textFragment = fullUrl.split('#')[1] // Gets :~:text=...
 
     // 2. Put it back into the address bar so it stays there
@@ -213,13 +215,14 @@ onMounted(() => {
     && isMobile.value === false
     && !fullUrl.includes('#:~:text=')) {
     // Before this code the page opened in the bottom view
-    console.log('hash.length = 0, isMobile = false & fullUrl not startsWith #:~:text=')
+    console.log('if4 no hash')
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: 'smooth' // or 'instant'
     })
   } else { // THIS SHOULD NEVER HAPPEN
+    console.log('else(5) - scrollRestoration')
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'auto'
     }

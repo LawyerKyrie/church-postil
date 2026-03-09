@@ -398,6 +398,8 @@ const goToNote = (note) => {
 }
 
 /* ------------------- NOTE ACTIONS MENU ---------------------- */
+const fileInput = ref<HTMLInputElement | null>(null)
+
 const noteActions = ref<DropdownMenuItem[][]>([
   [
     {
@@ -451,6 +453,17 @@ const noteActions = ref<DropdownMenuItem[][]>([
       title: 'Backup JSON data!',
       icon: 'i-mdi-code-json',
       onSelect: () => backupJson()
+    },
+    {
+      id: 'import-notes',
+      label: 'Import Notes',
+      title: 'Import Notes from backup',
+      icon: 'i-lucide-import',
+      // onSelect: event => importNotes(event)
+      onSelect: () => {
+        // This "clicks" the hidden file input when the dropdown item is picked
+        nextTick(() => fileInput.value?.click())
+      }
     }
   ],
   [
@@ -462,6 +475,56 @@ const noteActions = ref<DropdownMenuItem[][]>([
     }
   ]
 ])
+
+/* NOTE ACTION IMPORT NOTES */
+// The state that controls the "Action Menu"
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  const reader = new FileReader()
+  reader.onload = async (e) => {
+    try {
+      const importedData = JSON.parse(e.target?.result as string)
+      if (!Array.isArray(importedData)) throw new Error('Bad Json Format')
+
+      // The Choice Strategy
+      const userChoice = window.confirm(
+        `Found ${importedData.length} notes.\n\n`
+        + `OK: MERGE (Add new notes, keep current)\n`
+        + `CANCEL: REPLACE (Wipe current, restore backup)`
+      )
+
+      if (userChoice) {
+        // MERGE: Filter out IDs we already have
+        const currentIds = new Set(allNotes.value.map(n => n.id))
+        const newNotes = importedData.filter(n => !currentIds.has(n.id))
+        allNotes.value = [...allNotes.value, ...newNotes]
+        // alert(`Successfully merged ${newNotes.length} new notes.`)
+        toast.add({ title: `Successfully Merged ${newNotes.length} new notes.` /* , description: '' */ })
+      } else {
+        // REPLACE: Double check before wiping
+        const secondaryCheck = window.confirm('Are you 100% sure? \nAll current notes will be deleted.\nMaybe you should take a backup first?\n')
+        if (secondaryCheck) {
+          allNotes.value = importedData
+          toast.add({ title: 'Restore Complete!', description: 'Backup imported and stored to notes.' })
+        } else
+          toast.add({ title: 'Restore Canceled!', description: 'Backup imported and stored to notes.' })
+      }
+
+      // saveToLocalStorage() // Sync to storage
+      //  allNotes.value = [...otherNotes, ...newVal]
+    } catch (err) {
+      toast.add({ title: 'Import failed:', description: `Invalid JSON file: ${err}` })
+    } finally {
+      // Important: Reset the input so you can import the same file twice if needed
+      target.value = ''
+    }
+  }
+  reader.readAsText(file)
+}
 </script>
 
 <template>
@@ -691,6 +754,15 @@ const noteActions = ref<DropdownMenuItem[][]>([
       </WrapAndDragEl>
       <!-- </div> -->
     </div>
+    <input
+      ref="fileInput"
+      type="file"
+      class="hidden"
+      accept=".json"
+      @change="handleFileChange"
+    >
+
+    <CustomAlert />
   </ClientOnly>
 </template>
 
