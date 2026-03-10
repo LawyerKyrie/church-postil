@@ -91,7 +91,6 @@ const toggleLang = () => {
     const isHash = hash !== undefined
 
     if (isHash) {
-      console.log('here is maybe something wrong')
       urlHash.value = hash
       navigateTo({
         path: path,
@@ -100,11 +99,9 @@ const toggleLang = () => {
         state: { skipHistoryScroll: true }
       })
     } else {
-      console.log('isHash = false')
       router.push(path)
     }
   } else { // no pageId
-    console.log('AppHeader toggle Language on main pages')
     $toggleLanguageOnMainPages(locale.value)
   }
 }

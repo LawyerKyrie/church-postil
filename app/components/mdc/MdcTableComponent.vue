@@ -387,7 +387,7 @@ const expanded = computed({
 })
 
 // The magic "Select" function - expanding the row
-const onSelect = async (row) => {
+const onRowSelect = async (row) => {
   // If the row is already open, close it. If not, open only this one.
   expanded.value = expanded.value[row.id] ? {} : { [row.id]: true }
   // 1. Logic to expand row
@@ -402,6 +402,7 @@ const onSelect = async (row) => {
     })
     // console.log('scrolling row element into view (to the top of the screen)')
   }
+  catchBible(row.original.id)
 }
 /*
 const scrollUpExpandRow = (el: any) => { // if it's to close to bottom
@@ -591,7 +592,7 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
           th: 'pt-1, pb-1',
           td: 'pt-1 pb-1 whitespace-normal'
         }"
-        @select="(_, row) => onSelect(row)"
+        @select="(_, row) => onRowSelect(row)"
       >
         <!-- Removed :data="rowItems || []" :rows="rowItems || []" -->
         <template #expanded="{ row }">
@@ -601,7 +602,7 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
           >
             <div class="expand-content pl-4 border-l-4 border-primary-500 rounded-sm">
               <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
-                {{ row.original.postil }} Postil, {{ row.original.label }}, {{ getTags(row.original.tags) }}
+                {{ row.original.postil }} {{ getTags(row.original.tags) }} - {{ row.original.label }}
               </h4>
               <div class="text-sm text-gray-600 dark:text-gray-400">
                 <div class="pb-1">
@@ -618,8 +619,11 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
                       <div
                         v-if="loadedBible"
                         class="ml-2 mr-2 mt-0 mb-0"
+                        :style="{ maxWidth: (width - 33) + 'px', width: '400px' }"
                       >
-                        <p>{{ loadedBible.text }}</p>
+                        <p class="whitespace-normal break-words">
+                          {{ loadedBible.text }}
+                        </p>
                       </div>
                       <div
                         v-if="loadedBible"
@@ -651,8 +655,8 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
                     &nbsp;{{ getTags(row.original.tags, true) }}
                   </span>
                 </div>
-                <p v-if="row.original.description">
-                  &emsp;{{ row.original.description }}
+                <p v-if="loadedBible">
+                  &emsp;{{ loadedBible.description }}
                 </p>
                 <p v-else>
                   &emsp;{{ row.original }}

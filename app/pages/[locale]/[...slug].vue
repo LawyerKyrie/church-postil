@@ -182,7 +182,7 @@ onMounted(() => {
   // This handles the "Arrival" via a link
   // await nextTick()
   // const urlHash = useUrlHash()
-  const isMobile = ref(navigator.maxTouchPoints === 1 || navigator.maxTouchPoints === 1)
+  // const isMobile = ref(navigator.maxTouchPoints === 1 || navigator.maxTouchPoints === 1)
   // 1. Get the RAW URL from the performance entries (Nuxt can't hide this)
   const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
   const fullUrl = navEntry?.name || ''
@@ -212,7 +212,6 @@ onMounted(() => {
       window.scrollBy(0, -1)
     }, 500)
   } else if (route.hash.length === 0 // NO HASH
-    && isMobile.value === false
     && !fullUrl.includes('#:~:text=')) {
     // Before this code the page opened in the bottom view
     console.log('if4 no hash')

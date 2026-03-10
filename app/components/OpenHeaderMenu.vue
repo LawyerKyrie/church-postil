@@ -14,12 +14,33 @@ const { locale } = useI18n()
 const uiLocale = computed(() => locales[locale.value as keyof typeof locales])
 const oldLocale = locale.value // updating it on close click
 const openMenu = useOpenMenu()
+const pageId = usePageId()
 
 watch(openMenu, (/* newValue, oldValue */) => {
   if (openMenu.value === false) {
     if (oldLocale !== locale.value) {
       toast.add({ title: `${uiLocale.value.name} Translated Page`, description: '' })
-      $toggleLanguageOnMainPages(locale.value)
+      if (pageId !== null && pageId.value.length === 4) {
+        // Grab your data from JSON
+        const targetPath = getPagePath(pageId.value, locale.value)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const [path, hash] = targetPath.split('#') as any
+        const isHash = hash !== undefined
+
+        if (isHash) {
+          urlHash.value = hash
+          navigateTo({
+            path: path,
+            hash: `#${hash || undefined}`, // `#${hash}`
+            // This is your "message" to the router
+            state: { skipHistoryScroll: true }
+          })
+        } else {
+          router.push(path)
+        }
+      } else { // no pageId
+        $toggleLanguageOnMainPages(locale.value)
+      }
     }
   }
   // console.log(`Global variable "openMenu" was changed from "${oldValue}" to "${newValue}"`)
@@ -52,7 +73,7 @@ watch(activeTab, (newTabValue: string, oldTabValue) => {
   // Optional: check if the new value is different from the old one before running the function
   if (newTabValue !== oldTabValue) {
     locale.value = newTabValue
-    showToast(`Close the Menu`, `- to Update the Language on Select Menu`)
+    showToast(`Language changed`, `Close the menu to switch lang.`)
   }
 })
 
@@ -120,6 +141,7 @@ const { data: sermons } = await useFetch<RowCells[]>(
             const isHash = hash !== undefined
 
             if (isHash) {
+              console.log('isHash navigateTo ...')
               urlHash.value = hash
               navigateTo({
                 path: path,
@@ -127,7 +149,10 @@ const { data: sermons } = await useFetch<RowCells[]>(
                 // This is your "message" to the router
                 state: { skipHistoryScroll: true }
               })
-            } else router.push(path)
+            } else {
+              console.log('router.push(path) running')
+              router.push(path)
+            }
             /*
             navigateTo(`${getPagePath(sermon.id, locale.value)}`, {
               external: false
