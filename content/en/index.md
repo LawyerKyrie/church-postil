@@ -17,7 +17,7 @@ orientation: horizontal
 Luther's [Church Postil]{.text-primary}
 
 #description
-
+<!-- markdownlint-disable MD033 -->
 &nbsp; Mobile Friendly etc.<br>- Search/ Filter/ Sort <br>- English/ Danish ...
 
 #links

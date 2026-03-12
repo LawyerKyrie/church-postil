@@ -37,6 +37,7 @@ export default defineEventHandler(() => {
 
     { id: 3111, postil: 'Faste', tags: 'Epistel', label: '1.S.e.Åbenb.', bible: 'Rom 12: 1-5' },
     { id: 3112, postil: 'Faste', tags: 'Evangelium', label: '1.S.e.Åbenb.', bible: 'Luk 2: 41-52' },
+    /* id: 3113 Not Translated to Danish: "1.Sun after Epi 2.sermon Luk 2: 41-52" */
     { id: 3121, postil: 'Faste', tags: 'Epistel', label: '2.S.e.Åbenb.', bible: 'Rom 12: 6-16' },
     { id: 3122, postil: 'Faste', tags: 'Evangelium', label: '2.S.e.Åbenb.', bible: 'Joh 2: 1-11' },
     { id: 3131, postil: 'Faste', tags: 'Epistel', label: '3.S.e.Åbenb.', bible: 'Rom 12: 16-21' },
@@ -58,7 +59,7 @@ export default defineEventHandler(() => {
     { id: 3321, postil: 'Faste', tags: 'Epistel', label: '2.Søn.i Faste', bible: '1 Thess 4: 1-7' },
     { id: 3322, postil: 'Faste', tags: 'Evangelium', label: '2.Søn.i Faste', bible: 'Matt 15: 21-28' },
     { id: 3331, postil: 'Faste', tags: 'Epistel', label: '3.Søn.i Faste', bible: 'Ef 5: 1-9' },
-    { id: 3332, postil: 'Faste', tags: 'Evangelium', label: '3.Søn.i Faste', bible: 'Luk 11: 14-23' },
+    { id: 3332, postil: 'Faste', tags: 'Evangelium', label: '3.Søn.i Faste', bible: 'Luk 11: 14-28' },
     { id: 3341, postil: 'Faste', tags: 'Epistel', label: '4.Søn.i Faste', bible: 'Gal 4: 21-31' },
     { id: 3342, postil: 'Faste', tags: 'Epistel', label: '4.Søn.i Faste', bible: 'Joh 6: 1-15' },
 
@@ -74,8 +75,21 @@ export default defineEventHandler(() => {
     { type: 'separator' },
     { label: 'Påske Postil; Søn. e. Påske - Pinse - Tref.', type: 'label' },
 
+    { id: 4011, postil: 'Påske', tags: 'Epistel', label: '1.Påskedag', bible: '1 Kor 5: 7-8' },
+    { id: 4012, postil: 'Påske', tags: 'Gospel', label: '1.Påskedag', bible: 'Mark 16: 1-8' },
+
+    { id: 4021, postil: 'Påske', tags: 'Epistel', label: '2.Påskedag', bible: 'ApG 10: 34-43' },
+    { id: 4022, postil: 'Påske', tags: 'Gospel', label: '2.Påskedag', bible: 'Luk 24: 13-35' },
+
+    { id: 4031, postil: 'Påske', tags: 'Epistel', label: '3.Påskedag', bible: 'ApG 13: 26-39' },
+    { id: 4032, postil: 'Påske', tags: 'Gospel', label: '3.Påskedag', bible: 'Luk 24: 36-47' },
+    { id: 4033, postil: 'Påske', tags: 'Gospel', label: '3.Påskedag', bible: 'Luk 24: 36-47' },
+
+    { id: 4041, postil: 'Påske', tags: 'Epistle', label: '4.Påskedag', bible: 'Kol 3: 1-7' },
+
     { id: 4111, postil: 'Påske', tags: 'Epistel', label: '1.Søn.e.påske', bible: '1 Joh 5: 4-12' },
     { id: 4112, postil: 'Påske', tags: 'Evangelium', label: '1.Søn.e.påske', bible: 'Joh 20: 19-31' },
+    { id: 4113, postil: 'Påske', tags: 'Evangelium', label: '1.Søn.e.påske (2/2)', bible: 'Joh 20: 19-31' },
     { id: 4121, postil: 'Påske', tags: 'Epistel', label: '2.Søn.e.påske', bible: '1 Pet 2: 20-25' },
     { id: 4122, postil: 'Påske', tags: 'Evangelium', label: '2.Søn.e.påske', bible: 'Joh 10: 11-16' },
     { id: 4131, postil: 'Påske', tags: 'Epistel', label: '3.Søn.e.påske', bible: '1 Pet 2: 11-20' },

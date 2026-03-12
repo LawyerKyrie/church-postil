@@ -153,8 +153,9 @@ watch(() => route.hash, (newHash /* , oldHash */) => {
     if (pattern.test(newHash) && newHash.length > 25) {
       // the hash is probably h2 or ## Sermon Header Title Ending with Bible verse
       const headerId = getIdByPath(route.fullPath)
-      if (headerId?.length === 4)
+      if (headerId?.length === 4) {
         pageId.value = headerId
+      }
     }
     // tocHashArr is required to open the collapsed toc menu where it was last open
     hashArrayRef.value = $tocHashArr(newHash)

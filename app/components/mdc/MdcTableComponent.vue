@@ -308,21 +308,19 @@ function getRowItems(row: Row<RowItems>) {
         })
       }
     },
-    /*
     {
-      label: 'New Window',
+      label: 'New PC Tab',
       icon: 'i-lucide-link',
       onSelect() {
-        navigateTo(`${row.original.value}`, {
+        navigateTo(`${getPathFromId(row.original.id)}`, {
           external: true,
           open: {
-            target: '_blank',
-            windowFeatures: { width: 800, height: 600 }
+            target: '_blank'
+            // windowFeatures: { width: 800, height: 600 }
           }
         })
       }
     },
-    */
     {
       type: 'separator'
     },
@@ -606,7 +604,10 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
               </h4>
               <div class="text-sm text-gray-600 dark:text-gray-400">
                 <div class="pb-1">
-                  <UPopover arrow>
+                  <UPopover
+                    arrow
+                    :overlay="false"
+                  >
                     <UButton
                       :label="row.original.bible"
                       title="Click Gets Bible Text"
@@ -618,10 +619,12 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
                       <!-- <div> -->
                       <div
                         v-if="loadedBible"
-                        class="ml-2 mr-2 mt-0 mb-0"
-                        :style="{ maxWidth: (width - 33) + 'px', width: '400px' }"
+                        class="ml-2 mr-2 mt-0 mb-0 max-h-[25vh] overflow-y-auto"
+                        :style="{
+                          maxWidth: (width - 33) + 'px', width: '400px', height: '300px'
+                        }"
                       >
-                        <p class="whitespace-normal break-words">
+                        <p class="text-sm whitespace-normal break-words">
                           {{ loadedBible.text }}
                         </p>
                       </div>
@@ -648,12 +651,14 @@ const isEmpty = computed(() => status.value === 'success' && (!rowItems.value ||
                       <!-- </div> -->
                     </template>
                   </UPopover>
+                  <!--
                   <span v-if="loadedBible">
                     &nbsp;{{ loadedBible.tags }}
                   </span>
                   <span v-else>
                     &nbsp;{{ getTags(row.original.tags, true) }}
                   </span>
+                  -->
                 </div>
                 <p v-if="loadedBible">
                   &emsp;{{ loadedBible.description }}

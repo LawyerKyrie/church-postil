@@ -32,7 +32,7 @@ export default defineEventHandler(() => {
     { id: 2062, postil: 'Christmas', tags: 'Gospel', label: 'Epiphany', bible: 'Matt 2: 1-12' },
 
     { type: 'separator' },
-    { label: 'Winter Postil; Epiphany - The Holy Friday', type: 'label' },
+    { label: 'Winter Postil; Epiphany - The Holy Week', type: 'label' },
 
     { id: 3111, postil: 'Winter', tags: 'Epistle', label: '1.Sun.af.Epi.', bible: 'Rom 12: 1-5' },
     { id: 3112, postil: 'Winter', tags: 'Gospel', label: '1.Sun.af.Epi.', bible: 'Luk 2: 42-52' },
@@ -58,8 +58,12 @@ export default defineEventHandler(() => {
     { id: 3321, postil: 'Winter', tags: 'Epistle', label: '2.Sun. Lent', bible: '1 Thess 4: 1-7' },
     { id: 3322, postil: 'Winter', tags: 'Gospel', label: '2.Sun. Lent', bible: 'Matt 15: 21-28' },
     { id: 3331, postil: 'Winter', tags: 'Epistle', label: '3.Sun. Lent', bible: 'Eph 5: 1-9' },
-    { id: 3332, postil: 'Winter', tags: 'Gospel', label: '3.Sun. Lent', bible: 'Luk 11: 14-23' },
+    { id: 3332, postil: 'Winter', tags: 'Gospel', label: '3.Sun. Lent', bible: 'Luk 11: 14-28' },
+    { id: 3341, postil: 'Winter', tags: 'Epistle', label: '4.Sun. Lent', bible: 'Gal 4: 21-31' },
     { id: 3342, postil: 'Winter', tags: 'Gospel', label: '4.Sun. Lent', bible: 'Joh 6: 1-15' },
+
+    /* id: 3344 Not translated to English "Marys Annunciation Day Luk 1: 26-38" */
+
     { id: 3351, postil: 'Winter', tags: 'Epistle', label: '5.Sun. Lent', bible: 'Heb 9: 11-15' },
     { id: 3352, postil: 'Winter', tags: 'Gospel', label: '5.Sun. Lent', bible: 'Joh 8: 46-59' },
 
@@ -70,8 +74,21 @@ export default defineEventHandler(() => {
     { type: 'separator' },
     { label: 'Summer Postil; Easter - Trinitatis', type: 'label' },
 
+    { id: 4011, postil: 'Summer', tags: 'Epistle', label: 'Easter Sunday', bible: '1 Cor 5: 7-8' },
+    { id: 4012, postil: 'Summer', tags: 'Gospel', label: 'Easter Sunday', bible: 'Mark 16: 1-8' },
+
+    { id: 4021, postil: 'Summer', tags: 'Epistle', label: 'Easter Monday', bible: 'Acts 10: 34-43' },
+    { id: 4022, postil: 'Summer', tags: 'Gospel', label: 'Easter Monday', bible: 'Luk 24: 13-35' },
+
+    { id: 4031, postil: 'Summer', tags: 'Epistle', label: 'Easter Tuesday', bible: 'Acts 13: 26-39' },
+    { id: 4032, postil: 'Summer', tags: 'Gospel', label: 'Easter Tuesday', bible: 'Luk 24: 36-47' },
+    { id: 4033, postil: 'Summer', tags: 'Gospel', label: 'Easter Tuesday', bible: 'Luk 24: 36-47' },
+
+    { id: 4041, postil: 'Summer', tags: 'Epistle', label: 'Easter Wednesday', bible: 'Col 3: 1-7' },
+
     { id: 4111, postil: 'Summer', tags: 'Epistle', label: '1.Sun.a.East.', bible: '1 Joh 5: 4-12' },
     { id: 4112, postil: 'Summer', tags: 'Gospel', label: '1.Sun.a.East.', bible: 'Joh 20: 19-31' },
+    { id: 4113, postil: 'Summer', tags: 'Gospel', label: '1.Sun.a.East.(2/2)', bible: 'Joh 20: 19-31' },
     { id: 4121, postil: 'Summer', tags: 'Epistle', label: '2.Sun.a.East.', bible: '1 Pet 2: 20-25' },
     { id: 4122, postil: 'Summer', tags: 'Gospel', label: '2.Sun.a.East.', bible: 'Joh 10: 11-16' },
     { id: 4131, postil: 'Summer', tags: 'Epistle', label: '3.Sun.a.East.', bible: '1 Pet 2: 11-20' },
