@@ -64,9 +64,9 @@ const viewportHeight = useViewportHeight()
 const pos = computed(() => {
   // Desktop Default (Bottom Right)
   const btnSize = 36 // We use 36 as an estimate for the button size
-  const margin = 0 // Align to bottom-right with a 6px padding
+  const margin = 4 // Align to bottom-right with a 6px padding
   const btnSum = btnSize + margin
-  let x = window.innerWidth - btnSum
+  let x = window.innerWidth - btnSum - 8
   let y = window.innerHeight - btnSum
 
   if (isMobile.value) { // 'ontouchstart' in window
@@ -107,7 +107,6 @@ watch(isScrolling, (scrolling) => {
     // Hide menu immediately when scrolling starts
     showMovableToggle.value = false
     // Re-setting the state of all the menu buttons
-    inActive.value = true
     movableMenuOpen.value = false
   }
 })
@@ -135,13 +134,12 @@ watch(height, (/* newVal, oldVal */) => {
 })
 
 /* Creating popup menu and insert it on the right side */
-const inActive = ref(true)
+// const inActive = ref(true) // required when switch is used
 
 /* On click outside movable menu the button stays inActive = false */
 
 const scrollToTop = () => {
   movableMenuOpen.value = !movableMenuOpen.value
-  inActive.value = true
   toast.add({ title: 'Scrolling to Top!', description: '- and closing bottom menu' })
   window.scrollTo({
     top: 0,
@@ -154,7 +152,6 @@ const cpOpen = ref(false)
 defineShortcuts({
   o: () => {
     movableMenuOpen.value = !movableMenuOpen.value
-    inActive.value = !inActive.value
     if (!movableMenuOpen.value) cpOpen.value = false
   },
   m: () => {
@@ -246,23 +243,25 @@ const endHoldTimer = () => {
 }
 
 const handleMovableState = (/* ev */) => {
-  // setTimeout(() => {
-  movableMenuOpen.value = inActive.value ? false : true
+  if (!movableMenuOpen.value) {
+    // OPENING: Set the conditions you identified
+    movableMenuOpen.value = false
+  } else { // closed
+    // CLOSING: Reset them so the button can work again
+    movableMenuOpen.value = true
+  }
 
   if (!isMobile.value && isHold.value) {
-    movableMenuOpen.value = false
-    inActive.value = true
+    movableMenuOpen.value = !movableMenuOpen.value
   }
-  // event.stopPropagation()
-  // }, 0)
 }
 
+/*
 // Fixing that click outside movable button(s) the menu close, but the inActive staying FALSE
-watch(movableMenuOpen, () => {
-  if (movableMenuOpen.value === false && inActive.value === false) {
-    inActive.value = true
-  }
+watch(movableMenuOpen, (newVal, oldVal) => {
+  console.log('movableMenuOpen; oldVal= ', oldVal, ' newVal= ', newVal)
 })
+*/
 
 // I could done the same with a mousedown handle and vueUse onLongPress(buttonRef, () => {
 
@@ -540,6 +539,7 @@ const handleFileChange = (event: Event) => {
         :x-width="viewportWidth"
         :y-height="viewportHeight"
         :mobile="isMobile"
+        class=""
         @touchstart.stop
         @touchmove.stop
       >
@@ -548,29 +548,22 @@ const handleFileChange = (event: Event) => {
           v-model:open="movableMenuOpen"
           arrow
           :content="{ side: 'top', align: 'start' }"
-          class=""
+          class="flex flex-col-reverse"
           :ui="{ content: 'w-(--reka-popper-anchor-width)' }"
         >
-          <template #anchor>
-            <div
-              class="rotate-90"
-            >
-              <!-- :ref="(el) => logFunction(movableMenuOpen)" -->
-              <USwitch
-                v-model="inActive"
-                :title="inActive === true ? 'Open Menu' : 'Close Menu'"
-                color="secondary"
-                unchecked-icon="i-lucide-x"
-                checked-icon="i-lucide-arrow-left"
-                @pointerdown="startHoldTimer"
-                @touchstart="startHoldTimer"
-                @pointerup="endHoldTimer"
-                @touchend="endHoldTimer"
-                @change="(ev) => handleMovableState()"
-              />
-              <!-- // @change="(ev) => handleMovableState()" -->
-            </div>
-          </template>
+          <!-- <template #anchor> -->
+          <UButton
+            :icon="movableMenuOpen ? 'i-iconamoon-close-bold' : 'i-iconamoon-menu-kebab-vertical-bold'"
+            :color="movableMenuOpen ? 'secondary' : 'neutral'"
+            variant="outline"
+            :title="movableMenuOpen ? 'Close Menu' : 'Open Menu'"
+            @pointerdown="startHoldTimer"
+            @touchstart="startHoldTimer"
+            @pointerup="endHoldTimer"
+            @touchend="endHoldTimer"
+            @click="handleMovableState"
+          />
+          <!-- </template> -->
           <template #content>
             <div>
               <!-- BUTTON MENU WITH TWO MENU BUTTONS -->
@@ -603,12 +596,18 @@ const handleFileChange = (event: Event) => {
                   body: 'p-0'
                 }"
               >
-                <UButton
-                  color="secondary"
-                  square
-                  variant="subtle"
-                  icon="i-lucide-menu"
-                />
+                <UChip
+                  :text="allNotes.values.length"
+                  size="3xl"
+                  position="bottom-left"
+                >
+                  <UButton
+                    color="secondary"
+                    square
+                    variant="subtle"
+                    icon="i-boxicons-menu-notification-filled"
+                  />
+                </UChip>
                 <template #body>
                   <div
                     class="max-h-[80vh] flex flex-col u-command-palette-parent overflow-hidden"

@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'nuxt-og-image',
     'nuxt-llms',
+    'reka-ui/nuxt',
     '@nuxtjs/mcp-toolkit',
     '@vueuse/nuxt'
   ],

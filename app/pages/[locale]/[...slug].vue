@@ -337,7 +337,7 @@ const tocIcon = (open) => {
         :links="page.body?.toc?.links"
         :ui="{
           title: 'text-info',
-          trailing: 'text-error',
+          trailing: 'text-info',
           link: 'focus:text-secondary active:text-warning hover:text-error visited:text-neutral'
         }"
         @click="clickOnContentToc"
