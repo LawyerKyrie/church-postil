@@ -45,7 +45,7 @@ console.log('Styled Printable Notes opened in new tab!')
   <Teleport to="body">
     <div class="print-container-final">
       <header class="print-header">
-        <h1>Study Journal</h1>
+        <h1>Study Notes</h1>
       </header>
 
       <div

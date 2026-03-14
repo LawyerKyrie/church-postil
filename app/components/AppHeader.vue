@@ -7,14 +7,23 @@ const isDrawerOpen = ref(false)
 const openMenu = useOpenMenu() // const globalValue = useGlobalValue()
 
 const handleClose = (isOpen: boolean) => {
+  console.log('isOpen?')
   if (!isOpen)
     openMenu.value = false
   else
     openMenu.value = true
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { width } = useWindowSize() as any
+const toast = useToast()
+
 defineShortcuts({
-  meta_m: () => isDrawerOpen.value = !isDrawerOpen.value
+  meta_m: () => {
+    if (width.value < 1024)
+      isDrawerOpen.value = !isDrawerOpen.value
+    else toast.add({ title: 'This menu - Not on wide screen!', description: 'Resize window < 1024 px to view this menu.' })
+  }
 })
 
 const handleGlobalCommandPaletteFocus = (event: FocusEvent) => {
@@ -58,8 +67,6 @@ onUnmounted(() => {
 })
 
 /* ------------- TOGGLE LANGUAGE BUTTON ------------- */
-const { width } = useWindowSize()
-const toast = useToast()
 const notMobile = ref(false)
 // notMobile.value = width.value > 385
 // not watching (width.value) or updating when width changes
@@ -110,7 +117,9 @@ const toggleLang = () => {
 <template>
   <UHeader
     v-model:open="isDrawerOpen"
-    :ui="{ center: 'flex-1' }"
+    :ui="{
+      center: 'flex-1'
+    }"
     :to="header?.to || '/'"
     mode="drawer"
     class="relative"

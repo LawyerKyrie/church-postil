@@ -597,7 +597,7 @@ const handleFileChange = (event: Event) => {
                 }"
               >
                 <UChip
-                  :text="allNotes.values.length"
+                  :text="allNotes.length"
                   size="3xl"
                   position="bottom-left"
                 >
@@ -648,14 +648,14 @@ const handleFileChange = (event: Event) => {
                               class="w-10 h-10 mx-auto text-gray-400 opacity-50"
                             />
                             <p class="text-sm text-gray-500">
-                              Your Study Journal is empty.
+                              No Study Notes yet?
                             </p>
                             <p class="text-xs text-gray-400 italic">
                               Start highlighting text <br>
                               or <br>
                               double-click <br>
                               <br>
-                              to see them here!
+                              to view them here!
                             </p>
                           </div>
 

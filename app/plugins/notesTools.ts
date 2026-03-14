@@ -68,7 +68,7 @@ export default defineNuxtPlugin(() => {
 
   const openPrintableMdNotes = (groupedNotes: any) => {
     // 1. Build the Markdown String
-    let markdown = `# Scripture Study Journal\n\n`
+    let markdown = `# Scripture Study Notes\n\n`
     markdown += `> Generated on: ${new Date().toLocaleDateString()}\n\n---\n\n`
 
     groupedNotes.forEach((group: any) => {
@@ -139,7 +139,7 @@ export default defineNuxtPlugin(() => {
           </script>
         </head>
         <body>
-          <h1>Study Journal</h1>
+          <h1>Study Notes</h1>
           <button class="print-button" onclick="window.print()">Print This Page</button>
           ${content}
         </body>
@@ -164,7 +164,7 @@ export default defineNuxtPlugin(() => {
 
   const exportNotesAsFile = (groupedNotes: any) => {
     // 1. Build your Markdown string (same as before)
-    let markdown = `# Scripture Study Journal\n\n`
+    let markdown = `# Scripture Study Notes\n\n`
     groupedNotes.forEach((group: any) => {
       markdown += `## ${group.path} - ${group.title}\n`
       group.items.forEach((item: any) => {

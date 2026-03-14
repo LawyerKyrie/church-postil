@@ -12,6 +12,13 @@ export default defineAppConfig({
       // footer stays at the end of the flex column
       footer: 'sticky bottom-0 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900'
       // https://gemini.google.com/share/664d10243a00
+      /*
+      header: {
+        slots: {
+          toggle: 'lg:flex'
+        }
+      },
+      */
     },
     contentToc: {
       slots: {

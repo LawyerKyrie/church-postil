@@ -487,7 +487,7 @@ let cachedData: BibleData | null = null
 async function catchBible(targetId: string) {
   // Only fetch if we haven't already
   if (!cachedData) {
-    const response = await fetch('../json/bibleid.json')
+    const response = await fetch(`../json/${locale.value}/bibleid.json`)
     cachedData = await response.json()
   }
   if (cachedData)

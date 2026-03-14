@@ -5,7 +5,7 @@ export const useExport = () => {
 
   const sendToGmail = (groupedNotes: any, totalCount: number) => {
     const myEmail = 'jur.eleison@gmail.com'
-    const subject = encodeURIComponent(`Scripture Study Journal (${totalCount} notes) - ${new Date().toLocaleDateString()}`)
+    const subject = encodeURIComponent(`Scripture Study Notes (${totalCount} notes) - ${new Date().toLocaleDateString()}`)
 
     // 1. Build the Plain Text Body
     let bodyText = 'SCRIPTURE STUDY NOTES\n\n'
