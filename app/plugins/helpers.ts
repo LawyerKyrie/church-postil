@@ -21,13 +21,25 @@ export default defineNuxtPlugin(() => {
 
       keyboardClickO() {
         const targetElement = document
-        const ctrlKEvent = new KeyboardEvent('keydown', {
+        const keyOEvent = new KeyboardEvent('keydown', {
           key: 'o',
           code: 'KeyO',
           bubbles: true,
           cancelable: true
         })
-        targetElement.dispatchEvent(ctrlKEvent)
+        targetElement.dispatchEvent(keyOEvent)
+      },
+
+      activateNoteMenu() {
+        const targetElement = document
+        const noteMenuEvent = new KeyboardEvent('keydown', {
+          key: 'm',
+          code: 'KeyM',
+          keyCode: 77,
+          bubbles: true,
+          cancelable: true
+        })
+        targetElement.dispatchEvent(noteMenuEvent)
       }
     }
   }

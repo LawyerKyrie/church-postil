@@ -278,6 +278,16 @@ watch(selectMenu, async (newValue/* , oldValue */) => {
           :default-open="false"
           class="pl-2 pr-2"
         />
+        <a
+          href="/da/notes"
+          class="pl-2.5"
+        >
+          <UIcon
+            name="i-mdi-learn"
+            class="size-5"
+          />
+          Userguide: How to create notes?
+        </a>
       </template>
 
       <template #da>

@@ -1,7 +1,7 @@
 ---
-seo:
-  title: Kirke Postille
-  description: Luthers Kirke Postille på Dansk
+title: Kirke Postille
+description: Luthers Kirke Postille på Dansk
+navigation: false
 ---
 
 ::u-page-hero{class="dark:bg-gradient-to-b from-neutral-900 to-neutral-950"}

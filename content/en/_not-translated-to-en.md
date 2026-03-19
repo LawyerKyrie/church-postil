@@ -1,8 +1,7 @@
 ---
 title: No English edition
 description: No English translation of this Danish sermon
-navigation: 
-icon: i-ix-language-filled
+navigation: false
 ---
 
 ## No English translation

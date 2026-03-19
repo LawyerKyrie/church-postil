@@ -1,8 +1,7 @@
 ---
 title: Ingen dansk udgave
 description: Ingen dansk oversættelse av denne engelske prædiken
-navigation:
-  icon: i-ix-language-filled
+navigation: false
 ---
 
 ## Ingen dansk oversættelse

@@ -1,7 +1,7 @@
 ---
-seo:
-  title: Church Postil (en/da)
-  description: Luther's Church Postil (Kirke Postille)
+title: Church Postil (en/da)
+description: Luther's Church Postil (Kirke Postille)
+navigation: false
 ---
 
 ::u-page-hero{class="dark:bg-gradient-to-b from-neutral-900 to-neutral-950"}
