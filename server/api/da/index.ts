@@ -32,20 +32,20 @@ export default defineEventHandler(() => {
     { id: 2061, postil: 'Jul', tags: 'Epistel', label: 'Tre Konger', bible: 'Es 60: 1-6' },
     { id: 2062, postil: 'Jul', tags: 'Evangelium', label: 'Tre Konger', bible: 'Matt 2: 1-12' },
 
-    { id: 3111, postil: 'Jul', tags: 'Epistel', label: '1.S.e.Åbenb.', bible: 'Rom 12: 1-5' },
-    { id: 3112, postil: 'Jul', tags: 'Evangelium', label: '1.S.e.Åbenb.', bible: 'Luk 2: 41-52' },
-    /* id: 3113 Not Translated to Danish: "1.Sun after Epi 2.sermon Luk 2: 41-52" */
-    { id: 3121, postil: 'Jul', tags: 'Epistel', label: '2.S.e.Åbenb.', bible: 'Rom 12: 6-16' },
-    { id: 3122, postil: 'Jul', tags: 'Evangelium', label: '2.S.e.Åbenb.', bible: 'Joh 2: 1-11' },
-    { id: 3131, postil: 'Jul', tags: 'Epistel', label: '3.S.e.Åbenb.', bible: 'Rom 12: 16-21' },
-    { id: 3132, postil: 'Jul', tags: 'Evangelium', label: '3.S.e.Åbenb.', bible: 'Matt 8: 1-13' },
-    { id: 3141, postil: 'Jul', tags: 'Epistel', label: '4.S.e.Åbenb.', bible: 'Rom 13: 8-10' },
-    { id: 3142, postil: 'Jul', tags: 'Evangelium', label: '4.S.e.Åbenb.', bible: 'Matt 8: 23-27' },
-    { id: 3151, postil: 'Jul', tags: 'Epistel', label: '5.S.e.Åbenb.', bible: 'Kol 3: 12-17' },
-    { id: 3152, postil: 'Jul', tags: 'Evangelium', label: '5.S.e.Åbenb.', bible: 'Matt 13: 24-30' },
-
     { type: 'separator' },
-    { label: 'Faste Postil; Før-faste - Langfre.', type: 'label' },
+    { label: 'Faste Postil; Åb.søndagene - Langfre.', type: 'label' },
+
+    { id: 3111, postil: 'Faste', tags: 'Epistel', label: '1.S.e.Åbenb.', bible: 'Rom 12: 1-5' },
+    { id: 3112, postil: 'Faste', tags: 'Evangelium', label: '1.S.e.Åbenb.', bible: 'Luk 2: 41-52' },
+    /* id: 3113 Not Translated to Danish: "1.Sun after Epi 2.sermon Luk 2: 41-52" */
+    { id: 3121, postil: 'Faste', tags: 'Epistel', label: '2.S.e.Åbenb.', bible: 'Rom 12: 6-16' },
+    { id: 3122, postil: 'Faste', tags: 'Evangelium', label: '2.S.e.Åbenb.', bible: 'Joh 2: 1-11' },
+    { id: 3131, postil: 'Faste', tags: 'Epistel', label: '3.S.e.Åbenb.', bible: 'Rom 12: 16-21' },
+    { id: 3132, postil: 'Faste', tags: 'Evangelium', label: '3.S.e.Åbenb.', bible: 'Matt 8: 1-13' },
+    { id: 3141, postil: 'Faste', tags: 'Epistel', label: '4.S.e.Åbenb.', bible: 'Rom 13: 8-10' },
+    { id: 3142, postil: 'Faste', tags: 'Evangelium', label: '4.S.e.Åbenb.', bible: 'Matt 8: 23-27' },
+    { id: 3151, postil: 'Faste', tags: 'Epistel', label: '5.S.e.Åbenb.', bible: 'Kol 3: 12-17' },
+    { id: 3152, postil: 'Faste', tags: 'Evangelium', label: '5.S.e.Åbenb.', bible: 'Matt 13: 24-30' },
 
     { id: 3211, postil: 'Faste', tags: 'Epistel', label: 'Septuagesima', bible: '1 Kor 9: 24-10:5' },
     { id: 3212, postil: 'Faste', tags: 'Evangelium', label: 'Septuagesima', bible: 'Matt 20: 1-16' },

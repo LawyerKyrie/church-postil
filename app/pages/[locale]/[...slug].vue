@@ -50,7 +50,7 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
 
 const title = page?.value?.seo?.title || page?.value?.title
 const description = page?.value?.seo?.description || page?.value?.description
-// const source = page?.value.seo.source || page?.value?.source
+const source = page?.value.seo.source || page?.value?.source
 
 const currentOrigin = ref('https://church-postil.vercel.app')
 
@@ -92,13 +92,13 @@ const sourceObj = computed(() => {
         postilRef = '[7, 8, 10 & 11](https://archive.org/details/Wellesley_College_Library?tab=collection&query=precioussacredwr07luth+OR+precioussacredwr11luth+OR+precioussacredwr10luth+OR+precioussacredwr11luth&sort=publicdate){:target="_blank" title="Link to this four volumes on archive.org"}' // 8 & 11 = Epiphany
         volumeRef = '- Epistles (vol 7 & 8) & \n- Gospels (vol 10 & 11)' // 8 & 11 = Epiphany
         urlRef = 'https://archive.org/details/Wellesley_College_Library?tab=collection&query=precioussacredwr07luth+OR+precioussacredwr11luth+OR+precioussacredwr10luth+OR+precioussacredwr11luth&sort=publicdate'
-        differences = '- This original postil of 1522/44 included epiphany sermons.'
+        differences = '- The original Christmas (& Advent) postil of 1521/22 was in 1544 part of the Winter Postil'
         break
       case 'Lent':
         postilRef = '[8 & 11](https://archive.org/details/Wellesley_College_Library?tab=collection&query=precioussacredwr08luth+OR+precioussacredwr11luth&sort=publicdate){:target="_blank" title="Link to this two volumes on archive.org"}'
         volumeRef = '- Epistles (vol 8) & \n Gospels (vol 11)'
         urlRef = 'https://archive.org/details/Wellesley_College_Library?tab=collection&query=precioussacredwr08luth+OR+precioussacredwr11luth&sort=publicdate'
-        differences = '- Original "Lent" postil starts with pre-lent sundays (and ends at the Holy Friday)'
+        differences = '- In the 1543/44 version of the Church Postil this postil and (the previous two postil\'s) was part of the winter postil.'
         break
       case 'Easter':
         postilRef = '[8, 9, 11 & 12](https://archive.org/details/Wellesley_College_Library?tab=collection&query=precioussacredwr08luth+OR+precioussacredwr09luth+OR+precioussacredwr11luth+OR+precioussacredwr12luth&sort=publicdate){:target="_blank" title="Link to this four volumes on archive.org"}' // 9 & 12 = Trinitatis
@@ -110,13 +110,13 @@ const sourceObj = computed(() => {
         postilRef = '[9 & 13](https://archive.org/details/Wellesley_College_Library?tab=collection&query=precioussacredwr09luth+OR+precioussacredwr13luth&sort=publicdate){:target="_blank" title="Link to this two volumes on archive.org"}' // 1-12 Sunday after Trinitatis
         volumeRef = '- Epistles (vol 9) & \n- Gospels (vol 13)' // 1-12 Sunday after Trinitatis
         urlRef = 'https://archive.org/details/Wellesley_College_Library?tab=collection&query=precioussacredwr09luth+OR+precioussacredwr13luth&sort=publicdate'
-        differences = '- This postil was originally part of the Summer Postil (1526)'
+        differences = '- This postil was originally part of the Summer Postil (1526/27)'
         break
       case 'Trinity II':
         postilRef = '[9 & 14](https://archive.org/details/Wellesley_College_Library?tab=collection&query=precioussacredwr09luth+OR+precioussacredwr14luth&sort=publicdate){:target="_blank" title="Link to this two volumes on archive.org"}'
         volumeRef = '- Epistles (vol 9) & \n- Gospels (vol 14)'
         urlRef = 'https://archive.org/details/Wellesley_College_Library?tab=collection&query=precioussacredwr09luth+OR+precioussacredwr14luth&sort=publicdate'
-        differences = '- - The sermon on all saint\'s (included here) was originally from the Festival Postil (1527)'
+        differences = '- - The sermon on all saint\'s (included here) was originally from the Festival Postil (1526/27)'
         break
       default:
         postilRef = '[Error](http://bad-url-ref.com){:target="_blank" title="Error - No volumes is detected!"} in Title - Unknown Postil!'
@@ -131,9 +131,14 @@ const sourceObj = computed(() => {
 })
 
 useHead({
-  link: [
-    { rel: 'canonical', href: sourceObj.value?.urlRef !== undefined ? sourceObj.value?.urlRef : 'http://www.lutherdansk.dk/KP%20-%20enkeltpr%C3%A6dikener/KP%20-%20Forside%20med%20indeks/index.htm' }
-  ]
+  link: computed(() => {
+    if (source === undefined) return []
+
+    return [{
+      rel: 'canonical',
+      href: sourceObj.value?.urlRef === undefined ? source : sourceObj.value?.urlRef
+    }]
+  })
 })
 
 const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
@@ -387,17 +392,20 @@ const daItems = [
     icon: 'i-entypo-creative-commons-public-domain',
     class: '',
     content: '&nbsp;'
-      + 'Denne prediken er **oversatt av Finn B. Andersen**\n'
-      + '- Kilde for denne prædiken er '
-      + '[www.lutherdansk.dk](http://www.lutherdansk.dk/KP%20-%20enkeltpr%C3%A6dikener/KP%20-%20Forside%20med%20indeks/index.htm){:target="_blank" title="Kirkepostillen i dansk oversættelse av Finn B.Andersen"}'
+      + 'Denne prediken er **oversatt/digitalisert av Finn B. Andersen**\n'
+      + '- **Kilde:** [www.lutherdansk.dk/etc.]('
+      + source
+      + '){:target="_blank" title="Kirkepostillen i dansk oversættelse av Finn B.Andersen"}'
   },
   {
     label: 'Digital kilde',
     icon: 'i-lucide-library',
     class: '',
     content: '&nbsp;'
-      + 'Digitalisert til html/pdf osv. av _Finn B.Andersen_.\n'
-      + '- **Digital kilde:** [www.lutherdansk.dk](http://www.lutherdansk.dk/KP%20-%20enkeltpr%C3%A6dikener/KP%20-%20Forside%20med%20indeks/index.htm){:target="_blank" title="Den danske kirkepostille av Finn B.Andersen"}\n'
+      + 'Digitalisert/ oversatt til html/pdf osv. av _Finn B.Andersen_.\n'
+      + '- **Digital kilde:** [www.lutherdansk.dk/etc.]('
+      + source
+      + '){:target="_blank" title="Den danske kirkepostille av Finn B.Andersen"}\n'
   },
   {
     label: 'Historisk info - Kirke Postil',
