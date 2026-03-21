@@ -23,4 +23,6 @@ export const usePageId = () => useState<string>('pageId', () => '')
 export const useUrlHash = () => useState<string>('urlHash', () => '')
 export const usePostilFilter = () => useState<string>('postilFilter', () => '')
 
+export const useSourceVolume = () => useState<string>('sourceVolume', () => '')
+
 // export const useCloseElement = () => useState<HTMLButtonElement>('closeElement', () => null)
