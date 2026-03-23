@@ -10,7 +10,6 @@ const props = defineProps({
 const route = useRoute()
 
 const showSourceInfo = computed(() => {
-  console.log('route.path= ', route.path)
   if (route.path.startsWith('/en')) return true
   else if (route.path.endsWith('-postil')) return false
   else if (route.path.includes('/da/notes')) return false
@@ -126,8 +125,8 @@ const daItems = [
     icon: 'i-lucide-library',
     class: '',
     content: '&nbsp;'
-      + 'Digitalisert/ oversatt til html/pdf osv. av _Finn B.Andersen_.\n'
-      + '- **Digital kilde:** [www.lutherdansk.dk/etc.]('
+      + 'Digitalisert/ oversatt av _Finn B.Andersen_.\n'
+      + '- **Digital kilde:** [www.lutherdansk.dk]('
       + props.source
       + '){:target="_blank" title="Den danske kirkepostille er hentet fra Finn B.Andersens site; www.lutherdansk.dk"}\n'
   },
@@ -147,19 +146,12 @@ const daItems = [
     class: '',
     content: '&nbsp;'
       + 'Optimized for studies on mobile.\n'
-      + 'Students (& others) can:\n'
-      + '- Highlight text &\n'
-      + '- Create note bobbles (dbl.click)\n'
-      + '- Print, export & import notes etc.\n'
-      + '- Share the URL to notes or\n'
-      + '- Find notes in the note menu\n'
-      + '- & click to go to the notes.\n'
-      + '- Note Menu = Right Btm Menu'
+      + 'Read more:\n'
+      + '- [Create note or highlight text etc.](../da/notes){:target="_blank" title="Click to read about how to create notes etc."}\n'
   }
 ]// https://share.google/aimode/p0aviyRrIPS1Ouwdp
 
 const sourceVolume = useSourceVolume()
-console.log('value of sourceVolume= ', sourceVolume.value)
 
 const enItems = [
   {
@@ -202,14 +194,8 @@ const enItems = [
     class: '',
     content: '&nbsp;'
       + 'Optimized for studies on mobile.\n'
-      + 'Students (& others) can:\n'
-      + '- Highlight text &\n'
-      + '- Create note bobbles (dbl.click)\n'
-      + '- Print, export & import notes etc.\n'
-      + '- Share the URL to notes or\n'
-      + '- Find notes in the note menu\n'
-      + '- & click to go to the notes.\n'
-      + '- Note Menu = Right Btm Menu'
+      + 'Read more:\n'
+      + '- [Create note or highlight text etc.](../da/notes){:target="_blank" title="Click to read about how to create notes etc."}\n'
   }
 ]
 // https://share.google/aimode/p0aviyRrIPS1Ouwdp

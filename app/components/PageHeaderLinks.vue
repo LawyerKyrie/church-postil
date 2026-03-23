@@ -10,6 +10,21 @@ const mdPath = computed(() => `${site.url}/raw${route.path}.md`)
 
 const items = [
   {
+    label: 'Notes & highlights',
+    title: 'Guide to making notes and highlight text',
+    icon: 'i-lucide-notebook-pen',
+    onSelect() {
+      navigateTo({
+        path: '/da/notes'
+      })
+      toast.add({
+        icon: 'i-lucide-notebook-pen',
+        title: 'Double Click add Notes!',
+        description: 'Add Notes with double click, and read it later on the same device.'
+      })
+    }
+  },
+  {
     label: 'View as Markdown',
     icon: 'i-simple-icons:markdown',
     target: '_blank',
@@ -49,18 +64,6 @@ const items = [
         title: 'Page Copied to clipboard'
       })
     }
-  },
-  {
-    label: 'Dbl.Click Add Notes',
-    title: 'Add Notes with double click and read it when you open the document next time (on the same device).',
-    icon: 'i-lucide-notebook-pen',
-    onSelect() {
-      toast.add({
-        icon: 'i-lucide-notebook-pen',
-        title: 'Double Click add Notes!',
-        description: 'Add Notes with double click, and read it later on the same device.'
-      })
-    }
   } /* ,
   {
     label: 'Create Accordions',
@@ -89,7 +92,7 @@ const { $downloadFile } = useNuxtApp() as any
 <template>
   <UFieldGroup>
     <UButton
-      label="Markdown Page etc…"
+      label="Study Tools"
       :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
       color="neutral"
       variant="outline"

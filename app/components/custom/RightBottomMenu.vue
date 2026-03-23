@@ -554,7 +554,7 @@ const handleFileChange = (event: Event) => {
           <!-- <template #anchor> -->
           <UButton
             :icon="movableMenuOpen ? 'i-iconamoon-close-bold' : 'i-iconamoon-menu-kebab-vertical-bold'"
-            :color="movableMenuOpen ? 'secondary' : 'neutral'"
+            :color="movableMenuOpen ? 'secondary' : 'secondary'"
             variant="outline"
             :title="movableMenuOpen ? 'Close Menu' : 'Open Menu'"
             @pointerdown="startHoldTimer"
@@ -760,8 +760,6 @@ const handleFileChange = (event: Event) => {
       accept=".json"
       @change="handleFileChange"
     >
-
-    <CustomAlert />
   </ClientOnly>
 </template>
 

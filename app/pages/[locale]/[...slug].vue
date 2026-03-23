@@ -53,11 +53,22 @@ const source = page?.value.seo.source || page?.value?.source as any
 
 const currentOrigin = ref('https://church-postil.vercel.app')
 
+// inserting quotation in the description field: https://gemini.google.com/share/4568e86eae86
+// 1. Grab the quote from the URL (e.g., ?q=important+text)
+const sharedQuote = computed(() => route.query.q as string)
+
+// 2. Fallback to the default description if no quote is present
+const seoDescription = computed(() => {
+  return sharedQuote.value
+    ? `"${sharedQuote.value}"`
+    : (description || 'Check out my notes')
+})
+
 useSeoMeta({
   title,
   ogTitle: title,
-  description,
-  ogDescription: description,
+  description: seoDescription,
+  ogDescription: seoDescription,
   ogUrl: () => `${currentOrigin.value}${route.path}`
 })
 

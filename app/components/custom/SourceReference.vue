@@ -38,10 +38,16 @@ const sourceVolume = computed(() => {
   return lenkerVol
 })
 
-console.log('sourceVolume.value=', sourceVolume.value)
-
 const lenkerVolume = useSourceVolume()
 lenkerVolume.value = sourceVolume.value
+
+const showSourceInfo = computed(() => {
+  if (route.path.endsWith('-postil')) return false
+  else if (route.path.includes('/da/notes')) return false
+  else if (route.path.includes('/uddrag')) return false
+  else if (props.source !== undefined) return true
+  else return true
+})
 </script>
 
 <template>
@@ -61,7 +67,7 @@ lenkerVolume.value = sourceVolume.value
     class="my-6"
   />
   <UAlert
-    v-if="props.source !== undefined && route.path.startsWith('/da')"
+    v-if="route.path.startsWith('/da') && showSourceInfo"
     title="Kilde"
     description="Translated by Finn B.Andersen"
     color="neutral"

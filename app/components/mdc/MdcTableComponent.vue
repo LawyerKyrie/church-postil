@@ -393,13 +393,29 @@ const onRowSelect = async (row) => {
 
   const element = expandRefs.value[row.id]
 
+  // console.log('scrolling row element into view (to the top of the screen)')
   if (element) {
     element.scrollIntoView({
       behavior: 'smooth',
       block: 'start' // 'nearest'
     })
-    // console.log('scrolling row element into view (to the top of the screen)')
+
+    // 4. THE FIX: Re-verify after a tiny delay
+    // This accounts for CSS transitions or slow layout shifts
+    setTimeout(() => {
+      const rect = element.getBoundingClientRect()
+
+      // If 'top' is still less than 0, it means the expansion
+      // pushed the row back up off-screen.
+      if (rect.top < 0) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        })
+      }
+    }, 250) // Adjust timeout to match your CSS transition time
   }
+
   catchBible(row.original.id)
 }
 /*
