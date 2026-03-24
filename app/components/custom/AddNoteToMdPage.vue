@@ -500,7 +500,7 @@ const shareUrl = (path, text) => {
   // 2. Encode the text for the Scroll-to-Text fragment
   const encodedText = encodeURIComponent(textToShare.trim())
   // 3. Construct the final "Magic Link"
-  const shareUrl = `${baseUrl}#:~:text=${encodedText}`
+  const shareUrl = `${baseUrl}?q=${encodedText}` // shareUrl = `${baseUrl}#:~:text=${encodedText}`
   return shareUrl
 }
 
@@ -509,6 +509,10 @@ const shareNote = (note) => {
   const url = shareUrl(note.path, note.text)
   // Share logic...
   // 4. Use the Web Share API (Mobile friendly) or Copy to Clipboard
+  if (!navigator.share) {
+    // fallback for development mode, localhost etc.
+    alert('Clipboard or navigator.share don\'t work in development mode, localhost etc.')
+  }
 
   if (navigator.share !== undefined) {
     navigator.share({
