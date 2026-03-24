@@ -47,9 +47,11 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
   })
 })
 
-const title = page?.value?.seo?.title || page?.value?.title
+let title = page?.value?.seo?.title || page?.value?.title as any
 const description = page?.value?.seo?.description || page?.value?.description
 const source = page?.value.seo.source || page?.value?.source as any
+
+console.log('description = ', page?.value?.seo?.description || page?.value?.description)
 
 const currentOrigin = ref('https://church-postil.vercel.app')
 
@@ -59,23 +61,29 @@ const sharedQuote = computed(() => route.query.q as string)
 
 // 2. Fallback to the default description if no quote is present
 const seoDescription = computed(() => {
+  title = page?.value?.seo?.title || page?.value?.title
+  const defaultDesc = page.value?.seo?.description || page.value?.description || 'Check out my notes'
   return sharedQuote.value
     ? `"${sharedQuote.value}"`
-    : (description || 'Check out my notes')
+    : (defaultDesc || 'Check out my notes')
 })
 
 useSeoMeta({
-  title,
-  ogTitle: title,
-  description: seoDescription,
-  ogDescription: seoDescription,
-  ogUrl: () => `${currentOrigin.value}${route.path}`
+  title, // title: () => page?.value?.seo?.title || page?.value?.title,
+  ogTitle: title, // ogTitle: () => page?.value?.seo?.title || page?.value?.title,
+  description,
+  ogDescription: description,
+  ogUrl: () => `${currentOrigin.value}${route.fullPath}` // route.fullPath
 })
 
 const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
 
 defineOgImageComponent('Docs', {
-  headline: headline.value
+  // headline: headline.value,
+  headLine: headline.value,
+  title: title,
+  description: seoDescription.value,
+  siteName: 'Luther\'s Church Postil'
 })
 
 // 3. Wrap the logic in a safe Computed block
@@ -211,8 +219,37 @@ onMounted(() => {
       document.getElementById(routerHash)?.scrollIntoView({ behavior: 'smooth' })
       // urlHash.value = ''
     }, 50)
+  } else if (route.hash.length === 0 // NO HASH or share note here
+    && !fullUrl.includes('#:~:text=')
+    && !sharedQuote.value) {
+    // Before this code the page opened in the bottom view
+    console.log('if3 no hash or query')
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth' // or 'instant'
+    })
+  } else if (sharedQuote.value) {
+    console.log('if4 query param (share note)')
+
+    // 1. Ensure the text is properly encoded for a URL fragment
+    // We use encodeURIComponent but the spec sometimes prefers slightly different handling
+    const formattedText = encodeURIComponent(sharedQuote.value)
+    const textFragment = `:~:text=${formattedText}`
+
+    // 2. Apply the hash
+    // We use replaceState first to keep the URL clean (no ?q= and # together if you prefer)
+    // But setting .hash directly is often more "persuasive" to the browser
+    setTimeout(() => {
+      window.location.hash = textFragment
+
+      // 3. The "Jumpstart"
+      // If it still doesn't scroll, we manually find the text
+      // but usually, the browser needs a layout reflow:
+      window.dispatchEvent(new Event('hashchange'))
+    }, 330) // Small delay to ensure Nuxt has rendered the content
   } else if (fullUrl.includes('#:~:text=')) {
-    console.log('if3 text search hash')
+    console.log('if5 text search hash')
     const textFragment = fullUrl.split('#')[1] // Gets :~:text=...
 
     // 2. Put it back into the address bar so it stays there
@@ -224,17 +261,8 @@ onMounted(() => {
       window.scrollBy(0, 1)
       window.scrollBy(0, -1)
     }, 500)
-  } else if (route.hash.length === 0 // NO HASH
-    && !fullUrl.includes('#:~:text=')) {
-    // Before this code the page opened in the bottom view
-    console.log('if4 no hash')
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth' // or 'instant'
-    })
-  } else { // THIS SHOULD NEVER HAPPEN
-    console.log('else(5) - scrollRestoration')
+  } else { // THIS SHOULD NEVER HAPPEN - probable an error
+    console.log('Error: else(6) - scrollRestoration')
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'auto'
     }

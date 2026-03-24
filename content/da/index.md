@@ -17,7 +17,7 @@ orientation: horizontal
 Luthers [Kirke Postille]{.text-primary}
 
 #description
-&nbsp; Mobil vennlig o.l.<br>- Søk/ Filtrer/ Sorter <br>- Dansk/ Engelsk etc.
+&nbsp; Optimalisert for mobil<br>+ <u>[Note App](/da/notes){title="Klikk for å lese mer om Note Appen"}</u> <br>+ deling av noter
 
 #links
 
