@@ -47,9 +47,11 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
   })
 })
 
-const title = page?.value?.seo?.title || page?.value?.title
+let title = page?.value?.seo?.title || page?.value?.title as any
 const description = page?.value?.seo?.description || page?.value?.description
 const source = page?.value.seo.source || page?.value?.source as any
+
+console.log('description = ', page?.value?.seo?.description || page?.value?.description)
 
 const currentOrigin = ref('https://church-postil.vercel.app')
 
@@ -59,23 +61,29 @@ const sharedQuote = computed(() => route.query.q as string)
 
 // 2. Fallback to the default description if no quote is present
 const seoDescription = computed(() => {
+  title = page?.value?.seo?.title || page?.value?.title
+  const defaultDesc = page.value?.seo?.description || page.value?.description || 'Check out my notes'
   return sharedQuote.value
     ? `"${sharedQuote.value}"`
-    : (description || 'Check out my notes')
+    : (defaultDesc || 'Check out my notes')
 })
 
 useSeoMeta({
-  title,
-  ogTitle: title,
-  description: seoDescription,
-  ogDescription: seoDescription,
-  ogUrl: () => `${currentOrigin.value}${route.path}`
+  title, // title: () => page?.value?.seo?.title || page?.value?.title,
+  ogTitle: title, // ogTitle: () => page?.value?.seo?.title || page?.value?.title,
+  description,
+  ogDescription: description,
+  ogUrl: () => `${currentOrigin.value}${route.fullPath}` // route.fullPath
 })
 
 const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
 
 defineOgImageComponent('Docs', {
-  headline: headline.value
+  // headline: headline.value,
+  headLine: headline.value,
+  title: title,
+  description: seoDescription.value,
+  siteName: 'Luther\'s Church Postil'
 })
 
 // 3. Wrap the logic in a safe Computed block

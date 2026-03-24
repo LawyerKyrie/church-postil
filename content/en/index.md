@@ -18,7 +18,7 @@ Luther's [Church Postil]{.text-primary}
 
 #description
 <!-- markdownlint-disable MD033 -->
-&nbsp; Mobile Friendly etc.<br>- Search/ Filter/ Sort <br>- English/ Danish ...
+&nbsp; **Optimized** for mobile<br>+ <u>[Note App](/da/notes){title="Click to read more about the Note App"}</u> <br>+ _Share Options_ etc.
 
 #links
 
