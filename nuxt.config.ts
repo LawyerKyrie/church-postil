@@ -11,6 +11,19 @@ export default defineNuxtConfig({
     '@nuxtjs/mcp-toolkit',
     '@vueuse/nuxt'
   ],
+
+  $development: {
+    runtimeConfig: {
+      // Also tell the site-config module specifically
+      site: {
+        url: 'http://localhost:3000'
+      },
+      public: {
+        // This forces the .env value to be ignored ONLY during 'pnpm dev'
+        siteUrl: 'http://localhost:3000'
+      }
+    }
+  },
   // ssr maybe fixing open page in new tab/ windows
   ssr: true,
 
@@ -40,6 +53,14 @@ export default defineNuxtConfig({
       // hashMode: false
     }
   },
+  site: {
+    // 1. Highest Priority: If we are on localhost, use localhost.
+    // 2. Second Priority: Use your .env variable (for your old code).
+    // 3. Fallback: Your production domain.
+    url: import.meta.dev
+      ? 'http://localhost:3000'
+      : (process.env.NUXT_PUBLIC_SITE_URL || 'https://your-production-domain.com')
+  },
 
   content: {
     database: {
@@ -62,15 +83,17 @@ export default defineNuxtConfig({
     // This ensures the database is pre-compiled and read-only
     // cacheQueries: true
   },
-  /*
+
   runtimeConfig: {
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+      siteUrl: import.meta.dev
+        ? 'http://localhost:3000'
+        : (process.env.NUXT_PUBLIC_SITE_URL || 'https://your-production-domain.com'),
       apiBase: process.env.NUXT_PUBLIC_API_BASE
         || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
     }
   },
-  */
+
   routeRules: {
     '/': { prerender: true }, // Good for SEO/Speed on the home page
     '/da/intro': { prerender: true },
@@ -87,7 +110,11 @@ export default defineNuxtConfig({
     '/en/trinity1': { prerender: true },
     '/en/trinity2': { prerender: true },
     '/api/**': {
-      cache: { maxAge: 3600 }, // 12 hours = 43200
+      cache: {
+        maxAge: 3600,
+        // Ensure the cache varies based on the query string
+        varies: ['query']
+      }, // 12 hours = 43200
       cors: true
     } // Optional: helps if you ever fetch from other domains
   },

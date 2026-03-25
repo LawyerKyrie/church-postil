@@ -47,44 +47,41 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
   })
 })
 
-let title = page?.value?.seo?.title || page?.value?.title as any
-const description = page?.value?.seo?.description || page?.value?.description
-const source = page?.value.seo.source || page?.value?.source as any
-
-console.log('description = ', page?.value?.seo?.description || page?.value?.description)
-
-const currentOrigin = ref('https://church-postil.vercel.app')
+const title = page?.value?.title as any
+const description = page?.value?.description
+const source = page?.value?.source as any
 
 // inserting quotation in the description field: https://gemini.google.com/share/4568e86eae86
 // 1. Grab the quote from the URL (e.g., ?q=important+text)
 const sharedQuote = computed(() => route.query.q as string)
 
 // 2. Fallback to the default description if no quote is present
-const seoDescription = computed(() => {
-  title = page?.value?.seo?.title || page?.value?.title
-  const defaultDesc = page.value?.seo?.description || page.value?.description || 'Check out my notes'
-  return sharedQuote.value
-    ? `"${sharedQuote.value}"`
-    : (defaultDesc || 'Check out my notes')
+const ogImage = computed(() => { // used in defineOgImage below
+  const title = page?.value?.title
+  const description = sharedQuote.value
+    ? `Luther: «${sharedQuote.value}»`
+    : (page.value?.description || 'Missing Description')
+
+  return { title, description }
 })
 
+const config = useRuntimeConfig() // siteUrl or apiBase
+
 useSeoMeta({
-  title, // title: () => page?.value?.seo?.title || page?.value?.title,
-  ogTitle: title, // ogTitle: () => page?.value?.seo?.title || page?.value?.title,
-  description,
-  ogDescription: description,
-  ogUrl: () => `${currentOrigin.value}${route.fullPath}` // route.fullPath
+  // title,
+  ogTitle: route.path.startsWith('/en') ? 'Luther\'s Church Postil' : 'Luthers Kirke Postille', // title,
+  // description,
+  ogDescription: sharedQuote.value ? (locale.value === 'en' ? 'Read this quote from Luther...' : 'Les dette sitatet fra Luther...') : description,
+  ogUrl: () => `${config.public.siteUrl}${route.fullPath}` // route.path
 })
 
 const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
 
 defineOgImageComponent('Docs', {
-  // headline: headline.value,
-  headLine: headline.value,
-  title: title,
-  description: seoDescription.value,
-  siteName: 'Luther\'s Church Postil'
-})
+  headline: headline.value,
+  title: ogImage.value.title,
+  description: ogImage.value.description
+}) // source: https://gemini.google.com/share/5ba56070f316
 
 // 3. Wrap the logic in a safe Computed block
 const links = computed(() => {

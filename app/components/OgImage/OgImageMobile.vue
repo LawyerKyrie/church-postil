@@ -1,7 +1,6 @@
 <script lang="ts" setup>
+// source: https://gemini.google.com/share/562c07ced3fa
 const props = withDefaults(defineProps<{ title?: string, description?: string, headline?: string }>(), {
-  // title: 'title',
-  // description: 'description'
 })
 
 const headline = computed(() => (props.headline || '').slice(0, 60))
@@ -11,7 +10,7 @@ const title = computed(() => (props.title || '').slice(0, 60))
 const description = computed(() => {
   let quotation = props.description as string
   if (quotation.length > 200) {
-    quotation = quotation.slice(0, 250)
+    quotation = quotation.slice(0, 200)
     quotation += '...»'
   }
   return quotation
@@ -19,7 +18,7 @@ const description = computed(() => {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col justify-center bg-[#020420]">
+  <div class="w-full h-full bg-[#1e293b] flex flex-col justify-between p-8">
     <svg
       class="absolute right-0 top-0"
       width="629"
@@ -62,25 +61,22 @@ const description = computed(() => {
       </defs>
     </svg>
 
-    <div class="pl-[100px]">
-      <p
-        v-if="headline"
-        class="uppercase text-[30px] text-[#00DC82] mb-4 font-semibold"
-      >
+    <div>
+      <p class="text-[#00DC82] uppercase font-bold text-lg mb-2.5">
         {{ headline }}
       </p>
-      <h1
-        v-if="title"
-        class="mt-2 text-[60px] font-semibold mb-4 text-white flex items-center"
-      >
-        <span>{{ title }}</span>
+      <h1 class="text-white text-xl font-black mb-2.5 leading-tight">
+        {{ title }}
       </h1>
-      <p
-        v-if="description"
-        class="text-[32px] text-[#E4E4E7] ml-[80px] border-l-4 border-[#00DC82] pl-[8px] leading-tight max-w-[600px]"
-      >
+      <p class="text-slate-300 text-base italic leading-relaxed">
         {{ description }}
       </p>
+    </div>
+
+    <div class="flex items-center justify-center bg-[#0f172a] -mx-8 -mb-8 py-6 border-t-4 border-[#00DC82]">
+      <span class="text-[#00DC82] text-base font-mono tracking-widest">
+        CHURCH-POSTIL.VERCEL.APP
+      </span>
     </div>
   </div>
 </template>

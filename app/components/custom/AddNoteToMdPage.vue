@@ -545,6 +545,32 @@ const setCopyMenuPosition = (left) => {
   } else position = window.innerWidth - right - 140
   return position
 }
+
+/* --- DOWNLOAD MOBILE SHARE IMAGE -- */
+// The logic for "Share as Image" button
+
+// source: https://gemini.google.com/share/562c07ced3fa
+const shareImage = (note) => {
+  const path = note.path
+  // 1. Strip the French quotes using your existing logic
+  const match = note.text.match(/«(.*?)»/)
+  const cleanText = match ? match[1] : note.text
+
+  const encodedText = encodeURIComponent(cleanText)
+
+  // 2. Build the JSON for the _query parameter (this is the "secret sauce")
+  const queryPayload = encodeURIComponent(JSON.stringify({ q: cleanText }))
+
+  const origin = window.location.origin
+
+  // 3. Assemble the full URL
+  const imageUrl = `${origin}/__og-image__/image${path}/og.png?q=${encodedText}&_query=${queryPayload}&component=Mobile&width=360&height=640`
+
+  // Share logic follows...
+  if (navigator.share) {
+    navigator.share({ title: 'Luther Quote', url: imageUrl })
+  }
+}
 </script>
 
 <template>
@@ -681,15 +707,27 @@ const setCopyMenuPosition = (left) => {
                 variant="ghost"
                 size="xs"
                 label="Share"
+                title="Share with wide image and link to page"
                 @click="shareNote(note)"
               />
-              <!-- @click="shareNote(note)"  -->
+
+              <!-- source shareImage: https://gemini.google.com/share/562c07ced3fa  -->
+              <UButton
+                v-if="note.isHighlight"
+                icon="i-heroicons-share"
+                color="neutral"
+                variant="ghost"
+                size="xs"
+                label="Image"
+                title="Download and share mobile image with the quotation"
+                @click="shareImage(note)"
+              />
 
               <UButton
                 icon="i-heroicons-check"
                 color="primary"
                 size="xs"
-                label="Done"
+                label=""
                 @click="note.isOpen = false"
               />
             </div>
