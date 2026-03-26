@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-// source: https://gemini.google.com/share/562c07ced3fa
+// source: https://gemini.google.com/share/3592a80da6a0
 const props = withDefaults(defineProps<{ title?: string, description?: string, headline?: string }>(), {
 })
 
@@ -8,17 +8,19 @@ const headline = computed(() => (props.headline || '').slice(0, 60))
 console.log('headline in OgImage: ', headline.value)
 const title = computed(() => (props.title || '').slice(0, 60))
 const description = computed(() => {
-  let quotation = props.description as string
-  if (quotation.length > 200) {
-    quotation = quotation.slice(0, 200)
+  const quotation = props.description as string
+  /*
+  if (quotation.length > 230) {
+    quotation = quotation.slice(0, 230)
     quotation += '...»'
   }
+  */
   return quotation
 })
 </script>
 
 <template>
-  <div class="w-full h-full bg-[#1e293b] flex flex-col justify-between p-8">
+  <div class="relative w-full h-full bg-[#0f172a] flex flex-col justify-between overflow-hidden">
     <svg
       class="absolute right-0 top-0"
       width="629"
@@ -61,20 +63,33 @@ const description = computed(() => {
       </defs>
     </svg>
 
-    <div>
-      <p class="text-[#00DC82] uppercase font-bold text-lg mb-2.5">
+    <div class="absolute -right-22 top-36 opacity-[0.07] text-[#00DC82]">
+      <svg
+        width="600"
+        height="800"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M11 2h2v5h5v2h-5v13h-2V9H6V7h5V2z" />
+      </svg>
+    </div>
+
+    <div class="relative z-10 flex flex-col p-16 pt-24">
+      <p class="text-[#00DC82] uppercase font-bold text-[32px] tracking-wide mb-6">
         {{ headline }}
       </p>
-      <h1 class="text-white text-xl font-black mb-2.5 leading-tight">
+
+      <h1 class="text-white text-[64px] font-black mb-10 leading-[1.1]">
         {{ title }}
       </h1>
-      <p class="text-slate-300 text-base italic leading-relaxed">
+
+      <p class="break-normal text-slate-300 text-[44px] italic leading-[1.4] border-l-8 border-[#00DC82]/30 pl-8">
         {{ description }}
       </p>
     </div>
 
-    <div class="flex items-center justify-center bg-[#0f172a] -mx-8 -mb-8 py-6 border-t-4 border-[#00DC82]">
-      <span class="text-[#00DC82] text-base font-mono tracking-widest">
+    <div class="relative z-10 flex items-center justify-center bg-[#1e293b] py-10 border-t-[6px] border-[#00DC82]">
+      <span class="text-[#00DC82] text-[28px] font-mono tracking-[0.2em] uppercase">
         CHURCH-POSTIL.VERCEL.APP
       </span>
     </div>

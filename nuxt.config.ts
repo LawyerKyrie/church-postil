@@ -152,7 +152,8 @@ export default defineNuxtConfig({
       cache: {
         driver: 'memory' // Or 'fs' if you want it to persist across restarts
       }
-    }
+    },
+    moduleSideEffects: ['lz-string']
   },
   vite: {
     build: {

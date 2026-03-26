@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+// source: https://gemini.google.com/share/3592a80da6a0
 const props = withDefaults(defineProps<{ title?: string, description?: string, headline?: string }>(), {
   // title: 'title',
   // description: 'description'
@@ -9,11 +10,13 @@ const headline = computed(() => (props.headline || '').slice(0, 60))
 console.log('headline in OgImage: ', headline.value)
 const title = computed(() => (props.title || '').slice(0, 60))
 const description = computed(() => {
-  let quotation = props.description as string
-  if (quotation.length > 200) {
-    quotation = quotation.slice(0, 250)
+  const quotation = props.description as string
+  /*
+  if (quotation.length > 300) {
+    quotation = quotation.slice(0, 300)
     quotation += '...»'
   }
+  */
   return quotation
 })
 </script>
@@ -62,6 +65,17 @@ const description = computed(() => {
       </defs>
     </svg>
 
+    <div class="absolute -right-6 top-10 opacity-[0.07] text-[#00DC82]">
+      <svg
+        width="480"
+        height="600"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M11 2h2v5h5v2h-5v13h-2V9H6V7h5V2z" />
+      </svg>
+    </div>
+
     <div class="pl-[100px]">
       <p
         v-if="headline"
@@ -77,7 +91,7 @@ const description = computed(() => {
       </h1>
       <p
         v-if="description"
-        class="text-[32px] text-[#E4E4E7] ml-[80px] border-l-4 border-[#00DC82] pl-[8px] leading-tight max-w-[600px]"
+        class="text-[32px] text-[#E4E4E7] ml-[80px] border-l-4 border-[#00DC82] pl-[12px] leading-tight max-w-[600px]"
       >
         {{ description }}
       </p>

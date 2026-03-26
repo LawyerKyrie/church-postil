@@ -4,6 +4,7 @@
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '@nuxt/content/utils'
 import { useI18n } from 'vue-i18n'
+import LZString from 'lz-string'
 
 const route = useRoute()
 
@@ -51,13 +52,23 @@ const title = page?.value?.title as any
 const description = page?.value?.description
 const source = page?.value?.source as any
 
-// inserting quotation in the description field: https://gemini.google.com/share/4568e86eae86
-// 1. Grab the quote from the URL (e.g., ?q=important+text)
-const sharedQuote = computed(() => route.query.q as string)
+// inserting quotation in the description field: https://gemini.google.com/share/1fbb50b7255e
+// 1. Grab and Unzip the quote from the URL parameter 'z'
+const sharedQuote = computed(() => {
+  const zipped = route.query.z as string
+  if (!zipped) return null
 
-// 2. Fallback to the default description if no quote is present
-const ogImage = computed(() => { // used in defineOgImage below
+  try {
+    return LZString.decompressFromEncodedURIComponent(zipped)
+  } catch (e) {
+    console.error('Failed to unzip image url', e)
+    return null
+  }
+})
+// 2. Prepare the clean object for defineOgImage
+const ogImage = computed(() => {
   const title = page?.value?.title
+  // If we have a shared quote, we use it; otherwise, use the page default
   const description = sharedQuote.value
     ? `Luther: «${sharedQuote.value}»`
     : (page.value?.description || 'Missing Description')
@@ -77,7 +88,12 @@ useSeoMeta({
 
 const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
 
-defineOgImageComponent('Docs', {
+// 1. Detect which component was requested in the URL
+// If no component is in the URL, default to 'Docs' (the wide one)
+const activeComponent = computed(() => (route.query.component as string) || 'Docs')
+
+// 2. Define the OG Image using that dynamic value
+defineOgImageComponent(activeComponent.value, {
   headline: headline.value,
   title: ogImage.value.title,
   description: ogImage.value.description

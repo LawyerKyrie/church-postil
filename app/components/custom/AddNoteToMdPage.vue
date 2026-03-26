@@ -1,5 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
+import LZString from 'lz-string'
 // source: https://gemini.google.com/share/5719bd6e91d8
 const props = defineProps<{
   target: HTMLElement | null
@@ -546,31 +547,65 @@ const setCopyMenuPosition = (left) => {
   return position
 }
 
-/* --- DOWNLOAD MOBILE SHARE IMAGE -- */
+/* ---------- DOWNLOAD MOBILE SHARE IMAGE ---------- */
 // The logic for "Share as Image" button
 
-// source: https://gemini.google.com/share/562c07ced3fa
-const shareImage = (note) => {
-  const path = note.path
-  // 1. Strip the French quotes using your existing logic
-  const match = note.text.match(/«(.*?)»/)
-  const cleanText = match ? match[1] : note.text
+// source: https://gemini.google.com/share/5a7d44246351
+const shareLutherImage = async (note, type = 'wide') => {
+  const fullText = note.text.match(/«(.*?)»/)?.[1] || note.text
 
-  const encodedText = encodeURIComponent(cleanText)
+  // STEP 1: Shorten based on the layout capacity
+  // Mobile needs a shorter "Teaser" than Wide
+  const limit = type === 'mobile' ? 230 : 300
+  const visualText = fullText.length > limit
+    ? fullText.substring(0, limit - 3) + '...'
+    : fullText
 
-  // 2. Build the JSON for the _query parameter (this is the "secret sauce")
-  const queryPayload = encodeURIComponent(JSON.stringify({ q: cleanText }))
+  // STEP 2: Zip the SHORTENED text
+  const z = LZString.compressToEncodedURIComponent(visualText)
 
-  const origin = window.location.origin
+  // STEP 3: Build the URL (Now it will be much shorter!)
+  const queryPayload = encodeURIComponent(JSON.stringify({ z }))
+  const imageUrl = `${window.location.origin}/__og-image__/image${note.path}/og.png?z=${z}&_query=${queryPayload}&component=${type === 'mobile' ? 'Mobile' : 'Docs'}&width=${type === 'mobile' ? 720 : 1200}&height=${type === 'mobile' ? 1280 : 630}`
 
-  // 3. Assemble the full URL
-  const imageUrl = `${origin}/__og-image__/image${path}/og.png?q=${encodedText}&_query=${queryPayload}&component=Mobile&width=360&height=640`
+  // STEP 4: Clipboard gets the FULL text, but URL stays lean
+  try {
+    // Combine the text and URL for a better "Paste" experience
+    const intro = 'Luther Quote from Church Postil:'
 
-  // Share logic follows...
-  if (navigator.share) {
-    navigator.share({ title: 'Luther Quote', url: imageUrl })
+    const more = 'Read more in\n- church-postil.vercel.app\n- '
+      + note.title + '\n- '
+      + window.location.origin + route.path
+      + '\n\n'
+      + 'Find quotation (in this Postil Sermon) with «Ctrl F»'
+
+    const fullMessage = `${intro}\n\n"${fullText}"\n\n${more}` // \n\n${imageUrl}`
+    await navigator.clipboard.writeText(fullMessage)
+
+    toast.add({
+      title: 'Quote & Link Copied!',
+      description: 'Paste this into your post to show the image and the text.',
+      icon: 'i-heroicons-clipboard-document-check'
+    })
+  } catch (err) {
+    console.error('Failed to copy', err)
   }
-}
+
+  // 5. Try Web Share API (Mobile)
+  if (navigator.share) {
+    try {
+      console.log('navigator share started')
+      await navigator.share({
+        title: 'Luther Quote Image',
+        text: `Check out this highlight: "${fullText}"`,
+        url: imageUrl
+      })
+      return
+    } catch (err) {
+      console.log('Share cancelled or failed', err)
+    }
+  }
+} // https://gemini.google.com/share/e5953741835f
 </script>
 
 <template>
@@ -697,11 +732,12 @@ const shareImage = (note) => {
                 color="warning"
                 variant="ghost"
                 size="xs"
-                label="Delete"
+                :label="note.isHighlight ? '' : 'Delete'"
                 @click="deleteNote(note.id)"
               />
 
               <UButton
+                v-if="!note.isHighlight"
                 icon="i-heroicons-share"
                 color="neutral"
                 variant="ghost"
@@ -711,6 +747,17 @@ const shareImage = (note) => {
                 @click="shareNote(note)"
               />
 
+              <UButton
+                v-if="note.isHighlight"
+                icon="i-heroicons-share"
+                color="neutral"
+                variant="ghost"
+                size="xs"
+                label="Post"
+                title="Share with wide image and link to page"
+                @click="shareLutherImage(note, 'wide')"
+              />
+
               <!-- source shareImage: https://gemini.google.com/share/562c07ced3fa  -->
               <UButton
                 v-if="note.isHighlight"
@@ -718,9 +765,9 @@ const shareImage = (note) => {
                 color="neutral"
                 variant="ghost"
                 size="xs"
-                label="Image"
+                label="Story"
                 title="Download and share mobile image with the quotation"
-                @click="shareImage(note)"
+                @click="shareLutherImage(note, 'mobile')"
               />
 
               <UButton
