@@ -96,7 +96,9 @@ const activeComponent = computed(() => (route.query.component as string) || 'Doc
 defineOgImageComponent(activeComponent.value, {
   headline: headline.value,
   title: ogImage.value.title,
-  description: ogImage.value.description
+  description: ogImage.value.description,
+  sectionId: route.query.s as string,
+  parents: route.query.p as string // Pass the new 'p' param
 }) // source: https://gemini.google.com/share/5ba56070f316
 
 // 3. Wrap the logic in a safe Computed block

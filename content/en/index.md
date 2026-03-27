@@ -18,7 +18,7 @@ Luther's [Church Postil]{.text-primary}
 
 #description
 <!-- markdownlint-disable MD033 -->
-&nbsp; **Optimized** for mobile<br>+ <u>[Note App](/da/notes){title="Click to read more about the Note App"}</u> <br>+ _Share Options_ etc.
+&nbsp; **Optimized** for Mobile &<br>+ <u>[Study (Notes)](/da/notes){title="Read how to create Notes and Share them etc."}</u> <br>+ _Sharing of Notes_ etc.
 
 #links
 

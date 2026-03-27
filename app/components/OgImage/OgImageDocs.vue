@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 // source: https://gemini.google.com/share/3592a80da6a0
-const props = withDefaults(defineProps<{ title?: string, description?: string, headline?: string }>(), {
+const props = withDefaults(defineProps<{ title?: string, description?: string, headline?: string, sectionId?: string, parents?: string }>(), {
   // title: 'title',
   // description: 'description'
 })
 
 const headline = computed(() => (props.headline || '').slice(0, 60))
 
-console.log('headline in OgImage: ', headline.value)
 const title = computed(() => (props.title || '').slice(0, 60))
 const description = computed(() => {
   const quotation = props.description as string
@@ -19,10 +18,42 @@ const description = computed(() => {
   */
   return quotation
 })
+
+/* Creating the section header name if there is a sectionId */
+const displayDescription = computed(() => {
+  // 1. If there is no sectionId, fall back to the standard page description
+  if (!props.sectionId) return props.description
+
+  // 2. Transform "my-second-header" -> "My Second Header"
+  return props.sectionId
+    .split('-') // Split by hyphen
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
+    .join(' ') // Join with spaces
+})
+
+const beautify = (slug: string) => {
+  if (!slug) return ''
+  return slug
+    .replace(/^\d+/, '')
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
+const parentList = computed(() => {
+  if (!props.parents) return []
+  return props.parents.split(' > ')
+})
+
+const displaySection = computed(() => beautify(props.sectionId || ''))
+
+// Logic for the final section (The Child)
+// It should be more indented than the last parent
+const finalIndex = computed(() => parentList.value.length)
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col justify-center bg-[#020420]">
+  <div class="w-full h-full flex flex-col justify-center bg-[#020420] relative overflow-hidden">
     <svg
       class="absolute right-0 top-0"
       width="629"
@@ -64,7 +95,6 @@ const description = computed(() => {
         </filter>
       </defs>
     </svg>
-
     <div class="absolute -right-6 top-10 opacity-[0.07] text-[#00DC82]">
       <svg
         width="480"
@@ -76,24 +106,64 @@ const description = computed(() => {
       </svg>
     </div>
 
-    <div class="pl-[100px]">
+    <div class="pl-[100px] relative z-10">
       <p
         v-if="headline"
-        class="uppercase text-[30px] text-[#00DC82] mb-4 font-semibold"
+        class="uppercase text-[24px] text-[#00DC82] mb-2 font-semibold"
       >
         {{ headline }}
       </p>
       <h1
         v-if="title"
-        class="mt-2 text-[60px] font-semibold mb-4 text-white flex items-center"
+        class="ml-5 text-[32px] mb-6 text-white"
+        :style="{
+          opacity: `${sectionId ? 0.6 : 1}`
+        }"
       >
-        <span>{{ title }}</span>
+        <!-- text-[50px] font-bold mb-8 -->
+        {{ title }}
       </h1>
+
+      <div
+        v-if="sectionId"
+        class="flex flex-col gap-3"
+      >
+        <div
+          v-for="(parent, index) in parentList"
+          :key="index"
+          class="text-[#E4E4E7] leading-tight"
+          :style="{
+            marginLeft: `${60 + (index * 20)}px`,
+            borderLeft: `${Math.max(1, 6 - index)}px solid #00DC82`,
+            paddingLeft: '16px',
+            fontSize: `${32 - (index * 2)}px`,
+            opacity: `${(100 - (index *10)) / 100}`
+          }"
+        >
+          {{ parent }}
+        </div>
+
+        <div
+          class="mt-2 text-white font-bold leading-tight"
+          :style="{
+            marginLeft: `${60 + (finalIndex * 20)}px`,
+            borderLeft: '2px solid #00DC82',
+            paddingLeft: '16px',
+            fontSize: '32px',
+            maxWidth: '500px'
+          }"
+        >
+          {{ displaySection }}
+
+          <div class="h-1 w-20 bg-[#00DC82] mt-4 opacity-50" />
+        </div>
+      </div>
+
       <p
-        v-if="description"
+        v-else-if="description"
         class="text-[32px] text-[#E4E4E7] ml-[80px] border-l-4 border-[#00DC82] pl-[12px] leading-tight max-w-[600px]"
       >
-        {{ description }}
+        {{ displayDescription }}
       </p>
     </div>
   </div>
