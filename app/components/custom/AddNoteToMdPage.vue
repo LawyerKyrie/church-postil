@@ -1,5 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
+import { useClipboard } from '@vueuse/core'
 import LZString from 'lz-string'
 // source: https://gemini.google.com/share/5719bd6e91d8
 const props = defineProps<{
@@ -60,7 +61,6 @@ onMounted(() => {
     })
   }
   window.oncontextmenu = function (event) {
-    console.log('oncontextmenu')
     if (event.target.closest('.your-scripture-class')) {
       event.preventDefault()
       event.stopPropagation()
@@ -199,7 +199,7 @@ const handleTextInteraction = (event: Event) => {
       }
 
       // Format with your « » strategy
-      const preFilledText = nearbyText ? `Ref: «${nearbyText}.» \n` : ''
+      const preFilledText = nearbyText ? `Ref: «${nearbyText}» \n` : ''
 
       createNoteOnDblClick(pos, preFilledText)
 
@@ -482,7 +482,31 @@ const cancelSelection = (event?: Event) => {
   reset()
 }
 
-const shareUrl = (path, text) => {
+/* Converting from old share logic to new logic */
+function convertToQuery(urlStr) {
+  let textToShare = urlStr
+
+  console.log('convertToQuery(urlStr)')
+
+  const match = textToShare.match(/Ref: «(.*?)»/)
+  if (match) {
+    textToShare = match[1]
+  }
+
+  // 1. Get text and Decode
+  const rawText = decodeURIComponent(textToShare)
+
+  // 2. Remove punctuation and special chars
+  const cleanText = rawText.replace(/[^a-zA-Z0-9\s]/g, '')
+
+  // 3. Lowercase and replace spaces with hyphens
+  const slug = cleanText.trim().toLowerCase().replace(/\s+/g, '-')
+
+  // 4. Return base URL + new parameter
+  return slug // `${window.location.origin}${route.path}?s=${slug}`
+}
+
+const shareUrl = (path, text, type = 'txt') => {
   let textToShare = text
 
   const match = textToShare.match(/«(.*?)»/)
@@ -501,12 +525,23 @@ const shareUrl = (path, text) => {
   // 2. Encode the text for the Scroll-to-Text fragment
   const encodedText = encodeURIComponent(textToShare.trim())
   // 3. Construct the final "Magic Link"
-  const shareUrl = `${baseUrl}?q=${encodedText}` // shareUrl = `${baseUrl}#:~:text=${encodedText}`
-  return shareUrl
+  const shareQ = `${baseUrl}?q=${encodedText}` // shareUrl = `${baseUrl}#:~:text=${encodedText}`
+  const shareTxt = `${baseUrl}#:~:text=${encodedText}`
+  return type === 'q' ? shareQ : shareTxt
 }
+
+const { copy } = useClipboard({ legacy: true })
 
 // https://gemini.google.com/share/d98cb44c52da
 const shareNote = (note) => {
+  if (!note.text.startsWith('Ref:')) {
+    const convertedSlug = convertToQuery(note.text)
+    const url = new URL(window.location.origin + route.path)
+    url.searchParams.set('s', convertedSlug)
+    copy(url.toString())
+    toast.add({ title: 'COPIED', description: 'Share Link to Clipboard (memory)' })
+    return
+  }
   const url = shareUrl(note.path, note.text)
   // Share logic...
   // 4. Use the Web Share API (Mobile friendly) or Copy to Clipboard

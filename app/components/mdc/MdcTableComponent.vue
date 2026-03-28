@@ -147,13 +147,13 @@ const columns: TableColumn<RowItems>[] = [
   },
   {
     accessorKey: 'label',
-    header: ({ column }) => getTableHeader(column, 'Label'),
+    header: ({ column }) => getTableHeader(column, 'Holiday'),
     cell: ({ row }) => `${row.getValue('label')}`
   },
   {
     accessorKey: 'bible',
     sortingFn: tanstackBibleSort,
-    header: ({ column }) => getTableHeader(column, 'Bible'),
+    header: ({ column }) => getTableHeader(column, 'Bible Txt'),
     cell: ({ row }) => `${row.getValue('bible')}`
   }, /*
   {

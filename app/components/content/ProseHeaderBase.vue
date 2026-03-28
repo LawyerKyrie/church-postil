@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// source: https://gemini.google.com/share/c6cba2f388a8
 import { useClipboard } from '@vueuse/core'
 
 const props = defineProps<{
@@ -7,90 +6,94 @@ const props = defineProps<{
   tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }>()
 
-const { copy, copied } = useClipboard()
+const { copy, copied } = useClipboard({ legacy: true })
 const route = useRoute()
+const toast = useToast()
 
-// Helper to turn 'h2' into 2
-const getLevel = (tag: string) => parseInt(tag.replace('h', ''))
-
-const getBreadcrumbs = () => {
-  const currentLevel = getLevel(props.tag)
-  if (currentLevel === 2) return '' // h2 has no relevant parents in docs usually
-
-  const crumbs: string[] = []
-  // Get all headers in the article
-  const allHeaders = Array.from(document.querySelectorAll('h2, h3, h4, h5, h6'))
-  const currentIndex = allHeaders.findIndex(el => el.id === props.id)
-
-  let searchLevel = currentLevel - 1
-
-  // Look backwards from the current header
-  for (let i = currentIndex - 1; i >= 0; i--) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const el = allHeaders[i] as any
-    const elLevel = getLevel(el.tagName.toLowerCase())
-
-    if (elLevel === searchLevel) {
-      crumbs.unshift(el.textContent?.trim() || '')
-      searchLevel--
-    }
-    if (searchLevel < 2) break
-  }
-
-  return crumbs.join(' > ')
-}
-
-const handleShareClick = (event: MouseEvent) => {
+const handleShareClick = async (event: MouseEvent) => {
+  // Prevent the NuxtLink from triggering when we only want to copy
+  event.preventDefault()
   event.stopPropagation()
 
-  const parentPath = getBreadcrumbs()
   const url = new URL(window.location.origin + route.path)
-
-  // We can pass the breadcrumbs as an extra query param for the OG Image!
   url.searchParams.set('s', props.id)
-  if (parentPath) url.searchParams.set('p', parentPath)
-
   copy(url.toString())
+
+  /*
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Header from Luther\'s Church Postil',
+        text: `Section Title: "${url.toString()}"`,
+        url: url.toString()
+      })
+      return
+    } catch (err) {
+      console.log('Share cancelled or failed', err)
+      toast.add({ title: 'Error', description: 'Navigator Share Issue'})
+    }
+  } else console.log('')
+  */
+  toast.add({ title: 'Copied', description: 'Section header title copied to Clipboard!' })
 }
 
 const sizes = {
   h1: 'text-4xl', h2: 'text-3xl', h3: 'text-2xl',
   h4: 'text-xl', h5: 'text-lg', h6: 'text-base'
 }
+
+/* ### [Header title]{#h31} */
+// source: https://gemini.google.com/share/183eb52d2c2e
 </script>
 
 <template>
   <component
     :is="tag"
     :id="id"
-    class="group relative flex items-center mb-4 mt-8 font-bold transition-colors"
+    class="group relative font-bold mb-4 mt-8 scroll-mt-24 tracking-tight"
     :class="sizes[tag]"
   >
-    <span
-      class="mr-2 cursor-pointer transition-all duration-200 shrink-0"
-      :class="copied ? 'text-primary-500 scale-110' : 'text-gray-400 opacity-0 group-hover:opacity-100'"
-      @click="handleShareClick"
-    >
-      <UIcon
-        name="i-lucide-share-2"
-        class="w-5 h-5"
-      />
-    </span>
-
     <NuxtLink
       :to="`#${id}`"
-      class="no-underline hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+      title="Click to Copy this link for SHARING"
+      class="no-underline hover:text-primary-600 dark:hover:text-primary-400 transition-colors inline"
     >
       <slot />
-    </NuxtLink>
 
-    <Transition name="fade">
       <span
-        v-if="copied"
-        class="ml-3 text-xs font-normal text-primary-500 italic"
+        class="inline-flex items-center ml-2 align-middle cursor-pointer transition-all duration-200"
+        :class="[
+          copied ? 'text-primary-500 scale-110 opacity-100' : 'text-gray-400 opacity-100 md:opacity-0 md:group-hover:opacity-100'
+        ]"
+        @click="handleShareClick"
       >
-        Link copied!
+        <UIcon
+          :name="copied ? 'i-lucide-check' : 'i-lucide-share-2'"
+          class="w-[0.6em] h-[0.6em]"
+        />
+
+        <Transition name="pop">
+          <span
+            v-if="copied"
+            class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] bg-primary-500 text-white px-2 py-0.5 rounded shadow-sm whitespace-nowrap normal-case font-medium"
+          >
+            Copied!
+          </span>
+        </Transition>
       </span>
-    </Transition>
+    </NuxtLink>
   </component>
 </template>
+
+<style scoped>
+/* Animation for the "Copied!" bubble */
+.pop-enter-active { transition: all 0.2s ease-out; }
+.pop-leave-active { transition: all 0.5s ease-in; }
+.pop-enter-from { opacity: 0; transform: translate(-50%, 10px) scale(0.8); }
+.pop-leave-to { opacity: 0; transform: translate(-50%, -10px); }
+
+/* Ensure the header doesn't have a giant gap when wrapping */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+}
+</style>

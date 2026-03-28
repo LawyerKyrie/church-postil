@@ -48,13 +48,9 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
   })
 })
 
-const title = page?.value?.title as any
-const description = page?.value?.description
-const source = page?.value?.source as any
-
 // inserting quotation in the description field: https://gemini.google.com/share/1fbb50b7255e
 // 1. Grab and Unzip the quote from the URL parameter 'z'
-const sharedQuote = computed(() => {
+const sharedQuote = computed(() => { // https://gemini.google.com/share/523e955e9fd0
   const zipped = route.query.z as string
   if (!zipped) return null
 
@@ -64,8 +60,34 @@ const sharedQuote = computed(() => {
     console.error('Failed to unzip image url', e)
     return null
   }
+  /*
+  // https://gemini.google.com/share/d20ae270490a
+  const shortId = route.query.s as string
+  if (!shortId || page.value) return null
+  // Nuxt Content TOC (Table of Contents) maps these IDs automatically
+  const toc = (page.value as any)?.body?.toc
+  const found = toc?.links.find(link => link.id === shortId)
+
+  return found ? found.text : 'Luther Quote'
+  */
 })
-// 2. Prepare the clean object for defineOgImage
+
+const config = useRuntimeConfig() // siteUrl or apiBase
+
+useSeoMeta({
+  // title, // This title comes below the shared image - I don't want to have the same title in image and below it
+  ogTitle: route.path.startsWith('/en') ? 'Luther\'s Church Postil' : 'Luthers Kirke Postille', // page?.value?.title,
+  // description,
+  ogDescription: sharedQuote.value ? (locale.value === 'en' ? 'Read this quote from Luther...' : 'Les dette sitatet fra Luther...') : page?.value?.description,
+  ogUrl: () => `${config.public.siteUrl}${route.fullPath}` // route.path
+})
+
+// 1. Detect which component was requested in the URL
+// If no component is in the URL, default to 'Docs' (the wide one)
+const activeComponent = computed(() => (route.query.component as string) || 'Docs')
+const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
+
+// 2. Prepare the clean object (with title & description) for defineOgImage
 const ogImage = computed(() => {
   const title = page?.value?.title
   // If we have a shared quote, we use it; otherwise, use the page default
@@ -76,32 +98,20 @@ const ogImage = computed(() => {
   return { title, description }
 })
 
-const config = useRuntimeConfig() // siteUrl or apiBase
+console.log('activeComponent.value:' + activeComponent.value
+  + '\nroute.query.s:' + route.query.s
+  + '\nroute.fullPath:' + route.fullPath)
 
-useSeoMeta({
-  // title,
-  ogTitle: route.path.startsWith('/en') ? 'Luther\'s Church Postil' : 'Luthers Kirke Postille', // title,
-  // description,
-  ogDescription: sharedQuote.value ? (locale.value === 'en' ? 'Read this quote from Luther...' : 'Les dette sitatet fra Luther...') : description,
-  ogUrl: () => `${config.public.siteUrl}${route.fullPath}` // route.path
-})
-
-const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
-
-// 1. Detect which component was requested in the URL
-// If no component is in the URL, default to 'Docs' (the wide one)
-const activeComponent = computed(() => (route.query.component as string) || 'Docs')
-
-// 2. Define the OG Image using that dynamic value
+// 3. Define the OG Image using that dynamic value
 defineOgImageComponent(activeComponent.value, {
-  headline: headline.value,
-  title: ogImage.value.title,
-  description: ogImage.value.description,
-  sectionId: route.query.s as string,
-  parents: route.query.p as string // Pass the new 'p' param
+  headline: headline.value, // folder navigation title
+  title: ogImage.value.title, // page title
+  description: ogImage.value.description, // page description OR quotation
+  sectionId: route.query.s as string, // hash header title
+  parents: route.query.p as string // breadcrumbs
 }) // source: https://gemini.google.com/share/5ba56070f316
 
-// 3. Wrap the logic in a safe Computed block
+// 4. Wrap the logic in a safe Computed block
 const links = computed(() => {
   // If page is null (because it's an API route or 404),
   // return an empty array immediately. No 'return' outside this function!
@@ -223,6 +233,8 @@ onMounted(() => {
   const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
   const fullUrl = navEntry?.name || ''
 
+  const sectionId = route.query.s as string
+
   if (route.hash.startsWith('#note-')) { // NOTE HASH
     console.log('if1, hash startsWith "note-')
     scrollToNoteFromHash()
@@ -234,9 +246,9 @@ onMounted(() => {
       document.getElementById(routerHash)?.scrollIntoView({ behavior: 'smooth' })
       // urlHash.value = ''
     }, 50)
-  } else if (route.hash.length === 0 // NO HASH or share note here
+  } else if (route.hash.length === 0 // NO HASH here
     && !fullUrl.includes('#:~:text=')
-    && !sharedQuote.value) {
+    && !(sharedQuote.value || sectionId)) {
     // Before this code the page opened in the bottom view
     console.log('if3 no hash or query')
     window.scrollTo({
@@ -263,8 +275,31 @@ onMounted(() => {
       // but usually, the browser needs a layout reflow:
       window.dispatchEvent(new Event('hashchange'))
     }, 330) // Small delay to ensure Nuxt has rendered the content
+  } else if (sectionId === 'remove-this-if-you-want-to-replace-query-s-with-text-search-hash') {
+    if (sectionId) {
+      setTimeout(() => {
+        const el = document.getElementById(sectionId)
+        if (!el) return
+        console.log('sectionId ?s=', sectionId)
+
+        // 1. Get the text for the "Yellow Highlight"
+        const text = el.innerText || el.textContent || ''
+        const textFragment = `:~:text=${encodeURIComponent(text.trim())}`
+
+        // 2. Scroll to the element first (Smooth & Reliable)
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+        // 3. Update the URL: Change ?s=id into #id + the text highlight
+        // This keeps the highlight visible but cleans the query param
+        const newUrl = window.location.pathname + `#${sectionId}${textFragment}`
+        window.history.replaceState(null, '', newUrl)
+
+        // 4. Tell the rest of the app "We have moved!"
+        window.dispatchEvent(new Event('hashchange'))
+      }, 400) // 400ms gives Nuxt Content plenty of time to finish the layout
+    }
   } else if (fullUrl.includes('#:~:text=')) {
-    console.log('if5 text search hash')
+    console.log('if6 text search hash')
     const textFragment = fullUrl.split('#')[1] // Gets :~:text=...
 
     // 2. Put it back into the address bar so it stays there
@@ -277,7 +312,7 @@ onMounted(() => {
       window.scrollBy(0, -1)
     }, 500)
   } else { // THIS SHOULD NEVER HAPPEN - probable an error
-    console.log('Error: else(6) - scrollRestoration')
+    console.log('Error: else(7) - scrollRestoration')
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'auto'
     }
@@ -346,8 +381,8 @@ const tocIcon = (open) => {
         <PageHeaderLinks />
       </template>
       <SourceAccordion
-        :title="title"
-        :source="source"
+        :title=" page?.title"
+        :source="page?.source"
       />
     </UPageHeader>
 
@@ -366,8 +401,8 @@ const tocIcon = (open) => {
         />
 
         <SourceReference
-          :title="title"
-          :source="source"
+          :title="page?.title"
+          :source="page?.source"
         />
 
         <ClientOnly>
