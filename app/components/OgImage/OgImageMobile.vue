@@ -6,7 +6,16 @@ const props = withDefaults(defineProps<{ title?: string, description?: string, h
 const headline = computed(() => (props.headline || '').slice(0, 60))
 
 console.log('headline in OgImage: ', headline.value)
-const title = computed(() => (props.title || '').slice(0, 60))
+// const title = computed(() => (props.title || '').slice(0, 60))
+const titleParts = computed(() => {
+  const rawTitle = (props.title || '').slice(0, 60)
+  // Regex to split on " - " (if not between digits) OR "; "
+  const regex = /(?<!\d)\s-\s(?!\d)|;\s/
+  // We split into an array.
+  // If you only want the FIRST split to happen, keep the 2 limit.
+  return rawTitle.split(regex, 2)
+})
+// https://share.google/aimode/MnBfUn0H2RcYYDKCn
 const description = computed(() => {
   const quotation = props.description as string
   /*
@@ -17,6 +26,8 @@ const description = computed(() => {
   */
   return quotation
 })
+console.log('titleParts0? ', titleParts.value[0])
+console.log('titleParts1?', titleParts.value[1])
 </script>
 
 <template>
@@ -63,7 +74,7 @@ const description = computed(() => {
       </defs>
     </svg>
 
-    <div class="absolute -right-22 top-36 opacity-[0.07] text-[#00DC82]">
+    <div class="absolute -right-22 top-26 opacity-[0.07] text-[#00DC82]">
       <svg
         width="600"
         height="800"
@@ -79,8 +90,12 @@ const description = computed(() => {
         {{ headline }}
       </p>
 
-      <h1 class="text-white text-[64px] font-black mb-10 leading-[1.1]">
-        {{ title }}
+      <h1 class="text-white text-[58px] font-black mb-10 leading-[1.1]">
+        {{ titleParts[0] }}
+        <span v-if="titleParts.length > 1">
+          <br>
+          {{ titleParts[1] }}
+        </span>
       </h1>
 
       <p class="break-normal text-slate-300 text-[44px] italic leading-[1.4] border-l-8 border-[#00DC82]/30 pl-8">

@@ -6,8 +6,6 @@ import { findPageHeadline } from '@nuxt/content/utils'
 import { useI18n } from 'vue-i18n'
 import LZString from 'lz-string'
 
-const route = useRoute()
-
 const { toc } = useAppConfig()
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
@@ -16,6 +14,8 @@ definePageMeta({
   scrollToTop: false
 })
 // const { data: page } = await useAsyncData(path, () => queryCollection('docs').path(path).first())
+
+const route = useRoute()
 
 const { data: page } = await useAsyncData(
   `${route.path}`,
@@ -102,7 +102,6 @@ console.log('activeComponent.value:' + activeComponent.value
   + '\nroute.query.s:' + route.query.s
   + '\nroute.fullPath:' + route.fullPath)
 
-// 3. Define the OG Image using that dynamic value
 defineOgImageComponent(activeComponent.value, {
   headline: headline.value, // folder navigation title
   title: ogImage.value.title, // page title
@@ -111,6 +110,17 @@ defineOgImageComponent(activeComponent.value, {
   parents: route.query.p as string // breadcrumbs
 }) // source: https://gemini.google.com/share/5ba56070f316
 
+// 3. Define the OG Image using that dynamic value
+// new defineOgImagecomp: https://gemini.google.com/share/5cb9fe382b05
+/*
+const { imageData, syncFromUrl } = useImageState()
+
+// 2. Sync the Global State with the URL and Page Data
+syncFromUrl(page.value)
+
+// 3. The Image Component just follows the State
+defineOgImageComponent(imageData.value.layout)
+*/
 // 4. Wrap the logic in a safe Computed block
 const links = computed(() => {
   // If page is null (because it's an API route or 404),
