@@ -1,33 +1,64 @@
-<script lang="ts" setup>
-// source: https://gemini.google.com/share/3592a80da6a0
-const props = withDefaults(defineProps<{ title?: string, description?: string, headline?: string }>(), {
-})
+<script setup lang="ts">
+// https://gemini.google.com/share/940e5681a213
+import LZString from 'lz-string'
 
-const headline = computed(() => (props.headline || '').slice(0, 60))
+const route = useRoute()
 
-console.log('headline in OgImage: ', headline.value)
-// const title = computed(() => (props.title || '').slice(0, 60))
-const titleParts = computed(() => {
-  const rawTitle = (props.title || '').slice(0, 60)
-  // Regex to split on " - " (if not between digits) OR "; "
-  const regex = /(?<!\d)\s-\s(?!\d)|;\s/
-  // We split into an array.
-  // If you only want the FIRST split to happen, keep the 2 limit.
-  return rawTitle.split(regex, 2)
-})
-// https://share.google/aimode/MnBfUn0H2RcYYDKCn
-const description = computed(() => {
-  const quotation = props.description as string
-  /*
-  if (quotation.length > 230) {
-    quotation = quotation.slice(0, 230)
-    quotation += '...»'
+const props = defineProps<{
+  h?: string
+  t?: string
+  d?: string
+  z?: string
+}>()
+
+// const h = computed(() => props.h || 'Missing Headline')
+const h = computed(() => {
+  // 1. If there is a 'z' in the URL (Direct Image Request),
+  // UNPACK IT INTERNALLY. Do not trust the props!
+  const directZ = props.z || route.query.z
+  if (directZ) {
+    try {
+      const unpacked = JSON.parse(LZString.decompressFromEncodedURIComponent(directZ as string))
+      if (unpacked.h) return unpacked.h
+    } catch (e) { console.error('Unzip of s-query failed', e) }
   }
-  */
-  return quotation
+
+  // 2. Fallback to the prop (which slug.vue handles for the 's' case)
+  return props.h || 'og-image headline'
 })
-console.log('titleParts0? ', titleParts.value[0])
-console.log('titleParts1?', titleParts.value[1])
+
+const t = computed(() => {
+  // 1. If there is a 'z' in the URL (Direct Image Request),
+  // UNPACK IT INTERNALLY. Do not trust the props!
+  const directZ = props.z || route.query.z
+  if (directZ) {
+    try {
+      const unpacked = JSON.parse(LZString.decompressFromEncodedURIComponent(directZ as string))
+      if (unpacked.t) return unpacked.t
+    } catch (e) { console.error('Unzip of s-query failed', e) }
+  }
+
+  // 2. Fallback to the prop (which slug.vue handles for the 's' case)
+  return props.t || 'og-image title'
+})
+
+const d = computed(() => {
+  // 1. If there is a 'z' in the URL (Direct Image Request),
+  // UNPACK IT INTERNALLY. Do not trust the props!
+  const directZ = props.z || route.query.z
+  if (directZ) {
+    try {
+      const unpacked = JSON.parse(LZString.decompressFromEncodedURIComponent(directZ as string))
+      if (unpacked.d) return unpacked.d
+    } catch (e) { console.error('Unzip of s-query failed', e) }
+  }
+
+  // 2. Fallback to the prop (which slug.vue handles for the 's' case)
+  return props.d || 'og-image description'
+})
+
+// console.log('--- ISLAND RENDER SUCCESS (Mobile) ---')
+// console.log('Props (d): ', props.d, '\n- Expand the log if necessary!')
 </script>
 
 <template>
@@ -87,19 +118,21 @@ console.log('titleParts1?', titleParts.value[1])
 
     <div class="relative z-10 flex flex-col p-16 pt-24">
       <p class="text-[#00DC82] uppercase font-bold text-[32px] tracking-wide mb-6">
-        {{ headline }}
+        {{ h }}
       </p>
 
       <h1 class="text-white text-[58px] font-black mb-10 leading-[1.1]">
-        {{ titleParts[0] }}
+        {{ t }}
+      </h1>
+      <!-- Place this after {{ t }} inside the h1 tag
         <span v-if="titleParts.length > 1">
           <br>
           {{ titleParts[1] }}
         </span>
-      </h1>
+        -->
 
       <p class="break-normal text-slate-300 text-[44px] italic leading-[1.4] border-l-8 border-[#00DC82]/30 pl-8">
-        {{ description }}
+        {{ d }}
       </p>
     </div>
 

@@ -1,10 +1,13 @@
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin((/* nuxtApp */) => {
+  // This file was renamed from js to ts April 2026
   // Only run this if we are in a browser environment
+  /*
   if (import.meta.client) {
     window.nuxt = nuxtApp
     // Optional: Log it so you know it's ready
     // console.log('Nuxt instance attached to window. Use "nuxt" to access.')
   }
+  */
   return {
     provide: {
       keyboardClickK() {

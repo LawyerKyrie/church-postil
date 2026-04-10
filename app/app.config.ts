@@ -1,5 +1,10 @@
 export default defineAppConfig({
   ui: {
+    accordion: {
+      slots: {
+        header: 'px-4'
+      }
+    },
     commandPalette: {
       slots: {
         input: '[&>input]:[inputmode:none]'

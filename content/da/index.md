@@ -17,7 +17,7 @@ orientation: horizontal
 Luthers [Kirke Postille]{.text-primary}
 
 #description
-&nbsp; Optimalisert for mobil &<br>+ <u>[Studering (Notater)](/da/notes){title="Les om hvordan du lager noter og deler dem osv."}</u> <br>+ Dele Notater og indhold
+&nbsp; Optimalisert for mobil & Studier<br>+ <u>[Marker tekst](/da/notes){title="Les om hvordan du lager noter og deler dem osv."}</u> & lag notater<br>+ Del og-image, print notater osv.
 
 #links
 
