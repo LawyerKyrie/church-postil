@@ -10,7 +10,7 @@ const mdPath = computed(() => `${site.url}/raw${route.path}.md`)
 
 const items = [
   {
-    label: 'Notes & highlights',
+    label: 'Highlight & Notes',
     title: 'Guide to making notes and highlight text',
     icon: 'i-lucide-notebook-pen',
     onSelect() {

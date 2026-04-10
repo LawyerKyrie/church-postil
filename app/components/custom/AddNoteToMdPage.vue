@@ -1,11 +1,12 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
-import LZString from 'lz-string'
 // source: https://gemini.google.com/share/5719bd6e91d8
+// import { useClipboard } from '@vueuse/core'
+import LZString from 'lz-string'
+
 const props = defineProps<{
   target: HTMLElement | null
-  title: string
+  title: any
 }>()
 
 const route = useRoute()
@@ -279,6 +280,9 @@ const handleTextInteraction = (event: Event) => {
   }
 }
 
+const { imageData, openEditor } = useImageState()
+const ctx = imageData.value.pageContext // ctx.title gives page title etc. then we also have ctx.description and ctx.path
+
 const createNoteOnDblClick = (rect, text) => {
   if (!props.target) return
 
@@ -295,7 +299,7 @@ const createNoteOnDblClick = (rect, text) => {
     id: Date.now(),
     path: route.path, // Crucial for the overview page
     // share: shareUrl(route.path, text),
-    title: props.title, // pageTitle: document.title, // Useful for the select menu label
+    title: ctx.title, // pageTitle: document.title, // Useful for the select menu label
     text: text,
     top: top,
     left: left,
@@ -328,7 +332,7 @@ const createHeaderBobble = (rect, text) => {
     id: Date.now(),
     path: route.path, // Crucial for the overview page
     // share: shareUrl(route.path, text),
-    title: props.title, // pageTitle: document.title, // Useful for the select menu label
+    title: ctx.title, // pageTitle: document.title, // Useful for the select menu label
     text: `«${text}»`,
     top: top,
     left: left,
@@ -354,7 +358,7 @@ const saveHighlightedText = (rect, text) => {
     id: Date.now(),
     path: route.path,
     // share: shareUrl(route.path, text),
-    title: props.title,
+    title: ctx.title,
     text: `«${text}»`,
     top: (rect.top - targetRect.top), // Align to top of text
     left: (rect.left - targetRect.left), // Align to start of text
@@ -423,7 +427,7 @@ defineExpose({
 })
 // Without defineExpose, the function stays "private" inside the child component, and the parent won't be able to "reach in" and trigger it.
 
-/*
+/* // pencilLogger
 const pencilLogger = (el: any, note: any) => {
   if (!el) return
 
@@ -482,93 +486,62 @@ const cancelSelection = (event?: Event) => {
   reset()
 }
 
-/* Converting from old share logic to new logic */
-function convertToQuery(urlStr) {
-  let textToShare = urlStr
-
-  console.log('convertToQuery(urlStr)')
-
-  const match = textToShare.match(/Ref: «(.*?)»/)
-  if (match) {
-    textToShare = match[1]
-  }
-
-  // 1. Get text and Decode
-  const rawText = decodeURIComponent(textToShare)
-
-  // 2. Remove punctuation and special chars
-  const cleanText = rawText.replace(/[^a-zA-Z0-9\s]/g, '')
-
-  // 3. Lowercase and replace spaces with hyphens
-  const slug = cleanText.trim().toLowerCase().replace(/\s+/g, '-')
-
-  // 4. Return base URL + new parameter
-  return slug // `${window.location.origin}${route.path}?s=${slug}`
-}
-
-const shareUrl = (path, text, type = 'txt') => {
-  let textToShare = text
-
-  const match = textToShare.match(/«(.*?)»/)
-  if (match) {
-    textToShare = match[1]
-  }
-  // 1. Try to get text between apostrophes
-  // 2. Fallback to the full note.text
-  // 3. Last resort: try to "hit test" the coordinates
-  // textToShare = textToShare || note.text || getNearestText(note)
-
-  // 1. Get the base URL (e.g., https://church-postil.vercel.app/en/advent#note-1234567)
-  // We use window.location.origin + note.path to ensure it's absolute
-
-  const baseUrl = window.location.origin + path
-  // 2. Encode the text for the Scroll-to-Text fragment
-  const encodedText = encodeURIComponent(textToShare.trim())
-  // 3. Construct the final "Magic Link"
-  const shareQ = `${baseUrl}?q=${encodedText}` // shareUrl = `${baseUrl}#:~:text=${encodedText}`
-  const shareTxt = `${baseUrl}#:~:text=${encodedText}`
-  return type === 'q' ? shareQ : shareTxt
-}
-
-const { copy } = useClipboard({ legacy: true })
-
-// https://gemini.google.com/share/d98cb44c52da
-const shareNote = (note) => {
-  if (!note.text.startsWith('Ref:')) {
-    const convertedSlug = convertToQuery(note.text)
-    const url = new URL(window.location.origin + route.path)
-    url.searchParams.set('s', convertedSlug)
-    copy(url.toString())
-    toast.add({ title: 'COPIED', description: 'Share Link to Clipboard (memory)' })
-    return
-  }
-  const url = shareUrl(note.path, note.text)
-  // Share logic...
-  // 4. Use the Web Share API (Mobile friendly) or Copy to Clipboard
-  if (!navigator.share) {
-    // fallback for development mode, localhost etc.
-    alert('Clipboard or navigator.share don\'t work in development mode, localhost etc.')
-  }
-
-  if (navigator.share !== undefined) {
-    navigator.share({
-      title: 'Check out this highlight',
-      url: url // shareUrl
-    }).catch(console.error)
-  } else if (navigator.share === undefined) {
-    // Fallback for PC: Copy to clipboard
-    navigator.clipboard.writeText(url)
-    toast.add({ title: 'Link copied to clipboard!', description: 'Share Menu not accessible on mobile in dev mode' })
-  }
-}
-
+/*
+--------------------------------
+SHARE LOGIC FOR LINKS AND IMAGES
+--------------------------------
+*/
 const toast = useToast()
 
+const copyPageLink = async (note) => {
+  const dataToZip = {
+    h: props.title.slice(0, 29),
+    t: ctx.title,
+    d: note.text.replace(/[«»]/g, '').trim()
+  }
+
+  // 2. Zip it for a "Lean" Social Media URL
+  const s = LZString.compressToEncodedURIComponent(JSON.stringify(dataToZip))
+
+  // 3. Build the Image URL
+  // We match your width/height logic from openPreview
+  const isMobile = imageData.value.layout === 'Mobile'
+  const wx = isMobile ? 720 : 1200
+  const hy = isMobile ? 1280 : 630
+
+  const pageUrl = `${window.location.origin}${route.path}?s=${s}&component=${imageData.value.layout}&width=${wx}&height=${hy}`
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Shared Luther Quote',
+        text: `${dataToZip.d}`, // « »
+        url: pageUrl // This link contains the compressed data
+      })
+    } catch (err) {
+      console.log('Share cancelled or failed', err)
+    }
+  } else {
+    // Fallback for PC: Copy to Clipboard
+    await navigator.clipboard.writeText(pageUrl)
+    toast.add({
+      title: 'Page Link Copied!',
+      description: 'Ready to paste in your browser.',
+      icon: 'i-heroicons-clipboard-document-check'
+    })
+  }
+}
+
+// One of the two alternatives when creating highlighted text
 const copyToClipboard = () => {
   const selection = window.getSelection()
   const text = selection?.toString().trim() || ''
   navigator.clipboard.writeText(text)
-  toast.add({ title: 'Copied Text!', description: 'Clipboard has captured the text!' })
+  toast.add({
+    title: 'Copied Text!',
+    description: 'Clipboard has captured the text!',
+    icon: 'i-heroicons-clipboard-document-check'
+  })
   selection?.removeAllRanges()
 }
 
@@ -583,64 +556,15 @@ const setCopyMenuPosition = (left) => {
 }
 
 /* ---------- DOWNLOAD MOBILE SHARE IMAGE ---------- */
-// The logic for "Share as Image" button
+// ------ The logic for "Share as Image" button ------
 
-// source: https://gemini.google.com/share/5a7d44246351
-const shareLutherImage = async (note, type = 'wide') => {
-  const fullText = note.text.match(/«(.*?)»/)?.[1] || note.text
-
-  // STEP 1: Shorten based on the layout capacity
-  // Mobile needs a shorter "Teaser" than Wide
-  const limit = type === 'mobile' ? 230 : 300
-  const visualText = fullText.length > limit
-    ? fullText.substring(0, limit - 3) + '...'
-    : fullText
-
-  // STEP 2: Zip the SHORTENED text
-  const z = LZString.compressToEncodedURIComponent(visualText)
-
-  // STEP 3: Build the URL (Now it will be much shorter!)
-  const queryPayload = encodeURIComponent(JSON.stringify({ z }))
-  const imageUrl = `${window.location.origin}/__og-image__/image${note.path}/og.png?z=${z}&_query=${queryPayload}&component=${type === 'mobile' ? 'Mobile' : 'Docs'}&width=${type === 'mobile' ? 720 : 1200}&height=${type === 'mobile' ? 1280 : 630}`
-
-  // STEP 4: Clipboard gets the FULL text, but URL stays lean
-  try {
-    // Combine the text and URL for a better "Paste" experience
-    const intro = 'Luther Quote from Church Postil:'
-
-    const more = 'Read more in\n- church-postil.vercel.app\n- '
-      + note.title + '\n- '
-      + window.location.origin + route.path
-      + '\n\n'
-      + 'Find quotation (in this Postil Sermon) with «Ctrl F»'
-
-    const fullMessage = `${intro}\n\n"${fullText}"\n\n${more}` // \n\n${imageUrl}`
-    await navigator.clipboard.writeText(fullMessage)
-
-    toast.add({
-      title: 'Quote & Link Copied!',
-      description: 'Paste this into your post to show the image and the text.',
-      icon: 'i-heroicons-clipboard-document-check'
-    })
-  } catch (err) {
-    console.error('Failed to copy', err)
-  }
-
-  // 5. Try Web Share API (Mobile)
-  if (navigator.share) {
-    try {
-      console.log('navigator share started')
-      await navigator.share({
-        title: 'Luther Quote Image',
-        text: `Check out this highlight: "${fullText}"`,
-        url: imageUrl
-      })
-      return
-    } catch (err) {
-      console.log('Share cancelled or failed', err)
-    }
-  }
-} // https://gemini.google.com/share/e5953741835f
+const openImageEditorWithNote = (note) => {
+  openEditor({
+    h: props.title.slice(0, 28),
+    t: ctx.title, // The "Parents" go here - if shared header
+    d: note.text || 'Note' // The "Clicked Header" goes here - if shared header
+  })
+}
 </script>
 
 <template>
@@ -772,38 +696,25 @@ const shareLutherImage = async (note, type = 'wide') => {
               />
 
               <UButton
-                v-if="!note.isHighlight"
-                icon="i-heroicons-share"
+                icon="i-lucide-link"
                 color="neutral"
                 variant="ghost"
                 size="xs"
-                label="Share"
-                title="Share with wide image and link to page"
-                @click="shareNote(note)"
+                label="Page"
+                title="Share the quote of Luther - The Link will open page (scroll down) and highlight the quote"
+                @click="copyPageLink(note)"
               />
 
               <UButton
-                v-if="note.isHighlight"
                 icon="i-heroicons-share"
                 color="neutral"
                 variant="ghost"
                 size="xs"
-                label="Post"
-                title="Share with wide image and link to page"
-                @click="shareLutherImage(note, 'wide')"
+                label="Image"
+                title="Share or edit text before (1) sharing URL to social media image or (2) copying text with full quotation/ comment and link to the image and link to header on page."
+                @click="openImageEditorWithNote(note)"
               />
-
               <!-- source shareImage: https://gemini.google.com/share/562c07ced3fa  -->
-              <UButton
-                v-if="note.isHighlight"
-                icon="i-heroicons-share"
-                color="neutral"
-                variant="ghost"
-                size="xs"
-                label="Story"
-                title="Download and share mobile image with the quotation"
-                @click="shareLutherImage(note, 'mobile')"
-              />
 
               <UButton
                 icon="i-heroicons-check"

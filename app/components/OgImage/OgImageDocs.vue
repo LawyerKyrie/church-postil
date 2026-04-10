@@ -1,55 +1,65 @@
-<script lang="ts" setup>
-// source: https://gemini.google.com/share/3592a80da6a0
-const props = withDefaults(defineProps<{ title?: string, description?: string, headline?: string, sectionId?: string, parents?: string }>(), {
-  // title: 'title',
-  // description: 'description'
-})
+<script setup lang="ts">
+// https://gemini.google.com/share/940e5681a213
+import LZString from 'lz-string'
 
-const headline = computed(() => (props.headline || '').slice(0, 60))
+const route = useRoute()
 
-const title = computed(() => (props.title || '').slice(0, 60))
-const description = computed(() => {
-  const quotation = props.description as string
-  /*
-  if (quotation.length > 300) {
-    quotation = quotation.slice(0, 300)
-    quotation += '...»'
+const props = defineProps<{
+  h?: string
+  t?: string
+  d?: string
+  z?: string
+}>()
+
+const h = computed(() => {
+  // 1. If there is a 'z' in the URL (Direct Image Request),
+  // UNPACK IT INTERNALLY. Do not trust the props!
+  const directZ = props.z || route.query.z
+  if (directZ) {
+    try {
+      const unpacked = JSON.parse(LZString.decompressFromEncodedURIComponent(directZ as string))
+      if (unpacked.h) return unpacked.h
+    } catch (e) { console.error('Unzip of s-query failed', e) }
   }
-  */
-  return quotation
+
+  // 2. Fallback to the prop (which slug.vue handles for the 's' case)
+  return props.h || 'og-image headline'
 })
 
-/* Creating the section header name if there is a sectionId */
-const displayDescription = computed(() => {
-  // 1. If there is no sectionId, fall back to the standard page description
-  if (!props.sectionId) return props.description
+const t = computed(() => {
+  // 1. If there is a 'z' in the URL (Direct Image Request),
+  // UNPACK IT INTERNALLY. Do not trust the props!
+  const directZ = props.z || route.query.z
+  if (directZ) {
+    try {
+      const unpacked = JSON.parse(LZString.decompressFromEncodedURIComponent(directZ as string))
+      if (unpacked.t) return unpacked.t
+    } catch (e) { console.error('Unzip of s-query failed', e) }
+  }
 
-  // 2. Transform "my-second-header" -> "My Second Header"
-  return props.sectionId
-    .split('-') // Split by hyphen
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
-    .join(' ') // Join with spaces
+  // 2. Fallback to the prop (which slug.vue handles for the 's' case)
+  return props.t || 'og-image title'
 })
 
-const beautify = (slug: string) => {
-  if (!slug) return ''
-  return slug
-    .replace(/^\d+/, '')
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
+const d = computed(() => {
+  // 1. If there is a 'z' in the URL (Direct Image Request),
+  // UNPACK IT INTERNALLY. Do not trust the props!
+  const directZ = props.z || route.query.z
+  if (directZ) {
+    try {
+      const unpacked = JSON.parse(LZString.decompressFromEncodedURIComponent(directZ as string))
+      if (unpacked.d) return unpacked.d
+    } catch (e) { console.error('Unzip of s-query failed', e) }
+  }
 
-const parentList = computed(() => {
-  if (!props.parents) return []
-  return props.parents.split(' > ')
+  // 2. Fallback to the prop (which slug.vue handles for the 's' case)
+  return props.d || 'og-image description'
 })
 
-const displaySection = computed(() => beautify(props.sectionId || ''))
+// console.log('--- ISLAND RENDER SUCCESS (Docs) ---')
+// console.log('Props (d): ', props.d, '\n- Expand the log if necessary!')
 
-// Logic for the final section (The Child)
-// It should be more indented than the last parent
-const finalIndex = computed(() => parentList.value.length)
+const sectionId = 0
 </script>
 
 <template>
@@ -108,22 +118,27 @@ const finalIndex = computed(() => parentList.value.length)
 
     <div class="pl-[100px] relative z-10">
       <p
-        v-if="headline"
         class="uppercase text-[24px] text-[#00DC82] mb-2 font-semibold"
       >
-        {{ headline }}
+        {{ h }}
       </p>
       <h1
-        v-if="title"
         class="ml-5 text-[32px] mb-6 text-white"
         :style="{
           opacity: `${sectionId ? 0.6 : 1}`
         }"
       >
         <!-- text-[50px] font-bold mb-8 -->
-        {{ title }}
+        {{ t }}
       </h1>
 
+      <p
+        class="text-[32px] text-[#E4E4E7] ml-[80px] border-l-4 border-[#00DC82] pl-[12px] leading-tight max-w-[600px]"
+      >
+        {{ d }}
+      </p>
+
+      <!--
       <div
         v-if="sectionId"
         class="flex flex-col gap-3"
@@ -165,6 +180,7 @@ const finalIndex = computed(() => parentList.value.length)
       >
         {{ displayDescription }}
       </p>
+      -->
     </div>
   </div>
 </template>

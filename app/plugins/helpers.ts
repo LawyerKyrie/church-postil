@@ -4,6 +4,10 @@
 export default defineNuxtPlugin(() => {
   return {
     provide: {
+      globalTest(content) {
+        console.log('test test')
+        alert(content)
+      },
       created(timeStamp) {
         const dateObj = new Date(timeStamp)
         const date = dateObj.getDate().toString()

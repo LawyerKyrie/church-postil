@@ -96,6 +96,9 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': { prerender: true }, // Good for SEO/Speed on the home page
+    '/__og-image__/image/**': {
+      ogImage: { renderer: 'satori' } // not 'browser
+    },
     '/da/intro': { prerender: true },
     '/da/advent-postil': { prerender: true },
     '/da/christmas-postil': { prerender: true },
@@ -218,6 +221,13 @@ export default defineNuxtConfig({
 
   mcp: {
     name: 'Church Postil'
+  },
+  ogImage: {
+    // Force the runtime to be active
+    enabled: true,
+    // This ensures your custom component (e.g. OgImage/Luther.vue)
+    // is used when the 'v' parameter is present
+    runtimeCacheStorage: true
   }
 })
 

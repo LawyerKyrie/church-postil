@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core'
 
@@ -6,50 +7,77 @@ const props = defineProps<{
   tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }>()
 
-const { copy, copied } = useClipboard({ legacy: true })
-const route = useRoute()
-const toast = useToast()
+const { /* copy, */ copied } = useClipboard({ legacy: true })
 
-const handleShareClick = async (event: MouseEvent) => {
-  // Prevent the NuxtLink from triggering when we only want to copy
-  event.preventDefault()
-  event.stopPropagation()
+const { openEditor, imageData, headlineT } = useImageState()
 
-  const url = new URL(window.location.origin + route.path)
-  url.searchParams.set('s', props.id)
-  copy(url.toString())
+const getBreadcrumbs = (el: HTMLElement) => {
+  // 1. Find all headers on the page
+  const headers = Array.from(document.querySelectorAll('h2, h3, h4, h5, h6'))
+  // 2. Find where the clicked header is in that list
+  const currentIndex = headers.indexOf(el)
+  if (currentIndex === -1) return ''
 
-  /*
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: 'Header from Luther\'s Church Postil',
-        text: `Section Title: "${url.toString()}"`,
-        url: url.toString()
-      })
-      return
-    } catch (err) {
-      console.log('Share cancelled or failed', err)
-      toast.add({ title: 'Error', description: 'Navigator Share Issue'})
+  const breadcrumbs: string[] = []
+  const currentLevel = parseInt(el.tagName.substring(1))
+  let lastLevel = currentLevel
+
+  // 3. Walk backwards through the headers to find parents
+  for (let i = currentIndex - 1; i >= 0; i--) {
+    const h = headers[i] as HTMLElement
+    const level = parseInt(h.tagName.substring(1))
+
+    if (level < lastLevel) {
+      // Remove '#' and extra whitespace
+      const cleanText = h.innerText.replace('#', '').trim()
+      breadcrumbs.unshift(cleanText)
+      lastLevel = level
     }
-  } else console.log('')
-  */
-  toast.add({ title: 'Copied', description: 'Section header title copied to Clipboard!' })
+    // Stop if we hit the highest level (H2)
+    if (level === 2) break
+  }
+
+  return breadcrumbs.join(' > ')
+}
+
+const handleShareClick = () => {
+  // 1. Get the element using the ID provided by Nuxt Content
+  const targetElement = document.getElementById(props.id)
+
+  if (!targetElement) {
+    console.error('Critical: Could not find element with ID:', props.id)
+    return
+  }
+
+  // 2. Use the tool to get the string
+  const breadcrumbString = getBreadcrumbs(targetElement)
+
+  // 2. We grab the text of the header we clicked DIRECTLY from the screen
+  const clickedHeaderText = targetElement.innerText.replace('#', '').trim()
+  // 3. Send the data to your Image Editor
+
+  imageData.value.content.h = headlineT.value
+  imageData.value.content.t = breadcrumbString
+  imageData.value.content.d = clickedHeaderText
+
+  openEditor({
+    h: headlineT.value?.slice(0, 29),
+    t: breadcrumbString, // The "Parents" go here
+    d: clickedHeaderText || 'Clicked H el.' // The "Header" goes here
+  })
 }
 
 const sizes = {
   h1: 'text-4xl', h2: 'text-3xl', h3: 'text-2xl',
   h4: 'text-xl', h5: 'text-lg', h6: 'text-base'
 }
-
-/* ### [Header title]{#h31} */
-// source: https://gemini.google.com/share/183eb52d2c2e
 </script>
 
 <template>
   <component
     :is="tag"
     :id="id"
+    ref="headerRef"
     class="group relative font-bold mb-4 mt-8 scroll-mt-24 tracking-tight"
     :class="sizes[tag]"
   >

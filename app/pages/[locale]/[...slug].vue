@@ -13,7 +13,6 @@ definePageMeta({
   layout: 'docs',
   scrollToTop: false
 })
-// const { data: page } = await useAsyncData(path, () => queryCollection('docs').path(path).first())
 
 const route = useRoute()
 
@@ -26,6 +25,20 @@ const { data: page } = await useAsyncData(
       .first()
 )
 
+const { imageData, headlineT } = useImageState()
+
+// 2. Sync the Global State with the URL and Page Data
+// Sync page data to global (image-editor) state automatically
+watchEffect(() => {
+  if (page.value) {
+    imageData.value.pageContext = {
+      title: page.value.title,
+      description: page.value.description,
+      path: page.value.path
+    }
+  }
+})
+
 const { locale } = useI18n()
 
 const detectedLocale = computed(() => {
@@ -37,7 +50,7 @@ const detectedLocale = computed(() => {
 if (!page.value) {
   throw createError({
     statusCode: 404,
-    statusMessage: `Page not found in ${detectedLocale.value} at ${route.path}`,
+    statusMessage: `Page not found in ${detectedLocale.value} at ${route.fullPath}`,
     fatal: true
   })
 }
@@ -48,79 +61,42 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
   })
 })
 
-// inserting quotation in the description field: https://gemini.google.com/share/1fbb50b7255e
-// 1. Grab and Unzip the quote from the URL parameter 'z'
-const sharedQuote = computed(() => { // https://gemini.google.com/share/523e955e9fd0
-  const zipped = route.query.z as string
-  if (!zipped) return null
-
-  try {
-    return LZString.decompressFromEncodedURIComponent(zipped)
-  } catch (e) {
-    console.error('Failed to unzip image url', e)
-    return null
-  }
-  /*
-  // https://gemini.google.com/share/d20ae270490a
-  const shortId = route.query.s as string
-  if (!shortId || page.value) return null
-  // Nuxt Content TOC (Table of Contents) maps these IDs automatically
-  const toc = (page.value as any)?.body?.toc
-  const found = toc?.links.find(link => link.id === shortId)
-
-  return found ? found.text : 'Luther Quote'
-  */
-})
-
 const config = useRuntimeConfig() // siteUrl or apiBase
 
 useSeoMeta({
   // title, // This title comes below the shared image - I don't want to have the same title in image and below it
   ogTitle: route.path.startsWith('/en') ? 'Luther\'s Church Postil' : 'Luthers Kirke Postille', // page?.value?.title,
   // description,
-  ogDescription: sharedQuote.value ? (locale.value === 'en' ? 'Read this quote from Luther...' : 'Les dette sitatet fra Luther...') : page?.value?.description,
+  ogDescription: route.query.s ? (locale.value === 'en' ? 'Read this quote from Luther...' : 'Les dette sitatet fra Luther...') : page?.value?.description,
   ogUrl: () => `${config.public.siteUrl}${route.fullPath}` // route.path
+  /*
+  ogImage: quoteData // isAnchorLink.value
+    ? undefined // Let the OG Module handle it otherwise
+    : '/default-social-card.png' // A static image for urls with only the id instead of the section header title
+  */
 })
 
-// 1. Detect which component was requested in the URL
-// If no component is in the URL, default to 'Docs' (the wide one)
-const activeComponent = computed(() => (route.query.component as string) || 'Docs')
-const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
+let sData = null as any
 
-// 2. Prepare the clean object (with title & description) for defineOgImage
-const ogImage = computed(() => {
-  const title = page?.value?.title
-  // If we have a shared quote, we use it; otherwise, use the page default
-  const description = sharedQuote.value
-    ? `Luther: «${sharedQuote.value}»`
-    : (page.value?.description || 'Missing Description')
+// We ONLY handle 's' here because it's for the normal page load
+if (route.query.s) {
+  try { // unzip only the s-query (z-query i handled in og-image modules)
+    sData = JSON.parse(LZString.decompressFromEncodedURIComponent(route.query.s as string))
+  } catch (e) { console.error('Unzip of s-query failed', e) }
+}
 
-  return { title, description }
+const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path)) as any
+
+defineOgImageComponent(imageData.value.layout, {
+// We send ONLY these three. No more z or s.
+  h: sData?.h || imageData.value.content.h || headline,
+  t: sData?.t || imageData.value.content.t || page.value.title,
+  d: sData?.d || imageData.value.content.d || page.value.description,
+
+  z: route.query.z // The unzipping of direct image have to be done in og-image modules
+  // v: 1.5 // Keep the cache buster!
 })
 
-console.log('activeComponent.value:' + activeComponent.value
-  + '\nroute.query.s:' + route.query.s
-  + '\nroute.fullPath:' + route.fullPath)
-
-defineOgImageComponent(activeComponent.value, {
-  headline: headline.value, // folder navigation title
-  title: ogImage.value.title, // page title
-  description: ogImage.value.description, // page description OR quotation
-  sectionId: route.query.s as string, // hash header title
-  parents: route.query.p as string // breadcrumbs
-}) // source: https://gemini.google.com/share/5ba56070f316
-
-// 3. Define the OG Image using that dynamic value
-// new defineOgImagecomp: https://gemini.google.com/share/5cb9fe382b05
-/*
-const { imageData, syncFromUrl } = useImageState()
-
-// 2. Sync the Global State with the URL and Page Data
-syncFromUrl(page.value)
-
-// 3. The Image Component just follows the State
-defineOgImageComponent(imageData.value.layout)
-*/
 // 4. Wrap the logic in a safe Computed block
 const links = computed(() => {
   // If page is null (because it's an API route or 404),
@@ -235,6 +211,66 @@ const handleContextMenu = (e: Event) => {
 
 // Watch for when the component is ready
 onMounted(() => {
+  if (route.query.v) {
+    // const zipped = route.query.v as string
+    console.log('unzipping')
+    const unzipped = JSON.parse(LZString.decompressFromEncodedURIComponent(route.query.v as string))
+    // const unzipped = LZString.decompressFromEncodedURIComponent(zipped)
+    console.log('Welcome back! You were sent here to see:', unzipped.d)
+    return
+    // source: https://gemini.google.com/share/a89844d0d7e5
+    // You could open your Slideover here automatically to show them the quote!
+  }
+
+  // Inside slug.vue onMounted
+  const s = route.query.s as string
+
+  if (s) {
+    try {
+      const decompressed = LZString.decompressFromEncodedURIComponent(s)
+      const { d } = JSON.parse(decompressed)
+      const quoteSnippet = d.substring(0, 40)
+
+      // 1. Find the paragraph
+      const paragraphs = document.querySelectorAll('p')
+      let targetEl: HTMLElement | null = null
+
+      for (const p of paragraphs) {
+        if (p.textContent?.includes(quoteSnippet)) {
+          targetEl = p as HTMLElement
+          break
+        }
+      }
+
+      if (targetEl) {
+        // 1. Get the original HTML
+        const fullHtml = targetEl.innerHTML
+
+        // 2. We need to find the text even if there are slight spacing differences
+        // We'll search for the raw quote 'd'
+        const quoteToHighlight = d.trim()
+
+        // 3. Use a "Replace" to wrap the quote in a <mark> tag
+        // We use a regex or simple replace to add the styling
+        if (fullHtml.includes(quoteToHighlight)) {
+          targetEl.innerHTML = fullHtml.replace(
+            quoteToHighlight,
+            `<mark style="background-color: #fef08a; color: black; padding: 2px 0;">${quoteToHighlight}</mark>`
+          )
+        }
+
+        // 4. Scroll to the element
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+        // 5. Clean the URL for the address bar
+        // const textFragment = `:~:text=${encodeURIComponent(quoteToHighlight)}`
+        // window.history.replaceState(null, '', `${window.location.pathname}#${textFragment}`)
+      }
+    } catch (e) {
+      console.error('Manual highlight failed', e)
+    }
+  } // https://gemini.google.com/share/0a4a0adb393b
+
   // This handles the "Arrival" via a link
   // await nextTick()
   // const urlHash = useUrlHash()
@@ -258,7 +294,7 @@ onMounted(() => {
     }, 50)
   } else if (route.hash.length === 0 // NO HASH here
     && !fullUrl.includes('#:~:text=')
-    && !(sharedQuote.value || sectionId)) {
+    && !(route.query.s || sectionId)) {
     // Before this code the page opened in the bottom view
     console.log('if3 no hash or query')
     window.scrollTo({
@@ -266,25 +302,6 @@ onMounted(() => {
       left: 0,
       behavior: 'smooth' // or 'instant'
     })
-  } else if (sharedQuote.value) {
-    console.log('if4 query param (share note)')
-
-    // 1. Ensure the text is properly encoded for a URL fragment
-    // We use encodeURIComponent but the spec sometimes prefers slightly different handling
-    const formattedText = encodeURIComponent(sharedQuote.value)
-    const textFragment = `:~:text=${formattedText}`
-
-    // 2. Apply the hash
-    // We use replaceState first to keep the URL clean (no ?q= and # together if you prefer)
-    // But setting .hash directly is often more "persuasive" to the browser
-    setTimeout(() => {
-      window.location.hash = textFragment
-
-      // 3. The "Jumpstart"
-      // If it still doesn't scroll, we manually find the text
-      // but usually, the browser needs a layout reflow:
-      window.dispatchEvent(new Event('hashchange'))
-    }, 330) // Small delay to ensure Nuxt has rendered the content
   } else if (sectionId === 'remove-this-if-you-want-to-replace-query-s-with-text-search-hash') {
     if (sectionId) {
       setTimeout(() => {
@@ -323,17 +340,13 @@ onMounted(() => {
     }, 500)
   } else { // THIS SHOULD NEVER HAPPEN - probable an error
     console.log('Error: else(7) - scrollRestoration')
+    /*
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'auto'
     }
+    */
   }
 })
-
-/*
-if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'auto'
-    }
-*/
 
 // This handles the "Jumping" if you are already on the page
 watch(() => route.hash, () => {
@@ -371,6 +384,9 @@ pageId.value = getIdByPath(route.fullPath) as string
 const tocIcon = (open) => {
   return open ? '✖' : '☰'
 }
+
+// exporting headline for use in og-modules etc.
+headlineT.value = headline.value
 </script>
 
 <template>
@@ -418,11 +434,12 @@ const tocIcon = (open) => {
         <ClientOnly>
           <GithubComments />
           <RightBottomMenu />
+          <ImageEditor />
           <AddNoteToMdPage
             v-if="page"
             ref="noteRef"
             :target="pageContainer"
-            :title="page.title"
+            :title="headlineT"
           />
         </ClientOnly>
 

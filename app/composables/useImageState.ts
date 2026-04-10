@@ -1,15 +1,86 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import LZString from 'lz-string'
+
+interface ImageContent {
+  h?: string // Headline (A)
+  t?: string // Title (B/C)
+  d?: string // Description/Quote (D/E/F)
+}
+
 export const useImageState = () => {
   // Your Global "Source of Truth"
+  const headlineT = useState('headline-t', () => '') // Our global storage for "Church Postil"
+
   const imageData = useState('og-image-data', () => ({
-    text: '',
-    headline: 'Church Postil',
-    layout: 'Mobile',
-    isLoaded: false
+    showEditor: false,
+    layout: 'Docs',
+    // The "Bridge" storage
+    pageContext: {
+      title: '',
+      description: '',
+      path: ''
+    },
+    content: {
+      h: '', // A headline
+      t: '', // B or C title (page.title or parent to shared header)
+      d: '' // D, E, or F description
+    }
+    // Meta for internal logic
+    // sourceType: 'page' // helps track if it's a manual quote vs page scrap
   }))
 
-  const route = useRoute()
+  const setContent = (payload: { h?: string, t?: string, d?: string }) => {
+    if (payload.h) imageData.value.content.h = payload.h
+    if (payload.t) imageData.value.content.t = payload.t
+    if (payload.d) imageData.value.content.d = payload.d
+  }
 
+  // 2. THE ACTION (The "Broadcast" Function)
+  // We pass the text into this function from the component
+  // Change from string to Object
+  const openEditor = (payload: ImageContent) => {
+    // We use the spread operator to update only what is provided
+    imageData.value.content = {
+      h: payload.h || headlineT.value || 'Headline not provided',
+      t: payload.t || 'Title not provided',
+      d: payload.d || 'No description provided'
+    }
+    imageData.value.showEditor = true
+    // console.log('📢 Editor opened with structured data (h=):', imageData.value.content.h)
+  }
+
+  // This is your shared logic, now accessible from the Editor!
+  const generateSharePayload = () => {
+    const route = useRoute()
+
+    // 1. Create a tiny object using our single-letter keys
+    const payload = {
+      h: imageData.value.content.h,
+      t: imageData.value.content.t,
+      d: imageData.value.content.d,
+      l: imageData.value.layout === 'Mobile' ? 'm' : 'w' // m=mobile, w=wide
+    }
+
+    // 2. Compress the JSON string
+    const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(payload))
+
+    // `${origin}/__og-image__/image${route.path}/og.png?v=${z}` // is the correct or wrong?
+
+    const originPath = `${window.location.origin}${route.path}`
+
+    // 3. Build the final OG Image URL
+    // This points to the automatic PNG route provided by Nuxt OG Image
+    const imageUrl = `${originPath}/__og-image__/image/og.png?v=${compressed}`
+
+    // 4. Build the "Backlink" (The actual page the user visits)
+    const shareUrl = `${originPath}?v=${compressed}`
+
+    return { imageUrl, shareUrl, fullText: imageData.value.content.d }
+  }
+
+  return { headlineT, imageData, openEditor, setContent, generateSharePayload }
+}
+
+/*
   // THE BRAIN: Sync URL -> Global State
   const syncFromUrl = (pageData: any) => {
     const { s, q, layout } = route.query
@@ -39,6 +110,4 @@ export const useImageState = () => {
     imageData.value.text = pageData?.title || 'Luther Quote'
     imageData.value.isLoaded = true
   }
-
-  return { imageData, syncFromUrl }
-}
+*/
