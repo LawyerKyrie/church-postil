@@ -2,6 +2,7 @@
 // Source: https://gemini.google.com/share/7b2243e3ed02
 import { useImageState } from '~/composables/useImageState'
 import LZString from 'lz-string'
+import { useClipboard } from '@vueuse/core'
 
 const route = useRoute()
 const { imageData, openEditor } = useImageState()
@@ -99,6 +100,8 @@ const getAnchorUrl = () => {
   return `${window.location.origin}${route.path}${sectionId}`
 } // https://gemini.google.com/share/9aabcd75c390
 
+const { copy, copied } = useClipboard()
+
 const createPostWithImageAndUrl = async () => {
   // 1. Gather the data exactly as the Editor sees it
   const dataToZip = {
@@ -140,15 +143,32 @@ Source:
 ${anchorUrl}
   `.trim()
 
-  await navigator.clipboard.writeText(finalPost)
+  const source = 'Source:'
+  const post = finalPost.split(source)[0] + source
+  copy(anchorUrl)
 
-  toast.add({ title: 'Copied Post!', description: 'Past (quote & links to image and source) from clipboard to Post' })
+  // 4. Send to Clipboard / Web Share
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Shared Luther Quote',
+        text: `${post}`, // « »
+        url: anchorUrl // This link contains the compressed data
+      })
+    } catch (err) {
+      console.log('Share cancelled or failed', err)
+    }
+  } else {
+    // Fallback for PC: Copy to Clipboard
+    await navigator.clipboard.writeText(finalPost)
+    toast.add({ title: 'Copied Post!', description: 'Past (quote & links to image and source) from clipboard to Post' })
+  }
 }
 
 const shareUrlOfZipImage = async () => {
   // 1. Gather the data exactly as the Editor sees it
   const dataToZip = {
-    h: imageData.value.content.h?.slice(0, 29),
+    h: imageData.value.content.h,
     t: imageData.value.content.t,
     d: imageData.value.content.d
   }
@@ -164,12 +184,14 @@ const shareUrlOfZipImage = async () => {
 
   const imageUrl = `${window.location.origin}/__og-image__/image${route.path}/og.png?z=${z}&component=${imageData.value.layout}&width=${wx}&height=${hy}`
 
+  // immediately copy url to clipboard before the share window open
+  copy(imageUrl)
   // 4. Send to Clipboard / Web Share
   if (navigator.share) {
     try {
       await navigator.share({
         title: 'Shared Luther Quote',
-        text: `${imageData.value.content.d}`, // « »
+        // text: `${imageData.value.content.d}`, // « »
         url: imageUrl // This link contains the compressed data
       })
     } catch (err) {
@@ -231,32 +253,7 @@ function onNoteSelect(item) {
     t: ctx.title, // The "Parents" go here - if shared header
     d: item.label || 'Note' // The "Clicked Header" goes here - if shared header
   })
-
-  // Or if you kept the function inside the object:
-  // item.onSelect?.()
 }
-
-/* // getNearestSectionId
-const getNearestSectionId = (el: HTMLElement | null): string => {
-  if (!el) return ''
-
-  // 1. Start with the current element
-  let sibling = el.previousElementSibling
-
-  // 2. Loop backwards through siblings until we find a Header with an ID
-  while (sibling) {
-    // Check if it's a header tag (H1-H6) and has an ID
-    if (/^H[1-6]$/i.test(sibling.tagName) && sibling.id) {
-      return `#${sibling.id}`
-    }
-    // Move to the next one up
-    sibling = sibling.previousElementSibling
-  }
-
-  // 3. Fallback: If no header found, return empty (top of page)
-  return ''
-}
-*/
 </script>
 
 <template>
@@ -275,10 +272,10 @@ const getNearestSectionId = (el: HTMLElement | null): string => {
         <USelectMenu
           v-model="selectedNote"
           :items="noteItems"
-          placeholder="Select highlight, notes to edit/ share..."
+          :placeholder="allNotes.length > 0 ? 'Select highlight, notes to edit/ share...' : 'Create note bobbles or highlight text!'"
           :search-input="{
             id: 'selectMenuInputFilter',
-            placeholder: `Filter Highligh & Notes...`,
+            placeholder: allNotes.length > 0 ? 'Filter Highligh & Notes...' : 'Created notes can be selected her...',
             icon: 'i-lucide-search',
             readonly: true
           }"
@@ -331,7 +328,7 @@ const getNearestSectionId = (el: HTMLElement | null): string => {
 
               <div class="flex items-center gap-1">
                 <UButton
-                  icon="i-lucide-clipboard-copy"
+                  :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-clipboard-copy'"
                   title="Create Post - Copy/past text & links of image & source to post!"
                   color="primary"
                   variant="ghost"
@@ -340,7 +337,7 @@ const getNearestSectionId = (el: HTMLElement | null): string => {
                 />
 
                 <UButton
-                  icon="i-heroicons-share"
+                  :icon="copied ? 'i-lucide-copy-check' : 'i-heroicons-share'"
                   title="Copy/ past Image Url (link)!"
                   color="primary"
                   variant="ghost"
@@ -438,7 +435,7 @@ const getNearestSectionId = (el: HTMLElement | null): string => {
             >
               <UInput
                 v-model="imageData.content.h"
-                maxlength="30"
+                maxlength="40"
                 class="w-full"
               />
             </UFormField>
@@ -482,7 +479,7 @@ const getNearestSectionId = (el: HTMLElement | null): string => {
       >
         <UButton
           title="Create Post: Copy/ past text, image and link to a post etc."
-          trailing-icon="i-lucide-clipboard-copy"
+          :trailing-icon="copied ? 'i-lucide-copy-check' : 'i-lucide-clipboard-copy'"
           color="neutral"
           variant="outline"
           class="flex-1 py-2 flex flex-col items-center justify-center gap-1 border-r border-gray-200 dark:border-gray-800"
@@ -495,7 +492,7 @@ const getNearestSectionId = (el: HTMLElement | null): string => {
 
         <UButton
           title="Share - Get URL (Link) to the Image"
-          trailing-icon="i-heroicons-share"
+          :trailing-icon="copied ? 'i-lucide-copy-check' : 'i-heroicons-share'"
           color="primary"
           class="flex-1 py-2 flex flex-col items-center justify-center gap-1"
           @click="shareUrlOfZipImage"

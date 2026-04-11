@@ -3,6 +3,7 @@
 // source: https://gemini.google.com/share/5719bd6e91d8
 // import { useClipboard } from '@vueuse/core'
 import LZString from 'lz-string'
+import { useClipboard } from '@vueuse/core'
 
 const props = defineProps<{
   target: HTMLElement | null
@@ -486,57 +487,12 @@ const cancelSelection = (event?: Event) => {
   reset()
 }
 
-/*
---------------------------------
-SHARE LOGIC FOR LINKS AND IMAGES
---------------------------------
-*/
-const toast = useToast()
-
-const copyPageLink = async (note) => {
-  const dataToZip = {
-    h: props.title.slice(0, 29),
-    t: ctx.title,
-    d: note.text.replace(/[«»]/g, '').trim()
-  }
-
-  // 2. Zip it for a "Lean" Social Media URL
-  const s = LZString.compressToEncodedURIComponent(JSON.stringify(dataToZip))
-
-  // 3. Build the Image URL
-  // We match your width/height logic from openPreview
-  const isMobile = imageData.value.layout === 'Mobile'
-  const wx = isMobile ? 720 : 1200
-  const hy = isMobile ? 1280 : 630
-
-  const pageUrl = `${window.location.origin}${route.path}?s=${s}&component=${imageData.value.layout}&width=${wx}&height=${hy}`
-
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: 'Shared Luther Quote',
-        text: `${dataToZip.d}`, // « »
-        url: pageUrl // This link contains the compressed data
-      })
-    } catch (err) {
-      console.log('Share cancelled or failed', err)
-    }
-  } else {
-    // Fallback for PC: Copy to Clipboard
-    await navigator.clipboard.writeText(pageUrl)
-    toast.add({
-      title: 'Page Link Copied!',
-      description: 'Ready to paste in your browser.',
-      icon: 'i-heroicons-clipboard-document-check'
-    })
-  }
-}
-
 // One of the two alternatives when creating highlighted text
 const copyToClipboard = () => {
   const selection = window.getSelection()
   const text = selection?.toString().trim() || ''
   navigator.clipboard.writeText(text)
+  // copy(text)
   toast.add({
     title: 'Copied Text!',
     description: 'Clipboard has captured the text!',
@@ -555,8 +511,57 @@ const setCopyMenuPosition = (left) => {
   return position
 }
 
-/* ---------- DOWNLOAD MOBILE SHARE IMAGE ---------- */
-// ------ The logic for "Share as Image" button ------
+/*
+-------------------------------------------------
+SHARE LOGIC FOR LINKS AND IMAGES (in imageEditor)
+& SHARING OF PAGE LINKS TO QUOTES
+(The logic for "Share as Page or Image"
+--------------------------------
+*/
+const { copy, copied } = useClipboard()
+const toast = useToast()
+
+const sharePageLinkWithQuote = async (note) => {
+  const dataToZip = {
+    h: props.title.slice(0, 29),
+    t: ctx.title,
+    d: note.text.replace(/[«»]/g, '').trim()
+  }
+
+  // 2. Zip it for a "Lean" Social Media URL
+  const s = LZString.compressToEncodedURIComponent(JSON.stringify(dataToZip))
+
+  // 3. Build the Image URL
+  // We match your width/height logic from openPreview
+  const isMobile = imageData.value.layout === 'Mobile'
+  const wx = isMobile ? 720 : 1200
+  const hy = isMobile ? 1280 : 630
+
+  const pageUrl = `${window.location.origin}${route.path}?s=${s}&component=${imageData.value.layout}&width=${wx}&height=${hy}`
+
+  // copy url to clipboard before navigator.share window open
+  copy(pageUrl)
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Shared Luther Quote',
+        // text: `${dataToZip.d}`, // « »
+        url: pageUrl // This link contains the compressed data
+      })
+    } catch (err) {
+      console.log('Share cancelled or failed', err)
+    }
+  } else {
+    // Fallback for PC: Copy to Clipboard
+    await navigator.clipboard.writeText(pageUrl)
+    toast.add({
+      title: 'Page Link Copied!',
+      description: 'Ready to paste in your browser.',
+      icon: 'i-heroicons-clipboard-document-check'
+    })
+  }
+}
 
 const openImageEditorWithNote = (note) => {
   openEditor({
@@ -598,7 +603,7 @@ const openImageEditorWithNote = (note) => {
           />
 
           <UButton
-            icon="i-lucide-clipboard-copy"
+            :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-clipboard-copy'"
             title="Copy the selected text!"
             label="Copy"
             size="xs"
@@ -691,18 +696,18 @@ const openImageEditorWithNote = (note) => {
                 color="warning"
                 variant="ghost"
                 size="xs"
-                :label="note.isHighlight ? '' : 'Delete'"
+                label=""
                 @click="deleteNote(note.id)"
               />
 
               <UButton
-                icon="i-lucide-link"
+                :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-link'"
                 color="neutral"
                 variant="ghost"
                 size="xs"
                 label="Page"
                 title="Share the quote of Luther - The Link will open page (scroll down) and highlight the quote"
-                @click="copyPageLink(note)"
+                @click="sharePageLinkWithQuote(note)"
               />
 
               <UButton

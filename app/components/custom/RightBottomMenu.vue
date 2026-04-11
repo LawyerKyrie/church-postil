@@ -106,8 +106,7 @@ watch(isScrolling, (scrolling) => {
   } else {
     // Hide menu immediately when scrolling starts
     showMovableToggle.value = false
-    // Re-setting the state of all the menu buttons
-    movableMenuOpen.value = false
+    // movableMenuOpen.value = false // Re-setting the state of all the menu buttons (closing them)
   }
 })
 
@@ -524,6 +523,17 @@ const handleFileChange = (event: Event) => {
   }
   reader.readAsText(file)
 }
+
+/* -------- OPEN IMAGE EDITOR ---------- */
+const { openEditor } = useImageState()
+
+const openImageEditor = (allNotes) => {
+  openEditor({
+    h: allNotes.length === 0 ? 'No highlighted text or bobbles to show...' : 'Select a note to edit',
+    t: allNotes.length === 0 ? 'Highlight text or create bobbles first!' : 'Open select menu to select',
+    d: allNotes.length === 0 ? 'Create note bobbles with double click anywhere and open them here to edit and share Luther quotes and notes.' : 'All notes (note bobbles or highlighted text) can be found in the select menu in the top of this window. Select one to edit and share!'
+  })
+}
 </script>
 
 <template>
@@ -587,6 +597,21 @@ const handleFileChange = (event: Event) => {
                   aria-label="Toggle Language"
                   @click="toggleLang"
                 />
+                <UChip
+                  :text="allNotes.length"
+                  size="3xl"
+                  color="secondary"
+                  position="bottom-left"
+                >
+                  <UButton
+                    title="Image Editor - Edit the og-image that appear on social media on sharing"
+                    color="secondary"
+                    square
+                    variant="subtle"
+                    icon="i-lucide-edit"
+                    @click="openImageEditor(allNotes)"
+                  />
+                </UChip>
               </div>
               <UDrawer
                 v-model:open="cpOpen"
@@ -599,9 +624,11 @@ const handleFileChange = (event: Event) => {
                 <UChip
                   :text="allNotes.length"
                   size="3xl"
+                  color="neutral"
                   position="bottom-left"
                 >
                   <UButton
+                    title="Note Menu with overview of all highlighted text and notes!"
                     color="secondary"
                     square
                     variant="subtle"
