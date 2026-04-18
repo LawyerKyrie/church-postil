@@ -82,13 +82,13 @@ export default defineEventHandler(() => {
 
     { id: 4031, postil: 'Summer', tags: 'Epistle', label: 'Easter Tuesday', bible: 'Acts 13: 26-39' },
     { id: 4032, postil: 'Summer', tags: 'Gospel', label: 'Easter Tuesday', bible: 'Luk 24: 36-47' },
-    { id: 4033, postil: 'Summer', tags: 'Gospel', label: 'Easter Tuesday', bible: 'Luk 24: 36-47' },
+    { id: 4033, postil: 'Summer', tags: 'Gospel', label: '2.Sermon', bible: 'Luk 24: 36-47' },
 
-    { id: 4041, postil: 'Summer', tags: 'Epistle', label: 'Easter Wednesday', bible: 'Col 3: 1-7' },
+    { id: 4041, postil: 'Summer', tags: 'Epistle', label: '4.Easter day', bible: 'Col 3: 1-7' },
 
     { id: 4111, postil: 'Summer', tags: 'Epistle', label: '1.Sun.a.East.', bible: '1 Joh 5: 4-12' },
     { id: 4112, postil: 'Summer', tags: 'Gospel', label: '1.Sun.a.East.', bible: 'Joh 20: 19-31' },
-    { id: 4113, postil: 'Summer', tags: 'Gospel', label: '1.Sun.a.East.(2/2)', bible: 'Joh 20: 19-31' },
+    { id: 4113, postil: 'Summer', tags: 'Gospel', label: '2.sermon', bible: 'Joh 20: 19-31' },
     { id: 4121, postil: 'Summer', tags: 'Epistle', label: '2.Sun.a.East.', bible: '1 Pet 2: 20-25' },
     { id: 4122, postil: 'Summer', tags: 'Gospel', label: '2.Sun.a.East.', bible: 'Joh 10: 11-16' },
     { id: 4131, postil: 'Summer', tags: 'Epistle', label: '3.Sun.a.East.', bible: '1 Pet 2: 11-20' },

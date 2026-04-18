@@ -89,7 +89,7 @@ export default defineEventHandler(() => {
 
     { id: 4111, postil: 'Påske', tags: 'Epistel', label: '1.Søn.e.påske', bible: '1 Joh 5: 4-12' },
     { id: 4112, postil: 'Påske', tags: 'Evangelium', label: '1.Søn.e.påske', bible: 'Joh 20: 19-31' },
-    { id: 4113, postil: 'Påske', tags: 'Evangelium', label: '1.Søn.e.påske (2/2)', bible: 'Joh 20: 19-31' },
+    { id: 4113, postil: 'Påske', tags: 'Evangelium', label: '2.Sermon', bible: 'Joh 20: 19-31' },
     { id: 4121, postil: 'Påske', tags: 'Epistel', label: '2.Søn.e.påske', bible: '1 Pet 2: 20-25' },
     { id: 4122, postil: 'Påske', tags: 'Evangelium', label: '2.Søn.e.påske', bible: 'Joh 10: 11-16' },
     { id: 4131, postil: 'Påske', tags: 'Epistel', label: '3.Søn.e.påske', bible: '1 Pet 2: 11-20' },

@@ -115,6 +115,2791 @@ const sectionId = 0
         <path d="M11 2h2v5h5v2h-5v13h-2V9H6V7h5V2z" />
       </svg>
     </div>
+    <div class="absolute left-0 bottom-0">
+      <!-- https://www.qrcode-monkey.com/ Foreground Color: #020420 -->
+      <svg
+        id="Layer_1"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        width="100px"
+        height="100px"
+        viewBox="0 0 1155 1155"
+        enable-background="new 0 0 1155 1155"
+        xml:space="preserve"
+      >
+        <rect
+          x="0"
+          y="0"
+          width="1155"
+          height="1155"
+          fill="rgb(255,255,255)"
+        /><g transform="translate(70,70)"><g transform="translate(280,0) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,0) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,0) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,0) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,0) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,0) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,0) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,35) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,35) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,35) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,35) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,35) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,35) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,35) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,35) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,70) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,70) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,70) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,70) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,70) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,105) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,105) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,105) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,105) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,105) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,105) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,105) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,140) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,140) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,140) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,140) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,140) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,140) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,140) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,175) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,175) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,175) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,175) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,175) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,175) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,210) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,210) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,210) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,210) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,210) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,210) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,210) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,245) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,245) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,245) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,245) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,245) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,245) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,245) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(0,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(70,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(105,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(175,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(210,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(245,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(770,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(980,280) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(0,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(70,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(105,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(735,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(770,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(980,315) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(35,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(70,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(105,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(140,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(210,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,350) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(70,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(245,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(735,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(980,385) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(0,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(105,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(210,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(245,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,420) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(35,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(175,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(770,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(980,455) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(35,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(105,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(210,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(245,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(980,490) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(0,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(35,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(70,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(175,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(735,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,525) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(0,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(70,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(105,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(140,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(175,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(210,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(245,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,560) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(35,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(70,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(105,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(140,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,595) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(0,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(140,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(175,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(210,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(245,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(770,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,630) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(245,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(735,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,665) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(35,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(175,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(210,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(245,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(735,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(770,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,700) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(980,735) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(770,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,770) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(980,805) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(735,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(770,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,840) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(560,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(735,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(980,875) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(595,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(735,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(910,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(980,910) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(315,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(350,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(420,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(525,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(735,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(875,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,945) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(280,980) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(385,980) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(455,980) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(490,980) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(630,980) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(665,980) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(700,980) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(805,980) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(945,980) scale(0.35,0.35)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(0,0) scale(2.45, 2.45)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <g>
+            <rect
+              x="15"
+              y="15"
+              style="fill:none;"
+              width="70"
+              height="70"
+            />
+            <path d="M85,0H15H0v15v70v15h15h70h15V85V15V0H85z M85,85H15V15h70V85z" />
+          </g>
+        </g></g><g transform="translate(770,0) scale(2.45, 2.45)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <g>
+            <rect
+              x="15"
+              y="15"
+              style="fill:none;"
+              width="70"
+              height="70"
+            />
+            <path d="M85,0H15H0v15v70v15h15h70h15V85V15V0H85z M85,85H15V15h70V85z" />
+          </g>
+        </g></g><g transform="translate(0,770) scale(2.45, 2.45)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <g>
+            <rect
+              x="15"
+              y="15"
+              style="fill:none;"
+              width="70"
+              height="70"
+            />
+            <path d="M85,0H15H0v15v70v15h15h70h15V85V15V0H85z M85,85H15V15h70V85z" />
+          </g>
+        </g></g><g transform="translate(70,70) scale(1.05, 1.05)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(840,70) scale(1.05, 1.05)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g><g transform="translate(70,840) scale(1.05, 1.05)"><g
+          transform=""
+          style="fill: rgb(2, 4, 32);"
+        >
+          <rect
+            width="100"
+            height="100"
+          />
+        </g></g></g></svg>
+    </div>
 
     <div class="pl-[100px] relative z-10">
       <p
