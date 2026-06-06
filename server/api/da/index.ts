@@ -98,7 +98,7 @@ export default defineEventHandler(() => {
     { id: 4142, postil: 'Påske', tags: 'Evangelium', label: '4.Søn.e.påske', bible: 'Joh 16: 5-15' },
     { id: 4152, postil: 'Påske', tags: 'Evangelium', label: '5.Søn.e.påske', bible: 'Joh 16: 23-30' },
 
-    { id: 4155, postil: 'Påske', tags: 'Epistel', label: 'K.Himmelfart', bible: 'Mark 16: 14-20' },
+    { id: 4160, postil: 'Påske', tags: 'Epistel', label: 'K.Himmelfart', bible: 'Mark 16: 14-20' },
 
     { id: 4161, postil: 'Påske', tags: 'Epistel', label: '6.Søn.e.påske', bible: '1 Pet 4: 7-11' },
     { id: 4162, postil: 'Påske', tags: 'Evangelium', label: '6.Søn.e.påske', bible: 'Joh 15: 26-16: 4' },
@@ -106,14 +106,14 @@ export default defineEventHandler(() => {
     { id: 4211, postil: 'Påske', tags: 'Epistel', label: 'Pinsedag', bible: 'ApG 2: 1-13' },
     { id: 4212, postil: 'Påske', tags: 'Evangelium', label: 'Pinsedag', bible: 'Joh 14: 23-31' },
     { id: 4222, postil: 'Påske', tags: 'Epistel', label: '2.Pinsedag', bible: 'Joh 3: 16-21' },
-    { id: 4232, postil: 'Påske', tags: 'Evangelium', label: '3.Pinsedag', bible: 'Joh 10: 1-11' },
-
-    { id: 4301, postil: 'Påske', tags: 'Epistel', label: 'Trinitatis s.', bible: 'Rom 11: 33-36' },
-    { id: 4302, postil: 'Påske', tags: 'Evangelium', label: 'Trinitatis s.', bible: 'Joh 3: 1-15' },
-    { id: 4303, postil: 'Påske', tags: 'Evangelium', label: 'Trin.2.sermon', bible: 'Joh 3: 1-15' },
+    { id: 4232, postil: 'Påske', tags: 'Evangelium', label: '3.Pinsedag', bible: 'Joh 10: 1-10' },
 
     { type: 'separator' },
     { label: 'Trinity I; 1 - 12. Søndag efter Trefoldighed', type: 'label' },
+
+    { id: 5001, postil: 'Trefoldighed I', tags: 'Epistel', label: 'Trinitatis s.', bible: 'Rom 11: 33-36' },
+    { id: 5002, postil: 'Trefoldighed I', tags: 'Evangelium', label: 'Trinitatis s.', bible: 'Joh 3: 1-15' },
+    { id: 5003, postil: 'Trefoldighed I', tags: 'Evangelium', label: 'Trin.2.sermon', bible: 'Joh 3: 1-15' },
 
     { id: 5011, postil: 'Trefoldighed I', tags: 'Epistel', label: '1.Søn.e.Tref.', bible: '1 Joh 4: 16-21' },
     { id: 5012, postil: 'Trefoldighed I', tags: 'Evangelium', label: '1.Søn.e.Tref.', bible: 'Luk 16: 19-31' },

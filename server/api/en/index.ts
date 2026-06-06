@@ -72,7 +72,7 @@ export default defineEventHandler(() => {
     { id: 3403, postil: 'Winter', tags: 'Gospel', label: 'Good Friday', bible: 'Matt 27: 27-50' },
 
     { type: 'separator' },
-    { label: 'Summer Postil; Easter - Trinitatis', type: 'label' },
+    { label: 'Summer Postil; Easter - Pentecost', type: 'label' },
 
     { id: 4011, postil: 'Summer', tags: 'Epistle', label: 'Easter Sunday', bible: '1 Cor 5: 7-8' },
     { id: 4012, postil: 'Summer', tags: 'Gospel', label: 'Easter Sunday', bible: 'Mark 16: 1-8' },
@@ -98,7 +98,7 @@ export default defineEventHandler(() => {
 
     { id: 4152, postil: 'Summer', tags: 'Gospel', label: '5.Sun.a.East.', bible: 'Joh 16: 23-30' },
 
-    { id: 4155, postil: 'Summer', tags: 'Epistle', label: 'Ascension Day', bible: 'Mark 16: 14-20' },
+    { id: 4160, postil: 'Summer', tags: 'Epistle', label: 'Ascension Day', bible: 'Mark 16: 14-20' },
 
     { id: 4161, postil: 'Summer', tags: 'Epistle', label: '6.Sun.a.East.', bible: '1 Pet 4: 7-11' },
     { id: 4162, postil: 'Summer', tags: 'Gospel', label: '6.Sun.a.East.', bible: 'Joh 15: 26-16: 4' },
@@ -106,14 +106,14 @@ export default defineEventHandler(() => {
     { id: 4211, postil: 'Summer', tags: 'Epistle', label: 'Pentecost', bible: 'Acts 2: 1-13' },
     { id: 4212, postil: 'Summer', tags: 'Gospel', label: 'Pentecost', bible: 'Joh 14: 23-31' },
     { id: 4222, postil: 'Summer', tags: 'Epistle', label: '2.Pentecost.', bible: 'Joh 3: 16-21' },
-    { id: 4232, postil: 'Summer', tags: 'Gospel', label: '3.Pentecost', bible: 'Joh 10: 1-11' },
-
-    { id: 4301, postil: 'Summer', tags: 'Epistle', label: 'Trinitatis s.', bible: 'Rom 11: 33-36' },
-    { id: 4302, postil: 'Summer', tags: 'Gospel', label: 'Trinitatis s.', bible: 'Joh 3: 1-15' },
-    { id: 4303, postil: 'Summer', tags: 'Gospel', label: 'Trin.2.sermon', bible: 'Joh 3: 1-15' },
+    { id: 4232, postil: 'Summer', tags: 'Gospel', label: '3.Pentecost', bible: 'Joh 10: 1-10' },
 
     { type: 'separator' },
-    { label: 'Trinity I Postil; 1.- 12.Sun. after Trinitatis', type: 'label' },
+    { label: 'Trinity I Postil; Trinitatis - 12.Sun. after Trinitatis', type: 'label' },
+
+    { id: 5001, postil: 'Trinity I', tags: 'Epistle', label: 'Trinitatis s.', bible: 'Rom 11: 33-36' },
+    { id: 5002, postil: 'Trinity I', tags: 'Gospel', label: 'Trinitatis s.', bible: 'Joh 3: 1-15' },
+    { id: 5003, postil: 'Trinity I', tags: 'Epistle', label: '2.sermon', bible: 'Rom 11: 33-36' },
 
     { id: 5011, postil: 'Trinity I', tags: 'Epistle', label: '1.Sun.a.Trin.', bible: '1 Joh 4: 16-21' },
     { id: 5012, postil: 'Trinity I', tags: 'Gospel', label: '1.Sun.a.Trin.', bible: 'Luk 16: 19-31' },

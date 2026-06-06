@@ -2,42 +2,42 @@
   "1011":
   {
     "da": "/da/advent/epistle01-rom-13-11-14",
-    "en": "/en/advent#first-sunday-in-advent-romans-13-11-14"
+    "en": "/en/advent#first-sun-in-advent-rom-13-11-14"
   },
   "1012":
   {
     "da": "/da/advent/gospel01-matt-21-1-9",
-    "en": "/en/advent#first-sunday-in-advent-matthew-21-1-9"
+    "en": "/en/advent#first-sun-in-advent-matt-21-1-9"
   },
   "1021":
   {
     "da": "/da/advent/epistle02-rom-15-4-13",
-    "en": "/en/advent#second-sunday-in-advent-romans-15-4-13"
+    "en": "/en/advent#second-sun-in-advent-rom-15-4-13"
   },
   "1022":
   {
     "da": "/da/advent/gospel02-luk-21-25-36",
-    "en": "/en/advent#second-sunday-in-advent-luke-21-25-36"
+    "en": "/en/advent#second-sun-in-advent-luk-21-25-36"
   },
   "1031":
   {
     "da": "/da/advent/epistle03-1-cor-4-1-5",
-    "en": "/en/advent#third-sunday-in-advent-1-corinthians-4-1-5"
+    "en": "/en/advent#third-sun-in-advent-1-cor-4-1-5"
   },
   "1032":
   {
     "da": "/da/advent/gospel03-matt-11-2-10",
-    "en": "/en/advent#third-sunday-in-advent-matthew-11-2-10"
+    "en": "/en/advent#third-sun-in-advent-matt-11-2-10"
   },
   "1041":
   {
     "da": "/da/advent/epistle04-phil-4-4-7",
-    "en": "/en/advent#fourth-sunday-in-advent-philippians-4-4-7"
+    "en": "/en/advent#fourth-sun-in-advent-phil-4-4-7"
   },
   "1042":
   {
     "da": "/da/advent/gospel04-joh-1-19-28",
-    "en": "/en/advent#fourth-sunday-in-advent-john-1-19-28"
+    "en": "/en/advent#fourth-sun-in-advent-joh-1-19-28"
   },
   "2001":
   {
@@ -47,7 +47,7 @@
   "2002":
   {
     "da": "/da/christmas/gospel-juleaften-luk-2-1-14",
-    "en": "/en/christmas#early-christmas-service-luke-2-1-14"
+    "en": "/en/christmas#christmas-day-luke-2-1-14"
   },
   "2011":
   {
@@ -277,161 +277,161 @@
   "4011":
   {
     "da": "/da/easter/day01-epistle-1-kor-5-7-8",
-    "en": "/en/easter#epistle01"
+    "en": "/en/easter#easter-sunday-1-cor-5-6-8"
   },
   "4012":
   {
     "da": "/da/easter/day01-gospel-mark-16-1-8",
-    "en": "/en/easter#gospel01"
+    "en": "/en/easter#easter-sunday-mark-16-1-8"
   },
   "4021":
   {
     "da": "/da/easter/day02-epistle-apg-10-34-43",
-    "en": "/en/easter#epistle02"
+    "en": "/en/easter#easter-monday-acts-10-34-43"
   },
   "4022":
   {
     "da": "/da/easter/day02-gospel-luk-24-13-35",
-    "en": "/en/easter#gospel02"
+    "en": "/en/easter#easter-monday-luk-24-13-35"
   },
   "4031":
   {
     "da": "/da/easter/day03-epistle-apg-13-26-39",
-    "en": "/en/easter#epistle03"
+    "en": "/en/easter#easter-tuesday-acts-13-26-39"
   },
   "4032":
   {
     "da": "/da/easter/day03-gospel01-luk-24-36-47",
-    "en": "/en/easter#gospel03"
+    "en": "/en/easter#easter-tuesday-luk-24-36-47-1st"
   },
   "4033":
   {
     "da": "/da/easter/day03-gospel02-luk-24-36-47",
-    "en": "/en/easter#gospel03"
+    "en": "/en/easter#easter-tuesday-luk-24-36-47-2nd"
   },
   "4041":
   {
     "da": "/da/easter/day04-epistle-kol-3-1-7",
-    "en": "/en/easter#epistle04"
+    "en": "/en/easter#easter-wednesday-col-3-1-7"
   },
   "4111":
   {
-    "da": "/da/easter/epistle01",
-    "en": "/en/easter#epistle01"
+    "da": "/da/easter/sun01epistle-1-joh-5-4-12",
+    "en": "/en/easter#sunday-after-easter-1-joh-5-4-12"
   },
   "4112":
   {
-    "da": "/da/easter/gospel01",
-    "en": "/en/easter#gospel01"
+    "da": "/da/easter/sun01gospel01-joh-20-19-31",
+    "en": "/en/easter#sunday-after-easter-joh-20-19-31-1st"
   },
    "4113":
   {
-    "da": "/da/easter/gospel01b",
-    "en": "/en/easter#gospel01b"
+    "da": "/da/easter/sun01gospel02-joh-20-19-31",
+    "en": "/en/easter#sunday-after-easter-joh-20-19-31-2nd"
   },
   "4121":
   {
-    "da": "/da/easter/epistle02",
-    "en": "/en/easter#epistle02"
+    "da": "/da/easter/sun02epistle-1-pet-2-20-25",
+    "en": "/en/easter#second-sunday-after-easter-1-pet-2-20-25"
   },
   "4122":
   {
-    "da": "/da/easter/gospel02",
-    "en": "/en/easter#gospel02"
+    "da": "/da/easter/sun02gospel-joh-10-11-16",
+    "en": "/en/easter#second-sunday-after-easter-joh-10-11-16"
   },
   "4131":
   {
-    "da": "/da/easter/epistle03",
-    "en": "/en/easter#epistle03"
+    "da": "/da/easter/sun03epistle-1-pet-2-11-16",
+    "en": "/en/easter#third-sunday-after-easter-1-pet-2-11-20"
   },
   "4132":
   {
-    "da": "/da/easter/gospel03",
-    "en": "/en/easter#gospel03"
+    "da": "/da/easter/sun03gospel-joh-16-16-22",
+    "en": "/en/easter#third-sunday-after-easter-john-16-16-23"
   },
   "4141":
   {
-    "da": "/da/easter/epistle04",
-    "en": "/en/easter#epistle04"
+    "da": "/da/easter/sun04epistle-jak-1-16-21",
+    "en": "/en/easter#fourth-sunday-after-easter-james-1-16-21"
   },
   "4142":
   {
-    "da": "/da/easter/gospel04",
-    "en": "/en/easter#gospel04"
+    "da": "/da/easter/sun04gospel-joh-16-5-15",
+    "en": "/en/easter#fourth-sunday-after-easter-joh-16-5-15"
   },
   "4152":
   {
-    "da": "/da/easter/gospel05",
-    "en": "/en/easter#gospel05"
+    "da": "/da/easter/sun05gospel-joh-16-23-30",
+    "en": "/en/easter#fifth-sunday-after-easter-joh-16-23-30"
   },
-  "4155":
+  "4160":
   {
-    "da": "/da/easter/ascension-day",
-    "en": "/en/easter#ascension-day"
+    "da": "/da/easter/ascension-day-mark-16-14-20",
+    "en": "/en/easter#ascension-day-mark-16-14-20"
   },
   "4161":
   {
-    "da": "/da/easter/epistle06",
-    "en": "/en/easter#epistle06"
+    "da": "/da/easter/ascending-sun-epistle-1-pet-4-7-11",
+    "en": "/en/easter#sunday-after-ascension-day-1-pet-4-7-11"
   },
   "4162":
   {
-    "da": "/da/easter/gospel06",
-    "en": "/en/easter#gospel06"
+    "da": "/da/easter/ascending-sun-gospel-joh-15-26-16-4",
+    "en": "/en/easter#sunday-after-ascension-day-joh-15-26-16-4"
   },
   "4211":
   {
-    "da": "/da/easter/epistle07",
-    "en": "/en/easter#epistle07"
+    "da": "/da/easter/pentecost-sun-epistle-apg-2-1-13",
+    "en": "/en/easter#pentecost-sunday-acts-2-1-13"
   },
   "4212":
   {
-    "da": "/da/easter/gospel07",
-    "en": "/en/easter#gospel07"
+    "da": "/da/easter/pentecost-sun-gospel-joh-14-23-31",
+    "en": "/en/easter#pentecost-monday-joh-14-23-31"
   },
   "4222":
   {
-    "da": "/da/easter/gospel08",
-    "en": "/en/easter#gospel08"
+    "da": "/da/easter/pentecost-monday-gospel-joh-3-16-21",
+    "en": "/en/easter#pentecost-monday-joh-3-16-21"
   },
   "4232":
   {
-    "da": "/da/easter/gospel09",
-    "en": "/en/easter#gospel09"
+    "da": "/da/easter/pentecost-tuseday-gospel-joh-10-1-10",
+    "en": "/en/easter#pentecost-tuseday-joh-10-1-10"
   },
-  "4301":
+  "5001":
   {
-    "da": "/da/easter/epistle10",
-    "en": "/en/easter#epistle10"
+    "da": "/da/trinity1/trinitatis-epistle-rom-11-33-36",
+    "en": "/en/trinity1#trinity-sunday-rom-11-33-36-1st"
   },
-  "4302":
+  "5002":
   {
-    "da": "/da/easter/gospel10",
-    "en": "/en/easter#gospel10"
+    "da": "/da/trinity1/trinitatis-gospel01-joh-3-1-15",
+    "en": "/en/trinity1#trinity-sunday-joh-3-1-15"
   },
-  "4303":
+  "5003":
   {
-    "da": "/da/easter/gospel11",
-    "en": "/en/easter#gospel11"
+    "da": "/da/trinity1/trinitatis-gospel02-festdelen-joh-3-1-15",
+    "en": "/en/trinity1#trinity-sunday-rom-11-33-36-2nd-epistle"
   },
   "5011":
   {
-    "da": "/da/Trefoldighed1/epistle01",
-    "en": "/en/trinity1/epistle01"
+    "da": "/da/trinity1/first-sun-epistle-1-joh-4-16-21",
+    "en": "/en/trinity1#first-sunday-after-trinity-1-joh-4-16-21"
   },
   "5012":
   {
-    "da": "/da/Trefoldighed1/gospel01",
-    "en": "/en/trinity1/gospel01"
+    "da": "/da/trinity1/first-sun-gospel-luk-16-19-31",
+    "en": "/en/trinity1#first-sunday-after-trinity-luk-1619-311"
   },
   "5021":
   {
-    "da": "/da/Trefoldighed1/epistle02",
+    "da": "/da/trinity1/epistle02",
     "en": "/en/trinity1/epistle2"
   },
   "5022":
   {
-    "da": "/da/Trefoldighed1/gospel02",
+    "da": "/da/trinity1/gospel02",
     "en": "/en/trinity1/gospel02"
   },
   "5031":
